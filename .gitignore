@@ -1,0 +1,36 @@
+# Datos pesados — no subir al repo
+data/images/
+data/tabular/
+data/train_photo_metadata.csv
+data/test_photo_metadata.csv
+
+# Submissions generadas (excepto el template)
+submissions/*.csv
+!submissions/template.csv
+!submissions/purerandom_*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Entornos virtuales
+venv/
+.env/
+env/
+
+# IDEs
+.vscode/
+.idea/
+
+# Modelos guardados (pueden ser pesados)
+*.pkl
+*.joblib
+*.pt
+*.pth
+*.h5
