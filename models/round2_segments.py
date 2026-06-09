@@ -74,6 +74,12 @@ def preprocess(df):
 train = preprocess(train)
 test  = preprocess(test)
 
+# Alinear categorías para que segmentos de test tengan los mismos niveles que train
+for col in CAT_FEATURES:
+    all_cats = train[col].cat.categories.union(test[col].cat.categories)
+    train[col] = train[col].cat.set_categories(all_cats)
+    test[col]  = test[col].cat.set_categories(all_cats)
+
 # ── Feature engineering estático (sin usar el target → sin leakage) ───────────
 def add_static_features(df):
     df = df.copy()
@@ -209,6 +215,10 @@ for fold, (tr_idx, val_idx) in enumerate(kf.split(train), 1):
     tr_fold  = train.iloc[tr_idx].copy()
     val_fold = train.iloc[val_idx].copy()
 
+    # Guardar índices originales antes del merge (que resetea el índice)
+    tr_fold['_orig_idx']  = tr_fold.index.values
+    val_fold['_orig_idx'] = val_fold.index.values
+
     # Agregar features ZIP calculados desde el fold de entrenamiento
     tr_fold  = add_zip_features(tr_fold, tr_fold)
     val_fold = add_zip_features(tr_fold.drop(columns=ZIP_AGG_FEATURES, errors='ignore'),
@@ -240,7 +250,7 @@ for fold, (tr_idx, val_idx) in enumerate(kf.split(train), 1):
         )
 
         val_pred = model.predict(val_seg[seg_features])
-        oof_preds[val_seg.index] = val_pred
+        oof_preds[val_seg['_orig_idx'].values.astype(int)] = val_pred
 
         val_price  = np.expm1(val_seg[TARGET].values)
         pred_price = np.expm1(val_pred)
@@ -266,10 +276,10 @@ oof_pred_price = np.expm1(oof_preds)
 oof_mape = np.mean(np.abs((oof_price - oof_pred_price) / oof_price)) * 100
 oof_mae  = mean_absolute_error(oof_price, oof_pred_price)
 
-print(f'\n{"─"*45}')
+print(f'\n{"-"*45}')
 print(f'OOF MAPE global:  {oof_mape:.2f}%')
 print(f'OOF MAE global:   ${oof_mae:,.0f}')
-print(f'{"─"*45}')
+print(f'{"-"*45}')
 
 print('\nMAPE promedio por segmento:')
 for seg, mapes in segment_fold_mapes.items():
@@ -296,4 +306,4 @@ oof_submission = pd.DataFrame({
 })
 oof_path = 'submissions/oof_round2_segments.csv'
 oof_submission.to_csv(oof_path, index=False)
-print(f'OOF guardado:  {oof_path}  ({len(oof_submission)} filas)  ← subir al tab Practice')
+print(f'OOF guardado:  {oof_path}  ({len(oof_submission)} filas)  <- subir al tab Practice')

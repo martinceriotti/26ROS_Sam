@@ -189,4 +189,4 @@ oof_submission = pd.DataFrame({
 })
 oof_path = 'submissions/oof_baseline_lgbm.csv'
 oof_submission.to_csv(oof_path, index=False)
-print(f'OOF guardado:  {oof_path}  ({len(oof_submission)} filas)  ← subir al tab Practice')
+print(f'OOF guardado:  {oof_path}  ({len(oof_submission)} filas)  <- subir al tab Practice')
