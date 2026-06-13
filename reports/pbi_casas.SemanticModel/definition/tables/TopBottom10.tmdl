@@ -1,0 +1,65 @@
+table TopBottom10
+	lineageTag: b2000001-0000-0000-0000-000000000001
+
+	column zpid
+		lineageTag: 0ebbefb4-0ee6-4225-92a5-7d28605afd9f
+		isNameInferred
+		sourceColumn: [zpid]
+
+	column precio
+		dataType: double
+		formatString: $#,##0
+		lineageTag: d9d7ceac-180a-47e4-8a16-3d7839225819
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [precio]
+
+	column latitude
+		lineageTag: ba6723b2-a48c-4770-acf4-6ee0cabda7c3
+		isNameInferred
+		sourceColumn: [latitude]
+
+	column longitude
+		lineageTag: dff58984-fd0c-4238-aa52-1539b1794a20
+		isNameInferred
+		sourceColumn: [longitude]
+
+	column homeType
+		lineageTag: daa0bb34-f271-48e6-a3c9-876fbfa46f36
+		isNameInferred
+		sourceColumn: [homeType]
+
+	column categoria
+		lineageTag: ac0a2d7e-0c3f-40e4-99ad-018379da363b
+		isNameInferred
+		sourceColumn: [categoria]
+
+	partition TopBottom10 = calculated
+		source =
+				UNION(
+				    ADDCOLUMNS(
+				        SELECTCOLUMNS(
+				            TOPN(5, train_processed, train_processed[lastSoldPrice_hpi_adjusted], DESC),
+				            "zpid", train_processed[zpid],
+				            "precio", train_processed[lastSoldPrice_hpi_adjusted],
+				            "latitude", train_processed[latitude],
+				            "longitude", train_processed[longitude],
+				            "homeType", train_processed[homeType]
+				        ),
+				        "categoria", "Top 5 más caras"
+				    ),
+				    ADDCOLUMNS(
+				        SELECTCOLUMNS(
+				            TOPN(5, train_processed, train_processed[lastSoldPrice_hpi_adjusted], ASC),
+				            "zpid", train_processed[zpid],
+				            "precio", train_processed[lastSoldPrice_hpi_adjusted],
+				            "latitude", train_processed[latitude],
+				            "longitude", train_processed[longitude],
+				            "homeType", train_processed[homeType]
+				        ),
+				        "categoria", "5 más baratas"
+				    )
+				)
+
+	annotation PBI_ResultType = Table
+

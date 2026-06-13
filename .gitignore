@@ -28,6 +28,15 @@ env/
 .vscode/
 .idea/
 
+# Archivos del sistema
+.DS_Store
+._.DS_Store
+
+# Credenciales — nunca subir
+credenciales.txt
+*.env
+secrets.*
+
 # Modelos guardados (pueden ser pesados)
 *.pkl
 *.joblib

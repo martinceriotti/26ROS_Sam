@@ -1,0 +1,562 @@
+table train_processed
+	lineageTag: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+
+	measure 'N Propiedades' = COUNTROWS(train_processed)
+		formatString: #,0
+		lineageTag: a1000002-0000-0000-0000-000000000001
+
+	measure 'Precio Mediano' = MEDIAN(train_processed[lastSoldPrice_hpi_adjusted])
+		formatString: "$#,##0"
+		lineageTag: a1000002-0000-0000-0000-000000000002
+
+	measure 'Precio Promedio' = AVERAGE(train_processed[lastSoldPrice_hpi_adjusted])
+		formatString: "$#,##0"
+		lineageTag: a1000002-0000-0000-0000-000000000003
+
+	measure 'Precio Máximo' = MAX(train_processed[lastSoldPrice_hpi_adjusted])
+		formatString: "$#,##0"
+		lineageTag: a1000002-0000-0000-0000-000000000004
+
+	measure 'Precio Mínimo' = MIN(train_processed[lastSoldPrice_hpi_adjusted])
+		formatString: "$#,##0"
+		lineageTag: a1000002-0000-0000-0000-000000000005
+
+	measure 'Precio Mediano por ft2' =
+			VAR avgArea = AVERAGE(train_processed[livingArea])
+			VAR medPrice = MEDIAN(train_processed[lastSoldPrice_hpi_adjusted])
+			RETURN IF(avgArea > 0, DIVIDE(medPrice, avgArea), BLANK())
+		formatString: "$#,##0.00"
+		lineageTag: d7edecac-615e-43d4-9d86-fc1c52894e97
+
+	measure '% Con Pool' =
+			DIVIDE(
+			    CALCULATE(COUNTROWS(train_processed), train_processed[has_pool] = 1),
+			    COUNTROWS(train_processed)
+			)
+			formatString: 0.0%
+			lineageTag: a1000002-0000-0000-0000-000000000007
+		lineageTag: 6d06b551-7431-463e-8a76-db1f52e59207
+
+	measure '% Con Waterfront' =
+			DIVIDE(
+			    CALCULATE(COUNTROWS(train_processed), train_processed[has_waterfront] = 1),
+			    COUNTROWS(train_processed)
+			)
+			formatString: 0.0%
+			lineageTag: a1000002-0000-0000-0000-000000000008
+		lineageTag: 3f04f8bb-1618-4b88-9bc1-de98636396db
+
+	measure '% Con Garage' =
+			DIVIDE(
+			    CALCULATE(COUNTROWS(train_processed), train_processed[has_garage] = 1),
+			    COUNTROWS(train_processed)
+			)
+			formatString: 0.0%
+			lineageTag: a1000002-0000-0000-0000-000000000009
+		lineageTag: bdd5f72e-f3fd-4761-9e87-0a8bfd08db21
+
+	measure '% Con HOA' =
+			DIVIDE(
+			    CALCULATE(COUNTROWS(train_processed), train_processed[has_hoa] = 1),
+			    COUNTROWS(train_processed)
+			)
+			formatString: 0.0%
+			lineageTag: a1000002-0000-0000-0000-000000000010
+		lineageTag: b2c24f22-e1de-4838-adbc-bf3703b7db64
+
+	measure 'School Rating Promedio' = AVERAGE(train_processed[avg_school_rating])
+		formatString: 0.0
+		lineageTag: a1000002-0000-0000-0000-000000000011
+
+	measure 'Área Habitable Mediana (ft2)' = MEDIAN(train_processed[livingArea])
+		formatString: #,0
+		lineageTag: a1000002-0000-0000-0000-000000000012
+
+	measure 'Precio Mediano Waterfront vs No' =
+			VAR conWater = CALCULATE(MEDIAN(train_processed[lastSoldPrice_hpi_adjusted]), train_processed[has_waterfront] = 1)
+			VAR sinWater = CALCULATE(MEDIAN(train_processed[lastSoldPrice_hpi_adjusted]), train_processed[has_waterfront] = 0)
+			RETURN DIVIDE(conWater - sinWater, sinWater)
+			formatString: 0.0%
+			lineageTag: a1000002-0000-0000-0000-000000000013
+		lineageTag: 3b3a09f7-58f5-4f1c-a2cc-feadd57710e5
+
+	/// Identificador de propiedad
+	column zpid
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000001
+		summarizeBy: none
+		sourceColumn: zpid
+
+		annotation SummarizationSetBy = User
+
+	/// Precio de venta ajustado por HPI — TARGET
+	column lastSoldPrice_hpi_adjusted
+		dataType: double
+		lineageTag: a1000001-0000-0000-0000-000000000002
+		summarizeBy: none
+		sourceColumn: lastSoldPrice_hpi_adjusted
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"currencySymbol":"$","currencyCode":"USD"}
+
+	/// Log del precio de venta
+	column log_price
+		dataType: double
+		formatString: 0.000
+		lineageTag: a1000001-0000-0000-0000-000000000003
+		summarizeBy: none
+		sourceColumn: log_price
+
+		annotation SummarizationSetBy = User
+
+	column description
+		dataType: string
+		lineageTag: a1000001-0000-0000-0000-000000000004
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = User
+
+	column bedrooms
+		dataType: double
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000005
+		summarizeBy: none
+		sourceColumn: bedrooms
+
+		annotation SummarizationSetBy = User
+
+	column bathrooms
+		dataType: double
+		formatString: 0.0
+		lineageTag: a1000001-0000-0000-0000-000000000006
+		summarizeBy: none
+		sourceColumn: bathrooms
+
+		annotation SummarizationSetBy = User
+
+	column livingArea
+		dataType: double
+		formatString: #,0
+		lineageTag: a1000001-0000-0000-0000-000000000007
+		summarizeBy: none
+		sourceColumn: livingArea
+
+		annotation SummarizationSetBy = User
+
+	column yearBuilt
+		dataType: double
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000008
+		summarizeBy: none
+		sourceColumn: yearBuilt
+
+		annotation SummarizationSetBy = User
+
+	column latitude
+		dataType: double
+		formatString: 0.000000
+		lineageTag: a1000001-0000-0000-0000-000000000009
+		summarizeBy: none
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = User
+
+	column longitude
+		dataType: double
+		formatString: 0.000000
+		lineageTag: a1000001-0000-0000-0000-000000000010
+		summarizeBy: none
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = User
+
+	column lotAreaValue
+		dataType: double
+		formatString: #,0
+		lineageTag: a1000001-0000-0000-0000-000000000011
+		summarizeBy: none
+		sourceColumn: lotAreaValue
+
+		annotation SummarizationSetBy = User
+
+	column photoCount
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000012
+		summarizeBy: none
+		sourceColumn: photoCount
+
+		annotation SummarizationSetBy = User
+
+	column taxAssessedValue
+		dataType: double
+		lineageTag: a1000001-0000-0000-0000-000000000013
+		summarizeBy: none
+		sourceColumn: taxAssessedValue
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"currencySymbol":"$","currencyCode":"USD"}
+
+	column propertyTaxRate
+		dataType: double
+		formatString: 0.00"%"
+		lineageTag: a1000001-0000-0000-0000-000000000014
+		summarizeBy: none
+		sourceColumn: propertyTaxRate
+
+		annotation SummarizationSetBy = User
+
+	column homeType
+		dataType: string
+		lineageTag: a1000001-0000-0000-0000-000000000015
+		summarizeBy: none
+		sourceColumn: homeType
+
+		annotation SummarizationSetBy = User
+
+	column zipcode
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000016
+		summarizeBy: none
+		sourceColumn: zipcode
+
+		annotation SummarizationSetBy = User
+
+	column latest_tax_value
+		dataType: double
+		lineageTag: a1000001-0000-0000-0000-000000000017
+		summarizeBy: none
+		sourceColumn: latest_tax_value
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"currencySymbol":"$","currencyCode":"USD"}
+
+	column latest_tax_paid
+		dataType: double
+		lineageTag: a1000001-0000-0000-0000-000000000018
+		summarizeBy: none
+		sourceColumn: latest_tax_paid
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"currencySymbol":"$","currencyCode":"USD"}
+
+	column num_tax_records
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000019
+		summarizeBy: none
+		sourceColumn: num_tax_records
+
+		annotation SummarizationSetBy = User
+
+	column num_sales
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000020
+		summarizeBy: none
+		sourceColumn: num_sales
+
+		annotation SummarizationSetBy = User
+
+	column num_price_changes
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000021
+		summarizeBy: none
+		sourceColumn: num_price_changes
+
+		annotation SummarizationSetBy = User
+
+	column last_listing_price
+		dataType: double
+		lineageTag: a1000001-0000-0000-0000-000000000022
+		summarizeBy: none
+		sourceColumn: last_listing_price
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"currencySymbol":"$","currencyCode":"USD"}
+
+	column avg_school_rating
+		dataType: double
+		formatString: 0.0
+		lineageTag: a1000001-0000-0000-0000-000000000023
+		summarizeBy: none
+		sourceColumn: avg_school_rating
+
+		annotation SummarizationSetBy = User
+
+	column max_school_rating
+		dataType: double
+		formatString: 0.0
+		lineageTag: a1000001-0000-0000-0000-000000000024
+		summarizeBy: none
+		sourceColumn: max_school_rating
+
+		annotation SummarizationSetBy = User
+
+	column num_nearby_schools
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000025
+		summarizeBy: none
+		sourceColumn: num_nearby_schools
+
+		annotation SummarizationSetBy = User
+
+	column min_school_distance
+		dataType: double
+		formatString: 0.0" km"
+		lineageTag: a1000001-0000-0000-0000-000000000026
+		summarizeBy: none
+		sourceColumn: min_school_distance
+
+		annotation SummarizationSetBy = User
+
+	column has_hoa
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000027
+		summarizeBy: none
+		sourceColumn: has_hoa
+
+		annotation SummarizationSetBy = User
+
+	column hoa_fee_monthly
+		dataType: double
+		lineageTag: a1000001-0000-0000-0000-000000000028
+		summarizeBy: none
+		sourceColumn: hoa_fee_monthly
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"currencySymbol":"$","currencyCode":"USD"}
+
+	column has_pool
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000029
+		summarizeBy: none
+		sourceColumn: has_pool
+
+		annotation SummarizationSetBy = User
+
+	column has_garage
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000030
+		summarizeBy: none
+		sourceColumn: has_garage
+
+		annotation SummarizationSetBy = User
+
+	column has_waterfront
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000031
+		summarizeBy: none
+		sourceColumn: has_waterfront
+
+		annotation SummarizationSetBy = User
+
+	column tag_price_cut
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000032
+		summarizeBy: none
+		sourceColumn: tag_price_cut
+
+		annotation SummarizationSetBy = User
+
+	column tag_new_construction
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000033
+		summarizeBy: none
+		sourceColumn: tag_new_construction
+
+		annotation SummarizationSetBy = User
+
+	column tag_foreclosure
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000034
+		summarizeBy: none
+		sourceColumn: tag_foreclosure
+
+		annotation SummarizationSetBy = User
+
+	column property_age
+		dataType: double
+		formatString: 0" años"
+		lineageTag: a1000001-0000-0000-0000-000000000035
+		summarizeBy: none
+		sourceColumn: property_age
+
+		annotation SummarizationSetBy = User
+
+	column bath_to_bed_ratio
+		dataType: double
+		formatString: 0.00
+		lineageTag: a1000001-0000-0000-0000-000000000036
+		summarizeBy: none
+		sourceColumn: bath_to_bed_ratio
+
+		annotation SummarizationSetBy = User
+
+	column log_living_area
+		dataType: double
+		formatString: 0.000
+		lineageTag: a1000001-0000-0000-0000-000000000037
+		summarizeBy: none
+		sourceColumn: log_living_area
+
+		annotation SummarizationSetBy = User
+
+	column log_lot_area
+		dataType: double
+		formatString: 0.000
+		lineageTag: a1000001-0000-0000-0000-000000000038
+		summarizeBy: none
+		sourceColumn: log_lot_area
+
+		annotation SummarizationSetBy = User
+
+	column zip_3digit
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000039
+		summarizeBy: none
+		sourceColumn: zip_3digit
+
+		annotation SummarizationSetBy = User
+
+	column desc_length
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000040
+		summarizeBy: none
+		sourceColumn: desc_length
+
+		annotation SummarizationSetBy = User
+
+	column desc_word_count
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000041
+		summarizeBy: none
+		sourceColumn: desc_word_count
+
+		annotation SummarizationSetBy = User
+
+	column desc_is_boilerplate
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000042
+		summarizeBy: none
+		sourceColumn: desc_is_boilerplate
+
+		annotation SummarizationSetBy = User
+
+	column desc_mentions_renovated
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000043
+		summarizeBy: none
+		sourceColumn: desc_mentions_renovated
+
+		annotation SummarizationSetBy = User
+
+	column desc_mentions_pool
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000044
+		summarizeBy: none
+		sourceColumn: desc_mentions_pool
+
+		annotation SummarizationSetBy = User
+
+	column desc_mentions_view
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000045
+		summarizeBy: none
+		sourceColumn: desc_mentions_view
+
+		annotation SummarizationSetBy = User
+
+	column desc_mentions_new
+		dataType: int64
+		formatString: 0
+		lineageTag: a1000001-0000-0000-0000-000000000046
+		summarizeBy: none
+		sourceColumn: desc_mentions_new
+
+		annotation SummarizationSetBy = User
+
+	partition train_processed = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\SBI\Downloads\participant\data\tabular\train_processed.csv"),[Delimiter=",", Columns=46, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{
+				        {"zpid", Int64.Type},
+				        {"lastSoldPrice_hpi_adjusted", type number},
+				        {"log_price", type number},
+				        {"description", type text},
+				        {"bedrooms", type number},
+				        {"bathrooms", type number},
+				        {"livingArea", type number},
+				        {"yearBuilt", type number},
+				        {"latitude", type number},
+				        {"longitude", type number},
+				        {"lotAreaValue", type number},
+				        {"photoCount", Int64.Type},
+				        {"taxAssessedValue", type number},
+				        {"propertyTaxRate", type number},
+				        {"homeType", type text},
+				        {"zipcode", Int64.Type},
+				        {"latest_tax_value", type number},
+				        {"latest_tax_paid", type number},
+				        {"num_tax_records", Int64.Type},
+				        {"num_sales", Int64.Type},
+				        {"num_price_changes", Int64.Type},
+				        {"last_listing_price", type number},
+				        {"avg_school_rating", type number},
+				        {"max_school_rating", type number},
+				        {"num_nearby_schools", Int64.Type},
+				        {"min_school_distance", type number},
+				        {"has_hoa", Int64.Type},
+				        {"hoa_fee_monthly", type number},
+				        {"has_pool", Int64.Type},
+				        {"has_garage", Int64.Type},
+				        {"has_waterfront", Int64.Type},
+				        {"tag_price_cut", Int64.Type},
+				        {"tag_new_construction", Int64.Type},
+				        {"tag_foreclosure", Int64.Type},
+				        {"property_age", type number},
+				        {"bath_to_bed_ratio", type number},
+				        {"log_living_area", type number},
+				        {"log_lot_area", type number},
+				        {"zip_3digit", Int64.Type},
+				        {"desc_length", Int64.Type},
+				        {"desc_word_count", Int64.Type},
+				        {"desc_is_boilerplate", Int64.Type},
+				        {"desc_mentions_renovated", Int64.Type},
+				        {"desc_mentions_pool", Int64.Type},
+				        {"desc_mentions_view", Int64.Type},
+				        {"desc_mentions_new", Int64.Type}
+				    })
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_ResultType = Table
+

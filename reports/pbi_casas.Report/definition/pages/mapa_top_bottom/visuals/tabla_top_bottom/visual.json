@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "tabla_top_bottom",
+  "position": {
+    "x": 880,
+    "y": 80,
+    "z": 0,
+    "height": 580,
+    "width": 380,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TopBottom10"
+                    }
+                  },
+                  "Property": "categoria"
+                }
+              },
+              "queryRef": "TopBottom10.categoria"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TopBottom10"
+                    }
+                  },
+                  "Property": "homeType"
+                }
+              },
+              "queryRef": "TopBottom10.homeType"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TopBottom10"
+                    }
+                  },
+                  "Property": "precio"
+                }
+              },
+              "queryRef": "TopBottom10.precio"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TopBottom10"
+                    }
+                  },
+                  "Property": "zpid"
+                }
+              },
+              "queryRef": "TopBottom10.zpid"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Detalle de propiedades'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

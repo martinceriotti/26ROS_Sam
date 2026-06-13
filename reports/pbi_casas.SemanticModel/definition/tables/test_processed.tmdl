@@ -1,0 +1,409 @@
+table test_processed
+	lineageTag: 21dd051f-13f1-4d08-85dd-47619c90eb29
+
+	column zpid
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b32da18-c3d1-4779-8b03-9404bf24d485
+		summarizeBy: sum
+		sourceColumn: zpid
+
+		annotation SummarizationSetBy = Automatic
+
+	column description
+		dataType: string
+		lineageTag: 2a26b3d8-cc1d-4d55-bd28-f8bb620509e6
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	column bedrooms
+		dataType: int64
+		formatString: 0
+		lineageTag: 001311d4-bb69-4a69-8dad-8dd6aae97b9d
+		summarizeBy: sum
+		sourceColumn: bedrooms
+
+		annotation SummarizationSetBy = Automatic
+
+	column bathrooms
+		dataType: int64
+		formatString: 0
+		lineageTag: 811afa6a-67a7-42a3-bcca-9a8d5f29de99
+		summarizeBy: sum
+		sourceColumn: bathrooms
+
+		annotation SummarizationSetBy = Automatic
+
+	column livingArea
+		dataType: int64
+		formatString: 0
+		lineageTag: c80efedf-43e7-4aa2-99e8-63924609d279
+		summarizeBy: sum
+		sourceColumn: livingArea
+
+		annotation SummarizationSetBy = Automatic
+
+	column yearBuilt
+		dataType: int64
+		formatString: 0
+		lineageTag: 7112d3df-0386-4e29-9073-d30e8b6938d4
+		summarizeBy: sum
+		sourceColumn: yearBuilt
+
+		annotation SummarizationSetBy = Automatic
+
+	column latitude
+		dataType: int64
+		formatString: 0
+		lineageTag: 62103faa-91c0-45ea-ad2a-b5e6b1566c55
+		summarizeBy: sum
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column longitude
+		dataType: int64
+		formatString: 0
+		lineageTag: 9c8cca32-2bb3-40d1-bcde-f871abb487bd
+		summarizeBy: sum
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column lotAreaValue
+		dataType: int64
+		formatString: 0
+		lineageTag: 9e46572a-9fc4-4a60-8023-92939787a836
+		summarizeBy: sum
+		sourceColumn: lotAreaValue
+
+		annotation SummarizationSetBy = Automatic
+
+	column photoCount
+		dataType: int64
+		formatString: 0
+		lineageTag: e6a3ed8a-2676-4c39-be88-4c4bb4c4d7a8
+		summarizeBy: sum
+		sourceColumn: photoCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column taxAssessedValue
+		dataType: int64
+		formatString: 0
+		lineageTag: cf5ce48c-8d90-41fd-b26b-f3029fd9b8e3
+		summarizeBy: sum
+		sourceColumn: taxAssessedValue
+
+		annotation SummarizationSetBy = Automatic
+
+	column propertyTaxRate
+		dataType: int64
+		formatString: 0
+		lineageTag: eb2c6b1e-6f80-4f5f-be14-c155275a6eb3
+		summarizeBy: sum
+		sourceColumn: propertyTaxRate
+
+		annotation SummarizationSetBy = Automatic
+
+	column homeType
+		dataType: string
+		lineageTag: 9744d0b5-bfaf-4d36-86c4-2c70acb367be
+		summarizeBy: none
+		sourceColumn: homeType
+
+		annotation SummarizationSetBy = Automatic
+
+	column zipcode
+		dataType: int64
+		formatString: 0
+		lineageTag: ad876e19-b5d8-4c4b-9dba-727f7480d50c
+		summarizeBy: sum
+		sourceColumn: zipcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column latest_tax_value
+		dataType: int64
+		formatString: 0
+		lineageTag: d437c2e8-d82f-4a84-b7ee-b2f8ba68d75f
+		summarizeBy: sum
+		sourceColumn: latest_tax_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column latest_tax_paid
+		dataType: int64
+		formatString: 0
+		lineageTag: 3543076a-32f2-45e2-8e15-1cbae0c58caf
+		summarizeBy: sum
+		sourceColumn: latest_tax_paid
+
+		annotation SummarizationSetBy = Automatic
+
+	column num_tax_records
+		dataType: int64
+		formatString: 0
+		lineageTag: a93d00ac-d044-466e-b99c-aca3804719f1
+		summarizeBy: sum
+		sourceColumn: num_tax_records
+
+		annotation SummarizationSetBy = Automatic
+
+	column num_sales
+		dataType: int64
+		formatString: 0
+		lineageTag: a9f3a997-1d35-4874-a65d-13137ecdf6e1
+		summarizeBy: sum
+		sourceColumn: num_sales
+
+		annotation SummarizationSetBy = Automatic
+
+	column num_price_changes
+		dataType: int64
+		formatString: 0
+		lineageTag: 122c4ac1-8617-42ef-9272-bea1bddfa2dd
+		summarizeBy: sum
+		sourceColumn: num_price_changes
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_listing_price
+		dataType: int64
+		formatString: 0
+		lineageTag: d50bf144-f7f7-4ecf-9844-0c3a20276dc2
+		summarizeBy: sum
+		sourceColumn: last_listing_price
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_school_rating
+		dataType: int64
+		formatString: 0
+		lineageTag: d660d348-2903-4d4a-90e7-2d6d685610ec
+		summarizeBy: sum
+		sourceColumn: avg_school_rating
+
+		annotation SummarizationSetBy = Automatic
+
+	column max_school_rating
+		dataType: int64
+		formatString: 0
+		lineageTag: df364b70-61e7-46da-ab6c-d8ccaa497ad4
+		summarizeBy: sum
+		sourceColumn: max_school_rating
+
+		annotation SummarizationSetBy = Automatic
+
+	column num_nearby_schools
+		dataType: int64
+		formatString: 0
+		lineageTag: eab47f5b-ee5d-49ea-a454-1d076ca0f999
+		summarizeBy: sum
+		sourceColumn: num_nearby_schools
+
+		annotation SummarizationSetBy = Automatic
+
+	column min_school_distance
+		dataType: int64
+		formatString: 0
+		lineageTag: 3fe22444-3976-4efd-9df3-1bbf5ed31095
+		summarizeBy: sum
+		sourceColumn: min_school_distance
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_hoa
+		dataType: int64
+		formatString: 0
+		lineageTag: 5c407675-788e-40ac-b5ea-d2d7b1cd3326
+		summarizeBy: sum
+		sourceColumn: has_hoa
+
+		annotation SummarizationSetBy = Automatic
+
+	column hoa_fee_monthly
+		dataType: int64
+		formatString: 0
+		lineageTag: 5dd83359-905d-4360-9802-4746a9f1ab1c
+		summarizeBy: sum
+		sourceColumn: hoa_fee_monthly
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_pool
+		dataType: int64
+		formatString: 0
+		lineageTag: 1b0b60dc-44e3-440a-8c95-18c2802ccf94
+		summarizeBy: sum
+		sourceColumn: has_pool
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_garage
+		dataType: int64
+		formatString: 0
+		lineageTag: 0bf4347f-1dd0-41a7-93c8-7c46579ff5a3
+		summarizeBy: sum
+		sourceColumn: has_garage
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_waterfront
+		dataType: int64
+		formatString: 0
+		lineageTag: a2a33c16-0528-44a9-a154-ff4db402a09c
+		summarizeBy: sum
+		sourceColumn: has_waterfront
+
+		annotation SummarizationSetBy = Automatic
+
+	column tag_price_cut
+		dataType: int64
+		formatString: 0
+		lineageTag: 4d6eb107-0dcf-4956-aa46-99ebe80b794a
+		summarizeBy: sum
+		sourceColumn: tag_price_cut
+
+		annotation SummarizationSetBy = Automatic
+
+	column tag_new_construction
+		dataType: int64
+		formatString: 0
+		lineageTag: 4493df3f-d7a3-4519-ae8d-e03caed6bb32
+		summarizeBy: sum
+		sourceColumn: tag_new_construction
+
+		annotation SummarizationSetBy = Automatic
+
+	column tag_foreclosure
+		dataType: int64
+		formatString: 0
+		lineageTag: 6de01ae6-f17c-42ae-bb36-81206b390f05
+		summarizeBy: sum
+		sourceColumn: tag_foreclosure
+
+		annotation SummarizationSetBy = Automatic
+
+	column property_age
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ef6480a-5707-4b3f-ab8f-ad02dd9a1cc6
+		summarizeBy: sum
+		sourceColumn: property_age
+
+		annotation SummarizationSetBy = Automatic
+
+	column bath_to_bed_ratio
+		dataType: int64
+		formatString: 0
+		lineageTag: d83b3977-5991-4bf3-8e7a-190b141ddeec
+		summarizeBy: sum
+		sourceColumn: bath_to_bed_ratio
+
+		annotation SummarizationSetBy = Automatic
+
+	column log_living_area
+		dataType: int64
+		formatString: 0
+		lineageTag: 423cecfd-fc20-4109-b6ff-ec4ddbc898b1
+		summarizeBy: sum
+		sourceColumn: log_living_area
+
+		annotation SummarizationSetBy = Automatic
+
+	column log_lot_area
+		dataType: int64
+		formatString: 0
+		lineageTag: 84ad87b4-0546-49ac-ac4b-542653cc4848
+		summarizeBy: sum
+		sourceColumn: log_lot_area
+
+		annotation SummarizationSetBy = Automatic
+
+	column zip_3digit
+		dataType: int64
+		formatString: 0
+		lineageTag: ab8b5785-107a-4b55-a470-b5a507d907ae
+		summarizeBy: sum
+		sourceColumn: zip_3digit
+
+		annotation SummarizationSetBy = Automatic
+
+	column desc_length
+		dataType: int64
+		formatString: 0
+		lineageTag: 768daa27-2cfb-40f6-9dca-179e7236aa10
+		summarizeBy: sum
+		sourceColumn: desc_length
+
+		annotation SummarizationSetBy = Automatic
+
+	column desc_word_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 197a26c9-917b-4335-a62c-5a6b54cd27ee
+		summarizeBy: sum
+		sourceColumn: desc_word_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column desc_is_boilerplate
+		dataType: int64
+		formatString: 0
+		lineageTag: f94a5be7-4881-4438-a277-2b1d46d1b2da
+		summarizeBy: sum
+		sourceColumn: desc_is_boilerplate
+
+		annotation SummarizationSetBy = Automatic
+
+	column desc_mentions_renovated
+		dataType: int64
+		formatString: 0
+		lineageTag: 052702c2-b6a3-4e00-8881-00e69f83a1dd
+		summarizeBy: sum
+		sourceColumn: desc_mentions_renovated
+
+		annotation SummarizationSetBy = Automatic
+
+	column desc_mentions_pool
+		dataType: int64
+		formatString: 0
+		lineageTag: d96f3492-c6c1-4e71-b535-d7eb2723c9d9
+		summarizeBy: sum
+		sourceColumn: desc_mentions_pool
+
+		annotation SummarizationSetBy = Automatic
+
+	column desc_mentions_view
+		dataType: int64
+		formatString: 0
+		lineageTag: 695aaf41-554b-47eb-8e50-1d414d9d9138
+		summarizeBy: sum
+		sourceColumn: desc_mentions_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column desc_mentions_new
+		dataType: int64
+		formatString: 0
+		lineageTag: df83d750-fcd1-4c49-b16e-61530735d19f
+		summarizeBy: sum
+		sourceColumn: desc_mentions_new
+
+		annotation SummarizationSetBy = Automatic
+
+	partition test_processed = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\SBI\Downloads\participant\data\tabular\test_processed.csv"),[Delimiter=",", Columns=44, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"zpid", Int64.Type}, {"description", type text}, {"bedrooms", Int64.Type}, {"bathrooms", Int64.Type}, {"livingArea", Int64.Type}, {"yearBuilt", Int64.Type}, {"latitude", Int64.Type}, {"longitude", Int64.Type}, {"lotAreaValue", Int64.Type}, {"photoCount", Int64.Type}, {"taxAssessedValue", Int64.Type}, {"propertyTaxRate", Int64.Type}, {"homeType", type text}, {"zipcode", Int64.Type}, {"latest_tax_value", Int64.Type}, {"latest_tax_paid", Int64.Type}, {"num_tax_records", Int64.Type}, {"num_sales", Int64.Type}, {"num_price_changes", Int64.Type}, {"last_listing_price", Int64.Type}, {"avg_school_rating", Int64.Type}, {"max_school_rating", Int64.Type}, {"num_nearby_schools", Int64.Type}, {"min_school_distance", Int64.Type}, {"has_hoa", Int64.Type}, {"hoa_fee_monthly", Int64.Type}, {"has_pool", Int64.Type}, {"has_garage", Int64.Type}, {"has_waterfront", Int64.Type}, {"tag_price_cut", Int64.Type}, {"tag_new_construction", Int64.Type}, {"tag_foreclosure", Int64.Type}, {"property_age", Int64.Type}, {"bath_to_bed_ratio", Int64.Type}, {"log_living_area", Int64.Type}, {"log_lot_area", Int64.Type}, {"zip_3digit", Int64.Type}, {"desc_length", Int64.Type}, {"desc_word_count", Int64.Type}, {"desc_is_boilerplate", Int64.Type}, {"desc_mentions_renovated", Int64.Type}, {"desc_mentions_pool", Int64.Type}, {"desc_mentions_view", Int64.Type}, {"desc_mentions_new", Int64.Type}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_ResultType = Table
+
