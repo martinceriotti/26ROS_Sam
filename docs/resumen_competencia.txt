@@ -1,0 +1,176 @@
+========================================
+RESUMEN GENERAL DE LAS CLASES
+==============================
+
+OBJETIVO DEL CURSO
+------------------
+Resolver una competencia de inversion inmobiliaria.
+Construir un modelo que prediga precios de propiedades y mejorarlo
+iterativamente en cada ronda.
+
+ESTRUCTURA DEL CURSO
+--------------------
+Total: 7 clases + 6 rondas de competencia.
+
+Formato repetido en cada clase:
+  1. Se presenta un tema tecnico nuevo
+  2. Se usa ese tema para mejorar el modelo
+  3. Se trabaja en equipo
+  4. Se entrega (submit) una solucion
+  5. Se revisan resultados (leaderboard)
+
+Cada ronda suma mejoras: feature engineering, modelos nuevos, embeddings, etc.
+Aprendizaje incremental + competitivo.
+
+
+QUE SE HACE TECNICAMENTE
+-------------------------
+
+1. Datasets:
+   - Train  → tiene zpid + precio real  (11,840 casas)
+   - Test   → tiene zpid pero SIN precio (5,038 casas)
+
+2. Objetivo tecnico:
+   Entrenar un modelo con el train y generar un archivo tipo:
+     zpid | precio_predicho
+   Ese archivo es lo que se submitea a la competencia.
+
+3. Logica clave:
+   Entrenás con datos conocidos (train)
+   Predecis sobre datos desconocidos (test)
+   Generás predicciones → enviás → comparás resultados
+   → Esto es exactamente lo que se usa en Kaggle / ML real.
+
+
+DINAMICA DE CADA CLASE (3 a 7)
+--------------------------------
+  Parte 1: Teoria aplicada  → se ve una tecnica que mejora el modelo
+  Parte 2: Trabajo en equipo → cada equipo aplica la tecnica
+  Parte 3: Entrega (submit)  → generan y suben el archivo de predicciones
+  Parte 4: Analisis          → se libera el leaderboard y se analiza donde
+                               se acerto y donde se fallo
+
+Regla de oro: siempre generar un submission aunque sea basico.
+              Mejor tener algo que nada.
+
+
+CHECKLIST PARA ARMAR UN SUBMISSION (guia practica)
+----------------------------------------------------
+  [ ] 1. Correr el script del modelo desde la raiz del proyecto
+         ejemplo: python models/baseline_lgbm.py
+  [ ] 2. Verificar que se generaron los dos archivos en submissions/:
+         - submissions/nombre_modelo.csv       (5,038 filas — para la ronda real)
+         - submissions/oof_nombre_modelo.csv   (11,840 filas — para Practice)
+  [ ] 3. Subir el OOF al tab Practice del dashboard primero
+         → ver ROI medio y Sharpe
+  [ ] 4. Si mejora al modelo anterior → subir el CSV al tab Competition
+  [ ] 5. Anotar los resultados y analizar el drill-down
+
+
+CONCEPTOS CLAVE QUE APARECEN EN EL CURSO
+-----------------------------------------
+  - Train vs Test
+  - Prediccion (inferencia)
+  - Feature engineering
+  - Mejora iterativa del modelo
+  - Competencia tipo Kaggle
+  - Evaluacion por leaderboard / ROI simulado
+
+
+EN RESUMEN ULTRA SIMPLE (modo bebe)
+-------------------------------------
+  1. Tenes datos con precios → aprendes (train)
+  2. Te dan datos sin precios → adivinas (test)
+  3. Armas un archivo con predicciones
+  4. Lo subis al dashboard
+  5. Te dicen que tan bien lo hiciste (ROI)
+  6. Mejoras en la proxima ronda
+
+
+========================================
+LABO 2 — COMPETENCIA DE INVERSION INMOBILIARIA
+Equipo Aragorn | MDM Austral 2026
+========================================
+
+
+¿QUE ES ESTO?
+-------------
+Imaginate que sos un inversor inmobiliario. Tenes $5 millones y tenes que
+comprar casas en Miami para ganar plata. Pero no sabes el precio real de
+cada casa — solo ves un precio de oferta.
+
+Tu arma: un programa que adivina cuanto vale cada casa.
+
+Si adivinas bien  →  compras barato  →  ganas plata.
+Si adivinas mal   →  compras caro o dejas pasar oportunidades  →  perdes plata.
+
+
+¿COMO FUNCIONA EXACTAMENTE?
+----------------------------
+1. El sistema te muestra una casa con un precio de oferta
+   (que puede estar inflado o desinflado al azar)
+2. Tu modelo predice cuanto cree que vale esa casa
+3. Si tu prediccion dice que vale mas de lo que piden → compras
+4. Hay una subasta — gana quien mas ofrecio, pero paga lo que ofrecio el segundo
+5. Al final del juego: ¿cuanta plata tenes?
+
+Esto se repite 1,000 veces para que el azar no influya.
+
+
+¿QUE DATOS TENEMOS?
+--------------------
+Tenemos informacion de 11,840 casas que ya se vendieron:
+  - Tamanio, habitaciones, banos, anio de construccion
+  - Ubicacion (latitud, longitud, codigo postal)
+  - Fotos
+  - Descripcion de texto
+  - Precio de venta real  ← esto es lo que queremos aprender a predecir
+
+Y tenemos 5,038 casas sin precio → esas son las que tenemos que predecir
+para competir.
+
+
+¿QUE HICIMOS HASTA AHORA?
+--------------------------
+
+Paso 1 — Modelo basico (Ronda 1)
+  Le mostramos al programa las 11,840 casas con sus precios.
+  El programa "aprendio" el patron.
+  Resultado: se equivoca ~26% en promedio.
+  Con esto ganamos 23% de ROI en la simulacion.
+
+Paso 2 — Modelo mejorado (Ronda 2)
+  Agregamos mas informacion: si la casa es de lujo, si el barrio
+  es caro, etc.
+  Resultado: no mejoro (20% ROI).
+  A veces mas datos no ayudan.
+
+Paso 3 — Modelo anti-remates (Ronda 3)
+  Martin descubrio que el modelo se confunde con casas vendidas en
+  remate o herencia (precio real muy bajo pero impuesto alto).
+  Hizo un modelo que los detecta.
+  OOF MAPE: 27.00% | archivo listo para subir al dashboard.
+
+
+¿QUE FALTA HACER?
+-----------------
+  - Correr Ronda 3 en Practice  →  ver si el ROI mejora
+  - Agregar fotos (Ronda 4)     →  las fotos pueden mejorar mucho la prediccion
+  - Mezclar modelos (Ronda 5)   →  combinar varios modelos suele dar mejor resultado
+
+
+¿COMO SE GANA LA COMPETENCIA?
+------------------------------
+El equipo con mayor ROI promedio en las simulaciones gana.
+Son 6 rondas en total. Cada clase hay una ronda nueva.
+El que termina primero en las ultimas rondas queda eximido del final
+(10 directo).
+
+
+ESTADO ACTUAL DE MODELOS
+-------------------------
+  Ronda 1 | baseline_lgbm       | ROI: 23.3% | Sharpe: 1.15  ← mejor hasta ahora
+  Ronda 2 | round2_segments     | ROI: 20.6% | Sharpe: 1.06
+  Ronda 3 | round3_distress_fix | ROI: pendiente (subir al Practice)
+
+========================================
