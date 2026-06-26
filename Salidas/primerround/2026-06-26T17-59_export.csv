@@ -1,0 +1,251 @@
+﻿,zpid,Outcome,Asking Price,My Prediction,Decision,Won?,Cost Paid,True Value,Profit,Auction Bids,Winner
+0,1000786,Skip,,522285.7765371635,Skip: below threshold,—,,,,,
+1,1011347,Skip,,259619.77526623427,Skip: below threshold,—,,,,,
+2,1011529,Auction Lost,504342.00899234443,673921.2438173556,Bid,No,,,,"Legolas: $1,194,132, You: $572,833, Frodo: $497,308",Legolas
+3,1009198,Auction Lost,674044.7946465656,775182.1913643697,Bid,No,,,,"Legolas: $1,028,008, Aragorn: $712,242, Pippin: $712,242, You: $658,905, Frodo: $658,838, Gimli: $623,098",Legolas
+4,1014294,Skip,,872355.2427949789,Skip: below threshold,—,,,,,
+5,1005121,Auction Lost,115320.01353489887,407118.6651827748,Bid,No,,,,"Legolas: $1,622,712, Merry: $1,098,575, Aragorn: $398,061, Pippin: $398,061, You: $346,051, Frodo: $329,917, Gimli: $306,346",Legolas
+6,1000601,Auction Lost,276439.3443868174,660300.1905871705,Bid,No,,,,"Legolas: $1,398,086, Aragorn: $747,409, Pippin: $747,409, You: $561,255, Frodo: $550,349, Gimli: $527,262, Merry: $502,526",Legolas
+7,1001155,Auction Lost,187560.0544790095,392920.3848909383,Bid,No,,,,"Legolas: $962,008, Aragorn: $365,628, Pippin: $365,628, You: $333,982, Frodo: $258,883, Merry: $248,983, Gimli: $236,247",Legolas
+8,1014669,Auction Lost,86248.73835491636,640475.0321164978,Bid,No,,,,"Gimli: $587,125, Legolas: $578,097, Frodo: $564,757, Aragorn: $550,231, Pippin: $550,231, You: $544,404, Merry: $247,868",Gimli
+9,1016606,Skip,,443097.75234816415,Skip: below threshold,—,,,,,
+10,1009074,Skip,,646870.3137449345,Skip: below threshold,—,,,,,
+11,1013485,Skip,,1005132.3245360708,Skip: below threshold,—,,,,,
+12,1010463,Skip,,844685.1146329776,Skip: below threshold,—,,,,,
+13,1011393,Skip,,636807.0797514563,Skip: below threshold,—,,,,,
+14,1004437,Auction Lost,172570.2804034189,268485.1975116935,Bid,No,,,,"Legolas: $1,315,972, Merry: $277,786, Aragorn: $236,257, Pippin: $236,257, You: $228,212, Frodo: $223,944, Gimli: $219,361",Legolas
+15,1012823,Auction Lost,614378.396136472,710794.4251359426,Bid,No,,,,"Aragorn: $706,357, Pippin: $706,357, You: $604,175, Frodo: $571,771, Gimli: $568,259",Pippin
+16,1017299,Auction Lost,114847.2937810577,164107.09808230528,Bid,No,,,,"Merry: $1,325,980, Legolas: $1,230,617, Aragorn: $163,592, Pippin: $163,592, You: $139,491, Frodo: $134,153, Gimli: $118,248",Merry
+17,1012446,Auction Lost,10000,210776.9315914001,Bid,No,,,,"Merry: $652,854, Legolas: $185,678, Aragorn: $185,505, Pippin: $185,505, You: $179,160, Frodo: $166,244, Gimli: $137,950",Merry
+18,1008302,Auction Lost,212888.78921412173,282328.05623157945,Bid,No,,,,"Merry: $583,692, You: $239,979, Frodo: $231,026, Aragorn: $220,556, Pippin: $220,556, Gimli: $199,119",Merry
+19,1014360,Auction Lost,46770.04160754026,230450.4655699059,Bid,No,,,,"Merry: $1,451,590, Legolas: $283,060, Frodo: $213,502, You: $195,883, Gimli: $169,769, Aragorn: $116,615, Pippin: $116,615",Merry
+20,1013349,Skip,,758123.2212474645,Skip: below threshold,—,,,,,
+21,1005800,Skip,,206227.56505431444,Skip: below threshold,—,,,,,
+22,1000031,Auction Lost,303548.9915835169,411497.91490554885,Bid,No,,,,"Aragorn: $397,680, Pippin: $397,680, Gimli: $362,546, You: $349,773, Frodo: $341,242",Aragorn
+23,1007820,Skip,,593304.6865619457,Skip: below threshold,—,,,,,
+24,1016060,Skip,,227903.5317207312,Skip: below threshold,—,,,,,
+25,1005373,Skip,,1153128.4231202295,Skip: below threshold,—,,,,,
+26,1017307,Auction Lost,84501.66877757598,420242.77365714416,Bid,No,,,,"Merry: $1,544,121, Frodo: $377,280, You: $357,206, Aragorn: $340,664, Pippin: $340,664, Gimli: $326,879, Legolas: $88,248",Merry
+27,1009878,Skip,,291374.2517112385,Skip: below threshold,—,,,,,
+28,1007654,Skip,,253395.0158858064,Skip: below threshold,—,,,,,
+29,1007076,Skip,,433293.8054415236,Skip: below threshold,—,,,,,
+30,1005491,Skip,,155278.8188842617,Skip: below threshold,—,,,,,
+31,1010702,Skip,,318747.70080020867,Skip: below threshold,—,,,,,
+32,1007839,Skip,,1110945.8991963544,Skip: below threshold,—,,,,,
+33,1008787,Auction Lost,129333.10715829756,262687.51555635466,Bid,No,,,,"Aragorn: $332,805, Pippin: $332,805, Gimli: $304,126, Frodo: $274,428, You: $223,284, Legolas: $210,021",Aragorn
+34,1010464,Skip,,693192.175579305,Skip: below threshold,—,,,,,
+35,1014206,Skip,,210469.2323228322,Skip: below threshold,—,,,,,
+36,1003452,Auction Lost,413009.576217522,825948.7959929397,Bid,No,,,,"Frodo: $774,643, Gimli: $760,520, You: $702,056, Aragorn: $687,084, Pippin: $687,084",Frodo
+37,1001330,Skip,,830459.0028181623,Skip: below threshold,—,,,,,
+38,1006496,Skip,,137430.84383657563,Skip: below threshold,—,,,,,
+39,1016381,Skip,,225863.15872697235,Skip: below threshold,—,,,,,
+40,1008965,Auction Lost,193019.83597993036,320785.1065126787,Bid,No,,,,"Legolas: $696,985, You: $272,667, Aragorn: $256,390, Pippin: $256,390, Frodo: $239,858, Gimli: $238,817",Legolas
+41,1004235,Skip,,535712.7030596371,Skip: below threshold,—,,,,,
+42,1016438,Skip,,275410.3543900369,Skip: below threshold,—,,,,,
+43,1001884,Auction Lost,29597.143000841224,220845.1405549105,Bid,No,,,,"Legolas: $1,577,295, Merry: $1,314,301, You: $187,718, Frodo: $153,450, Gimli: $147,238, Aragorn: $124,873, Pippin: $124,873",Legolas
+44,1005258,Auction Lost,189008.80464986098,390286.5738428389,Bid,No,,,,"Aragorn: $344,102, Pippin: $344,102, You: $331,744, Frodo: $322,016, Gimli: $291,951",Aragorn
+45,1000189,Skip,,304273.54166114324,Skip: below threshold,—,,,,,
+46,1014692,Skip,,776053.3758207269,Skip: below threshold,—,,,,,
+47,1010961,Auction Lost,138731.711263607,230319.1626785352,Bid,No,,,,"Aragorn: $387,559, Pippin: $387,559, Gimli: $234,834, Frodo: $234,342, You: $195,771",Aragorn
+48,1009078,Auction Lost,176536.82617564354,406545.8937879567,Bid,No,,,,"Aragorn: $345,788, Pippin: $345,788, You: $345,564, Gimli: $323,514, Frodo: $317,055",Pippin
+49,1014331,Skip,,342370.27694866946,Skip: below threshold,—,,,,,
+50,1006668,Skip,,419658.2977672204,Skip: below threshold,—,,,,,
+51,1011452,Auction Lost,670449.0940136472,803162.5744980242,Bid,No,,,,"Aragorn: $837,067, Pippin: $837,067, You: $682,688, Gimli: $659,551, Frodo: $619,412",Pippin
+52,1009707,Auction Lost,119521.48524196561,391477.09119799006,Bid,No,,,,"Frodo: $374,023, Gimli: $340,219, You: $332,756, Aragorn: $290,926, Pippin: $290,926",Frodo
+53,1008847,Auction Lost,149974.5844295368,226826.14764773624,Bid,No,,,,"Gimli: $195,485, Aragorn: $194,874, Pippin: $194,874, You: $192,802, Frodo: $189,988",Gimli
+54,1005191,Skip,,395814.8527198619,Skip: below threshold,—,,,,,
+55,1006321,Auction Lost,84334.3278820694,662715.2567860279,Bid,No,,,,"Merry: $1,225,040, You: $563,308, Gimli: $470,371, Frodo: $446,049, Aragorn: $336,208, Pippin: $336,208",Merry
+56,1009607,Skip,,699786.8586953912,Skip: below threshold,—,,,,,
+57,1004776,Skip,,550632.104559323,Skip: below threshold,—,,,,,
+58,1006242,Skip,,179141.77433980184,Skip: below threshold,—,,,,,
+59,1011459,Loss,387410.92974103667,472139.79360479047,Bid,Yes,398363.8973455895,350731.541340592,-47632.35600499745,"You: $401,319, Aragorn: $390,553, Pippin: $390,553, Frodo: $386,702",You
+60,1003575,Skip,,651457.8837191622,Skip: below threshold,—,,,,,
+61,1015609,Loss,577220.2214546652,874125.3711990643,Bid,Yes,728708.1317340763,517009.440445618,-211698.6912884583,"You: $743,007, Aragorn: $714,420, Pippin: $714,420, Frodo: $657,315, Gimli: $568,096",You
+62,1015512,Skip,,608038.4212279344,Skip: below threshold,—,,,,,
+63,1010900,Loss,199468.7372720802,486825.3150739674,Bid,Yes,351637.48725400947,334940.22078733594,-16697.26646667352,"You: $413,802, Frodo: $344,743, Gimli: $293,731, Aragorn: $285,939, Pippin: $285,939",You
+64,1017363,Skip,,1302656.8876472956,Skip: no budget,—,,,,,
+65,1001604,Auction Lost,495897.15261301474,780338.1491419742,Bid,No,,,,"Frodo: $813,134, Aragorn: $733,739, Pippin: $733,739, You: $663,287, Gimli: $609,479",Frodo
+66,1013626,Skip,,855516.192557322,Skip: below threshold,—,,,,,
+67,1011057,Skip,,369601.80251524673,Skip: below threshold,—,,,,,
+68,1004209,Auction Lost,394973.94076725503,569517.1626633806,Bid,No,,,,"Aragorn: $656,340, Pippin: $656,340, Frodo: $529,181, Gimli: $485,572, You: $484,090",Aragorn
+69,1014276,Skip,,836660.7244240443,Skip: below threshold,—,,,,,
+70,1009675,Skip,,460187.62636087,Skip: below threshold,—,,,,,
+71,1003447,Skip,,311264.31874747865,Skip: below threshold,—,,,,,
+72,1007267,Loss,189369.56760719392,479006.62100832304,Bid,Yes,388943.38336054643,361716.2066525124,-27227.176708034007,"You: $407,156, Frodo: $381,317, Gimli: $355,320, Aragorn: $288,003, Pippin: $288,003",You
+73,1008603,Auction Lost,168886.7178212562,197593.58308768092,Bid,No,,,,"Gimli: $188,667, You: $167,955, Frodo: $156,424",Gimli
+74,1015629,Skip,,153228.31150041704,Skip: below threshold,—,,,,,
+75,1011343,Skip,,544329.5315793032,Skip: below threshold,—,,,,,
+76,1013903,Loss,244541.0709502903,323626.8709404035,Bid,Yes,259138.37903724983,256037.0144892244,-3101.36454802542,"You: $275,083, Frodo: $254,057, Aragorn: $246,721, Pippin: $246,721, Gimli: $232,553",You
+77,1002642,Skip,,1010422.0264412566,Skip: no budget,—,,,,,
+78,1013275,Loss,337714.2455021442,558633.8963536548,Bid,Yes,458892.70102923654,423890.0717251793,-35002.62930405722,"You: $474,839, Frodo: $449,895, Aragorn: $444,093, Pippin: $444,093, Gimli: $433,411",You
+79,1016569,Auction Lost,449405.33929286426,618017.1059668699,Bid,No,,,,"Aragorn: $727,147, Pippin: $727,147, Frodo: $638,437, Gimli: $560,811, You: $525,315",Aragorn
+80,1006090,Profit,288121.46556229173,703541.2237117196,Bid,Yes,607722.1907289978,770302.9488041494,162580.7580751516,"You: $598,010, Frodo: $595,806, Gimli: $588,791, Aragorn: $506,082, Pippin: $506,082",You
+81,1012770,Skip,,256770.71934492447,Skip: below threshold,—,,,,,
+82,1013694,Skip,,786371.4300440631,Skip: below threshold,—,,,,,
+83,1002582,Profit,306248.286904991,509793.26483551017,Bid,Yes,424691.38808255433,543906.5297276925,119215.14164513815,"You: $433,324, Aragorn: $416,364, Pippin: $416,364, Frodo: $413,519, Gimli: $381,486",You
+84,1013238,Skip,,169138.2762186536,Skip: below threshold,—,,,,,
+85,1001086,Auction Lost,301789.0858855816,396579.6832624328,Bid,No,,,,"Aragorn: $382,615, Pippin: $382,615, Frodo: $372,791, Gimli: $357,819, You: $337,093",Pippin
+86,1011087,Auction Lost,273596.0194349759,606155.7985035327,Bid,No,,,,"Frodo: $523,117, You: $515,232, Aragorn: $494,004, Pippin: $494,004, Gimli: $439,358",Frodo
+87,1004304,Auction Lost,59368.07833281141,179881.18690169617,Bid,No,,,,"Frodo: $154,936, You: $152,899, Aragorn: $149,292, Pippin: $149,292, Gimli: $137,067",Frodo
+88,1007761,Skip,,566628.128429804,Skip: below threshold,—,,,,,
+89,1009354,Loss,192267.39117691442,250571.20773751647,Bid,Yes,196112.7390004527,104246.85399069126,-91865.88500976145,,
+90,1000331,Skip,,1253682.6275421968,Skip: below threshold,—,,,,,
+91,1012559,Skip,,280559.2632234431,Skip: below threshold,—,,,,,
+92,1004624,Skip,,427260.243449969,Skip: no budget,—,,,,,
+93,1000489,Auction Lost,128660.7079563164,552262.1058385819,Bid,No,,,,"Frodo: $485,229, Gimli: $475,830, You: $469,423, Aragorn: $415,194, Pippin: $415,194",Frodo
+94,1012469,Skip,,382509.89188302966,Skip: below threshold,—,,,,,
+95,1000753,Skip,,354645.14003981254,Skip: below threshold,—,,,,,
+96,1011971,Skip,,544536.7927399358,Skip: below threshold,—,,,,,
+97,1007823,Skip,,375997.4011790208,Skip: below threshold,—,,,,,
+98,1009599,Auction Lost,80070.65550695226,432871.33887733216,Bid,No,,,,"Frodo: $450,380, Gimli: $422,328, Aragorn: $380,534, Pippin: $380,534, You: $367,941",Frodo
+99,1001407,Skip,,518479.3040563448,Skip: below threshold,—,,,,,
+100,1011340,Skip,,652882.9826669737,Skip: below threshold,—,,,,,
+101,1016307,Skip,,423624.6929786922,Skip: below threshold,—,,,,,
+102,1002177,Skip,,831194.9394616046,Skip: below threshold,—,,,,,
+103,1013212,Auction Lost,114714.09905031307,257286.5743866564,Bid,No,,,,"Aragorn: $227,241, Pippin: $227,241, You: $218,694, Frodo: $200,311, Gimli: $185,511",Aragorn
+104,1001889,Skip,,1163741.3975362584,Skip: no budget,—,,,,,
+105,1001475,Profit,221052.39638354964,319321.83431975765,Bid,Yes,257734.6805488052,278919.1626893157,21184.48214051049,"You: $271,424, Gimli: $252,681, Aragorn: $215,957, Pippin: $215,957",You
+106,1015575,Auction Lost,79626.56513135093,98600.60707157914,Bid,No,,,,"Aragorn: $93,835, Pippin: $93,835, You: $83,811, Gimli: $77,509, Frodo: $73,308",Pippin
+107,1016219,Skip,,569625.3516386355,Skip: no budget,—,,,,,
+108,1013893,Skip,,446097.7041969358,Skip: no budget,—,,,,,
+109,1008183,Skip,,514817.58523944486,Skip: below threshold,—,,,,,
+110,1012854,Skip,,626505.0933691271,Skip: below threshold,—,,,,,
+111,1012924,Skip,,594754.2510287988,Skip: below threshold,—,,,,,
+112,1014753,Skip,,291403.9424815743,Skip: below threshold,—,,,,,
+113,1006664,Skip,,830126.9588344397,Skip: no budget,—,,,,,
+114,1015990,Skip,,371950.2995718958,Skip: no budget,—,,,,,
+115,1000521,Skip,,709043.3229580933,Skip: no budget,—,,,,,
+116,1009204,Skip,,498719.07500281336,Skip: below threshold,—,,,,,
+117,1004595,Skip,,857403.852193154,Skip: below threshold,—,,,,,
+118,1010122,Skip,,665715.5293122589,Skip: below threshold,—,,,,,
+119,1001360,Skip,,662823.8378052202,Skip: no budget,—,,,,,
+120,1009939,Skip,,704014.2017950016,Skip: no budget,—,,,,,
+121,1013827,Skip,,521889.9592214182,Skip: no budget,—,,,,,
+122,1002958,Skip,,579657.2912820936,Skip: no budget,—,,,,,
+123,1009176,Skip,,823846.4765225254,Skip: no budget,—,,,,,
+124,1007920,Auction Lost,189828.42197113234,261723.42045268885,Bid,No,,,,"Frodo: $233,019, You: $222,465, Gimli: $214,587, Aragorn: $207,285, Pippin: $207,285",Frodo
+125,1010332,Profit,159404.0914913926,438683.5812505694,Bid,Yes,345259.5537569605,435646.9119200845,90387.35816312401,"You: $372,881, Gimli: $338,490, Aragorn: $323,634, Pippin: $323,634",You
+126,1008117,Skip,,529455.6535146694,Skip: below threshold,—,,,,,
+127,1014722,Skip,,228465.9064417917,Skip: no budget,—,,,,,
+128,1017419,Skip,,298208.2092604954,Skip: below threshold,—,,,,,
+129,1006683,Skip,,495901.15104767366,Skip: no budget,—,,,,,
+130,1005438,Skip,,1091681.8879503934,Skip: no budget,—,,,,,
+131,1015883,Skip,,745510.132586581,Skip: no budget,—,,,,,
+132,1017340,Skip,,1124262.4941667845,Skip: no budget,—,,,,,
+133,1001808,Skip,,843732.1345722051,Skip: no budget,—,,,,,
+134,1008493,Skip,,1014552.5683994323,Skip: no budget,—,,,,,
+135,1001313,Auction Lost,39498.67478266188,703157.3271130227,Bid,No,,,,"Aragorn: $602,642, Pippin: $602,642, You: $597,684, Frodo: $548,028, Gimli: $524,653",Pippin
+136,1001245,Skip,,239786.26228952923,Skip: below threshold,—,,,,,
+137,1010831,Skip,,1055189.0514699258,Skip: below threshold,—,,,,,
+138,1009929,Skip,,432206.4249819437,Skip: no budget,—,,,,,
+139,1007993,Skip,,527729.2940048899,Skip: no budget,—,,,,,
+140,1006446,Skip,,556907.719554692,Skip: below threshold,—,,,,,
+141,1007262,Skip,,314778.8734444718,Skip: below threshold,—,,,,,
+142,1003877,Skip,,428719.2769649932,Skip: no budget,—,,,,,
+143,1010705,Skip,,1160926.0379182857,Skip: below threshold,—,,,,,
+144,1014489,Skip,,859706.7463747585,Skip: below threshold,—,,,,,
+145,1015640,Skip,,1337948.066275447,Skip: no budget,—,,,,,
+146,1004005,Skip,,930363.3536072002,Skip: no budget,—,,,,,
+147,1010683,Skip,,953431.5369274674,Skip: below threshold,—,,,,,
+148,1009435,Auction Lost,127231.01648721893,511620.117825644,Bid,No,,,,"Aragorn: $551,149, Pippin: $551,149, Frodo: $442,652, You: $434,877",Pippin
+149,1003504,Skip,,433820.0904500444,Skip: no budget,—,,,,,
+150,1005504,Skip,,507759.6236813242,Skip: below threshold,—,,,,,
+151,1000292,Skip,,562778.5287763295,Skip: no budget,—,,,,,
+152,1011840,Skip,,227099.48921792253,Skip: below threshold,—,,,,,
+153,1009629,Skip,,190520.1359651345,Skip: below threshold,—,,,,,
+154,1008507,Skip,,396176.6396643427,Skip: below threshold,—,,,,,
+155,1004064,Skip,,880805.491411707,Skip: no budget,—,,,,,
+156,1006684,Skip,,335979.4130715313,Skip: no budget,—,,,,,
+157,1004484,Skip,,546310.5114971381,Skip: no budget,—,,,,,
+158,1012779,Skip,,340110.58153353527,Skip: no budget,—,,,,,
+159,1007211,Profit,120857.43061360336,259680.7001659037,Bid,Yes,219413.75496928376,257427.72068005,38013.965710766235,"You: $220,729, Aragorn: $215,112, Frodo: $211,342",You
+160,1009934,Skip,,305109.86353893054,Skip: below threshold,—,,,,,
+161,1001476,Skip,,644462.0634877596,Skip: below threshold,—,,,,,
+162,1009982,Skip,,615053.4911839286,Skip: no budget,—,,,,,
+163,1007464,Skip,,964619.0526003588,Skip: no budget,—,,,,,
+164,1002512,Skip,,435306.0648416358,Skip: no budget,—,,,,,
+165,1015696,Skip,,378252.438888012,Skip: no budget,—,,,,,
+166,1016457,Skip,,1097287.985653547,Skip: below threshold,—,,,,,
+167,1008466,Skip,,468459.0301921548,Skip: no budget,—,,,,,
+168,1004547,Skip,,480610.9558687497,Skip: below threshold,—,,,,,
+169,1008629,Skip,,731020.0306196819,Skip: no budget,—,,,,,
+170,1007621,Skip,,216208.8759543416,Skip: no budget,—,,,,,
+171,1008301,Skip,,942980.130167302,Skip: below threshold,—,,,,,
+172,1011190,Skip,,412209.8219000732,Skip: no budget,—,,,,,
+173,1002832,Skip,,523160.31873729225,Skip: no budget,—,,,,,
+174,1000174,Skip,,150540.32432654317,Skip: below threshold,—,,,,,
+175,1011843,Skip,,294899.6016257584,Skip: no budget,—,,,,,
+176,1007597,Skip,,448119.81375286606,Skip: no budget,—,,,,,
+177,1005785,Skip,,396640.13150749856,Skip: no budget,—,,,,,
+178,1002754,Skip,,334979.2889566088,Skip: no budget,—,,,,,
+179,1008028,Skip,,365296.4122147722,Skip: no budget,—,,,,,
+180,1001732,Skip,,1075045.8331407427,Skip: below threshold,—,,,,,
+181,1012398,Skip,,461275.139197634,Skip: below threshold,—,,,,,
+182,1011549,Skip,,471189.2419989018,Skip: no budget,—,,,,,
+183,1009998,Skip,,299981.60651358264,Skip: below threshold,—,,,,,
+184,1001559,Skip,,294099.3559216799,Skip: no budget,—,,,,,
+185,1013657,Skip,,593254.3694299812,Skip: below threshold,—,,,,,
+186,1008504,Skip,,1294562.681839401,Skip: no budget,—,,,,,
+187,1001159,Skip,,229881.4112032924,Skip: below threshold,—,,,,,
+188,1010981,Skip,,294627.6636947929,Skip: no budget,—,,,,,
+189,1010466,Skip,,1394797.911591397,Skip: below threshold,—,,,,,
+190,1002069,Skip,,539269.3425042861,Skip: below threshold,—,,,,,
+191,1012996,Skip,,617397.3839221603,Skip: no budget,—,,,,,
+192,1009222,Skip,,405788.123206971,Skip: below threshold,—,,,,,
+193,1005792,Skip,,335997.6916984341,Skip: below threshold,—,,,,,
+194,1010543,Skip,,395599.2625108264,Skip: no budget,—,,,,,
+195,1001485,Skip,,225932.82678835408,Skip: below threshold,—,,,,,
+196,1001734,Skip,,553047.329924545,Skip: no budget,—,,,,,
+197,1007257,Skip,,220269.7618060134,Skip: below threshold,—,,,,,
+198,1004320,Skip,,260346.1284930531,Skip: below threshold,—,,,,,
+199,1005860,Skip,,377184.47680701327,Skip: below threshold,—,,,,,
+200,1000563,Skip,,167547.31680733492,Skip: below threshold,—,,,,,
+201,1015302,Skip,,505107.2584391991,Skip: below threshold,—,,,,,
+202,1002909,Skip,,272146.3317940976,Skip: below threshold,—,,,,,
+203,1010660,Skip,,439105.7493556314,Skip: no budget,—,,,,,
+204,1014975,Skip,,494749.8827005868,Skip: below threshold,—,,,,,
+205,1012647,Skip,,890516.6229500106,Skip: no budget,—,,,,,
+206,1006313,Loss,56103.00119059752,147717.65865510036,Bid,Yes,122334.35855030577,77165.31503431067,-45169.0435159951,"You: $125,560, Gimli: $119,936, Frodo: $110,640, Aragorn: $96,879",You
+207,1004782,Skip,,142986.40793654838,Skip: no budget,—,,,,,
+208,1003117,Skip,,462058.6841967508,Skip: no budget,—,,,,,
+209,1007602,Skip,,496427.83341937367,Skip: below threshold,—,,,,,
+210,1008664,Skip,,763344.2963708045,Skip: below threshold,—,,,,,
+211,1016954,Skip,,488432.2503674136,Skip: no budget,—,,,,,
+212,1003945,Skip,,826610.8693694694,Skip: below threshold,—,,,,,
+213,1011969,Skip,,342353.9487287062,Skip: below threshold,—,,,,,
+214,1016285,Skip,,638104.2989993629,Skip: no budget,—,,,,,
+215,1012911,Skip,,401738.9070099446,Skip: no budget,—,,,,,
+216,1007474,Skip,,1305992.2947677623,Skip: no budget,—,,,,,
+217,1012979,Skip,,112493.04410791444,Skip: below threshold,—,,,,,
+218,1015422,Skip,,297973.14591406786,Skip: no budget,—,,,,,
+219,1002791,Skip,,1184440.1465557176,Skip: no budget,—,,,,,
+220,1003196,Skip,,601153.8492366084,Skip: below threshold,—,,,,,
+221,1016576,Skip,,369516.06309283694,Skip: below threshold,—,,,,,
+222,1014261,Skip,,142326.2299145125,Skip: below threshold,—,,,,,
+223,1009171,Skip,,426012.50709515234,Skip: below threshold,—,,,,,
+224,1012256,Skip,,329229.0263474559,Skip: no budget,—,,,,,
+225,1000249,Skip,,257160.96062206788,Skip: no budget,—,,,,,
+226,1011975,Skip,,486698.455251716,Skip: no budget,—,,,,,
+227,1008036,Skip,,485350.3372348176,Skip: no budget,—,,,,,
+228,1002110,Skip,,624561.1809995614,Skip: no budget,—,,,,,
+229,1002174,Skip,,133757.1896983879,Skip: no budget,—,,,,,
+230,1007937,Skip,,508058.4261624958,Skip: no budget,—,,,,,
+231,1004229,Skip,,144278.02404029804,Skip: below threshold,—,,,,,
+232,1006378,Skip,,1309434.653509539,Skip: no budget,—,,,,,
+233,1002893,Skip,,834235.4130093089,Skip: below threshold,—,,,,,
+234,1005832,Skip,,1176995.518501112,Skip: no budget,—,,,,,
+235,1001065,Skip,,616752.5979149066,Skip: no budget,—,,,,,
+236,1005492,Skip,,302415.02392743045,Skip: no budget,—,,,,,
+237,1010508,Skip,,396422.4937772889,Skip: no budget,—,,,,,
+238,1004649,Skip,,258552.25760071035,Skip: no budget,—,,,,,
+239,1015543,Skip,,312499.1503324733,Skip: below threshold,—,,,,,
+240,1002114,Skip,,350546.5986313549,Skip: no budget,—,,,,,
+241,1015019,Skip,,431226.1779446568,Skip: below threshold,—,,,,,
+242,1017239,Skip,,160849.2923485551,Skip: below threshold,—,,,,,
+243,1014402,Auction Lost,10000,696968.6515135118,Bid,No,,,,"Frodo: $796,750, Aragorn: $767,058, Pippin: $767,058, Gimli: $693,679, You: $592,423",Frodo
+244,1001322,Skip,,937728.2744226452,Skip: no budget,—,,,,,
+245,1016494,Skip,,254853.90563608025,Skip: no budget,—,,,,,
+246,1010815,Skip,,181681.37795735296,Skip: no budget,—,,,,,
+247,1001530,Skip,,619779.9403834927,Skip: below threshold,—,,,,,
+248,1014680,Skip,,361598.4268212722,Skip: no budget,—,,,,,
+249,1001813,Skip,,829059.3590262204,Skip: below threshold,—,,,,,
