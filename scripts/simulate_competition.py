@@ -342,12 +342,15 @@ def plot_ratio_distributions(ratio_df: pd.DataFrame, output_path: str):
 # ─── main ──────────────────────────────────────────────────────────────────────
 
 def main():
+    import sys
     base = Path(".")
 
-    # 1. Cargar OOF Round 4 (nuestras predicciones en train set)
-    oof_path = base / "submissions" / "oof_round4_quantile.csv"
+    # Aceptar OOF alternativo via argumento: python simulate_competition.py oof_round5_conservative.csv
+    oof_filename = sys.argv[1] if len(sys.argv) > 1 else "oof_round4_quantile.csv"
+    oof_path = base / "submissions" / oof_filename
     oof = pd.read_csv(oof_path).rename(columns={'predicted_price': 'our_pred'})
-    print(f"[1] OOF Round 4 cargado: {len(oof):,} propiedades")
+    model_label = oof_filename.replace("oof_", "").replace(".csv", "")
+    print(f"[1] OOF cargado ({model_label}): {len(oof):,} propiedades")
 
     # 2. Cargar true values del train set
     train = pd.read_csv(base / "data" / "tabular" / "train_processed.csv",
@@ -369,26 +372,32 @@ def main():
     print(f"    Total bids de SAM en exports: {n_sam_bids}")
     print(f"    Equipos detectados: {sorted(ratio_df['team'].unique())}")
 
-    # Ajustar corrección Round3 → Round4
-    # R4 es más conservador (quantile α=0.35), generalmente ~5-10% menor que R3
-    # Cargamos ambas predicciones test para estimar el factor
+    # Calcular factor de escala: el modelo actual vs R3 (baseline de calibracion)
+    # Los ratios de competidores fueron medidos usando nuestras predicciones R3
+    # En simulacion usamos predicciones del modelo actual → ajustar ratios
     try:
-        r3_test = pd.read_csv(base / "submissions" / "round3_distress_fix.csv")
-        r4_test = pd.read_csv(base / "submissions" / "round4_quantile.csv")
-        r3_test = r3_test.rename(columns={'predicted_price': 'r3'})
-        r4_test = r4_test.rename(columns={'predicted_price': 'r4'})
-        r_merge = r3_test.merge(r4_test, on='zpid')
-        scale_r4_r3 = (r_merge['r4'] / r_merge['r3']).median()
-        print(f"\n[4b] Factor de escala R4/R3 (test set): {scale_r4_r3:.4f}")
-        print(f"     (Los competitors usan R3 como referencia — los normalizamos a R4)")
+        r3_test  = pd.read_csv(base / "submissions" / "round3_distress_fix.csv")
+        cur_test = pd.read_csv(base / "submissions" / oof_filename.replace("oof_", ""))
+        r3_test  = r3_test.rename(columns={'predicted_price': 'r3'})
+        cur_test = cur_test.rename(columns={'predicted_price': 'cur'})
+        r_merge  = r3_test.merge(cur_test, on='zpid')
+        scale_cur_r3 = (r_merge['cur'] / r_merge['r3']).median()
+        print(f"\n[4b] Factor de escala {model_label}/R3: {scale_cur_r3:.4f}")
     except Exception:
-        scale_r4_r3 = 1.0
-        print("\n[4b] No se pudo calcular factor R3→R4, usando 1.0")
+        try:
+            r3_test = pd.read_csv(base / "submissions" / "round3_distress_fix.csv")
+            r4_test = pd.read_csv(base / "submissions" / "round4_quantile.csv")
+            r3_test = r3_test.rename(columns={'predicted_price': 'r3'})
+            r4_test = r4_test.rename(columns={'predicted_price': 'r4'})
+            r_merge = r3_test.merge(r4_test, on='zpid')
+            scale_cur_r3 = (r_merge['r4'] / r_merge['r3']).median()
+            print(f"\n[4b] Factor de escala R4/R3 (fallback): {scale_cur_r3:.4f}")
+        except Exception:
+            scale_cur_r3 = 1.0
+            print("\n[4b] No se pudo calcular factor de escala, usando 1.0")
 
-    # Ajustar ratios: como los ratios están medidos vs R3, y en simulación usamos R4,
-    # competitor_pred_real = our_r3 × ratio = our_r4 × (ratio / scale_r4_r3)
-    # → ratios_ajustados = ratio / scale_r4_r3
-    ratio_df['ratio_adjusted'] = ratio_df['ratio'] / scale_r4_r3
+    # Ajustar ratios: competitor_pred_real = our_r3 × ratio = our_cur × (ratio / scale_cur_r3)
+    ratio_df['ratio_adjusted'] = ratio_df['ratio'] / scale_cur_r3
 
     # Filtrar ratios extremos (Legolas y Merry en distressed sales)
     # Usamos percentil 5-95 para ser robustos
