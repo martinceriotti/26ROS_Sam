@@ -87,7 +87,7 @@ def parse_all_exports(export_dir: str) -> tuple:
         auctions = df[mask].copy()
 
         for _, row in auctions.iterrows():
-            our_pred = row.get('My Prediction', np.nan)
+            our_pred = pd.to_numeric(row.get('My Prediction', np.nan), errors='coerce')
             if pd.isna(our_pred) or our_pred < 1000:
                 continue
 
@@ -345,69 +345,61 @@ def main():
     import sys
     base = Path(".")
 
-    # Aceptar OOF alternativo via argumento: python simulate_competition.py oof_round5_conservative.csv
-    oof_filename = sys.argv[1] if len(sys.argv) > 1 else "oof_round4_quantile.csv"
-    oof_path = base / "submissions" / oof_filename
-    oof = pd.read_csv(oof_path).rename(columns={'predicted_price': 'our_pred'})
-    model_label = oof_filename.replace("oof_", "").replace(".csv", "")
-    print(f"[1] OOF cargado ({model_label}): {len(oof):,} propiedades")
+    # Args: [oof_file] [export_dir] [pred_scale]
+    # Ej:  python simulate_competition.py oof_round5_conservative.csv resultado_6 0.95
+    oof_filename = sys.argv[1] if len(sys.argv) > 1 else "oof_round5_conservative.csv"
+    export_dir   = sys.argv[2] if len(sys.argv) > 2 else "primerround"
+    pred_scale   = float(sys.argv[3]) if len(sys.argv) > 3 else 1.0
 
-    # 2. Cargar true values del train set
+    oof_path    = base / "submissions" / oof_filename
+    oof         = pd.read_csv(oof_path).rename(columns={"predicted_price": "our_pred"})
+    model_label = oof_filename.replace("oof_", "").replace(".csv", "")
+    scale_label = f" x{pred_scale:.2f}" if pred_scale != 1.0 else ""
+    print(f"[1] OOF cargado ({model_label}{scale_label}): {len(oof):,} propiedades")
+
     train = pd.read_csv(base / "data" / "tabular" / "train_processed.csv",
-                        usecols=['zpid', 'lastSoldPrice_hpi_adjusted'])
-    train = train.rename(columns={'lastSoldPrice_hpi_adjusted': 'true_value'})
+                        usecols=["zpid", "lastSoldPrice_hpi_adjusted"])
+    train = train.rename(columns={"lastSoldPrice_hpi_adjusted": "true_value"})
     print(f"[2] Train cargado: {len(train):,} propiedades")
 
-    # 3. Merge OOF + true values
-    merged = oof.merge(train, on='zpid', how='inner')
-    merged = merged[(merged['true_value'] > 0) & (merged['our_pred'] > 0)].dropna()
-    print(f"[3] Merge OK: {len(merged):,} propiedades con true value + predicción")
+    merged = oof.merge(train, on="zpid", how="inner")
+    merged = merged[(merged["true_value"] > 0) & (merged["our_pred"] > 0)].dropna()
+    print(f"[3] Merge OK: {len(merged):,} propiedades")
 
-    our_preds   = merged['our_pred'].values
-    true_values = merged['true_value'].values
+    our_preds   = merged["our_pred"].values * pred_scale
+    true_values = merged["true_value"].values
 
-    # 4. Parsear exports de ronda real para calibrar competidores
-    ratio_df, n_sam_bids = parse_all_exports(str(base / "Salidas" / "primerround"))
-    print(f"\n[4] Exports de competencia parseados: {len(ratio_df):,} observaciones de bids")
-    print(f"    Total bids de SAM en exports: {n_sam_bids}")
-    print(f"    Equipos detectados: {sorted(ratio_df['team'].unique())}")
+    # 4. Calibrar competidores desde exports de ronda real
+    export_path = str(base / "Salidas" / export_dir)
+    ratio_df, n_sam_bids = parse_all_exports(export_path)
+    print(f"\n[4] Exports '{export_dir}': {len(ratio_df):,} bids  |  SAM bids: {n_sam_bids}")
+    print(f"    Equipos: {sorted(ratio_df['team'].unique())}")
 
-    # Calcular factor de escala: el modelo actual vs R3 (baseline de calibracion)
-    # Los ratios de competidores fueron medidos usando nuestras predicciones R3
-    # En simulacion usamos predicciones del modelo actual → ajustar ratios
-    try:
-        r3_test  = pd.read_csv(base / "submissions" / "round3_distress_fix.csv")
-        cur_test = pd.read_csv(base / "submissions" / oof_filename.replace("oof_", ""))
-        r3_test  = r3_test.rename(columns={'predicted_price': 'r3'})
-        cur_test = cur_test.rename(columns={'predicted_price': 'cur'})
-        r_merge  = r3_test.merge(cur_test, on='zpid')
-        scale_cur_r3 = (r_merge['cur'] / r_merge['r3']).median()
-        print(f"\n[4b] Factor de escala {model_label}/R3: {scale_cur_r3:.4f}")
-    except Exception:
+    # Ajuste de escala: los ratios son relativos a las predicciones usadas en esos exports.
+    # resultado_6/resultado_5 usaron R5 como referencia -> ratios ya son vs R5, sin ajuste.
+    # primerround uso R3 como referencia -> hay que ajustar al modelo actual.
+    if export_dir in ("resultado_6", "resultado_5", "resultados_5"):
+        scale_ref = 1.0
+        print(f"\n[4b] Exports recientes (R5 como referencia): sin ajuste de escala.")
+    else:
         try:
-            r3_test = pd.read_csv(base / "submissions" / "round3_distress_fix.csv")
-            r4_test = pd.read_csv(base / "submissions" / "round4_quantile.csv")
-            r3_test = r3_test.rename(columns={'predicted_price': 'r3'})
-            r4_test = r4_test.rename(columns={'predicted_price': 'r4'})
-            r_merge = r3_test.merge(r4_test, on='zpid')
-            scale_cur_r3 = (r_merge['r4'] / r_merge['r3']).median()
-            print(f"\n[4b] Factor de escala R4/R3 (fallback): {scale_cur_r3:.4f}")
+            r3_test  = pd.read_csv(base / "submissions" / "round3_distress_fix.csv")
+            cur_test = pd.read_csv(base / "submissions" / oof_filename.replace("oof_", ""))
+            r3_test  = r3_test.rename(columns={"predicted_price": "r3"})
+            cur_test = cur_test.rename(columns={"predicted_price": "cur"})
+            r_merge  = r3_test.merge(cur_test, on="zpid")
+            scale_ref = (r_merge["cur"] / r_merge["r3"]).median()
+            print(f"\n[4b] Factor escala {model_label}/R3: {scale_ref:.4f}")
         except Exception:
-            scale_cur_r3 = 1.0
-            print("\n[4b] No se pudo calcular factor de escala, usando 1.0")
+            scale_ref = 1.0
+            print("\n[4b] Sin factor de escala (usando 1.0)")
 
-    # Ajustar ratios: competitor_pred_real = our_r3 × ratio = our_cur × (ratio / scale_cur_r3)
-    ratio_df['ratio_adjusted'] = ratio_df['ratio'] / scale_cur_r3
+    ratio_df["ratio_adjusted"] = ratio_df["ratio"] / scale_ref
 
-    # Filtrar ratios extremos (Legolas y Merry en distressed sales)
-    # Usamos percentil 5-95 para ser robustos
-    ratio_df_clean = ratio_df.copy()
-    # Mantener outliers — capturar comportamiento real de Legolas/Merry
-
-    # 5. Ajustar modelo lognormal por equipo (con p_cond)
+    # 5. Ajustar modelo lognormal por equipo
     competitor_params = {}
-    for team in sorted(ratio_df_clean['team'].unique()):
-        ratios = ratio_df_clean[ratio_df_clean['team'] == team]['ratio_adjusted'].values
+    for team in sorted(ratio_df["team"].unique()):
+        ratios = ratio_df[ratio_df["team"] == team]["ratio_adjusted"].values
         if len(ratios) < 3:
             continue
         params = fit_competitor_model(ratios, n_sam_bids)
@@ -415,48 +407,41 @@ def main():
         print(f"    {team:<12} n={params['n']:>4}  p_cond={params['p_cond']:.2%}  "
               f"mediana={params['median']:.3f}x  log_std={params['log_std']:.3f}")
 
-    # Graficamos distribución de ratios (diagnóstico)
     Path("reports").mkdir(exist_ok=True)
     plot_ratio_distributions(ratio_df, "reports/competitor_ratios.png")
 
-    # 6. Correr simulación Monte Carlo
-    print(f"\n[5] Corriendo {N_SIMS:,} simulaciones Monte Carlo "
-          f"({N_ROUNDS} rondas × {N_PROPS_PER_ROUND} props/ronda)...")
-
+    # 6. Simulacion Monte Carlo
+    print(f"\n[5] Corriendo {N_SIMS:,} simulaciones ({N_ROUNDS} rondas x {N_PROPS_PER_ROUND} props)...")
     roi_by_team, props_bought, profitable = run_monte_carlo(
         our_preds, true_values, competitor_params, n_sims=N_SIMS
     )
 
-    # 7. Calcular win rates
-    teams = list(roi_by_team.keys())
-    roi_matrix = np.array([roi_by_team[t] for t in teams])  # (n_teams, n_sims)
-    win_rates = {}
+    teams      = list(roi_by_team.keys())
+    roi_matrix = np.array([roi_by_team[t] for t in teams])
+    win_rates  = {}
     for i, t in enumerate(teams):
         win_rates[t] = (roi_matrix.argmax(axis=0) == i).sum() / N_SIMS * 100
 
-    # 8. Mostrar resultados
     print_summary(roi_by_team, props_bought, profitable, competitor_params)
-
-    # 9. Graficar
     plot_results(roi_by_team, win_rates, "reports/simulator_results.png")
 
-    # 10. Exportar tabla de resultados
     rows = []
     for t in sorted(teams, key=lambda x: win_rates[x], reverse=True):
         roi = roi_by_team[t]
         rows.append({
-            'Equipo': t,
-            'ROI Medio (%)': round(roi.mean(), 2),
-            'ROI Mediana (%)': round(np.median(roi), 2),
-            'Std ROI (%)': round(roi.std(), 2),
-            'VaR 5% (%)': round(np.percentile(roi, 5), 2),
-            'Prob Positive (%)': round((roi > 0).mean() * 100, 2),
-            'Win Rate (%)': round(win_rates[t], 2),
-            'Props/sim (media)': round(props_bought[t].mean(), 2),
+            "Equipo":             t,
+            "ROI Medio (%)":      round(roi.mean(), 2),
+            "ROI Mediana (%)":    round(np.median(roi), 2),
+            "Std ROI (%)":        round(roi.std(), 2),
+            "VaR 5% (%)":         round(np.percentile(roi, 5), 2),
+            "Prob Positive (%)":  round((roi > 0).mean() * 100, 2),
+            "Win Rate (%)":       round(win_rates[t], 2),
+            "Props/sim (media)":  round(props_bought[t].mean(), 2),
         })
     results_df = pd.DataFrame(rows)
-    results_df.to_csv("reports/simulator_results.csv", index=False)
-    print(f"  Tabla guardada en: reports/simulator_results.csv")
+    out_csv = f"reports/simulator_results_{export_dir}_scale{pred_scale:.2f}.csv"
+    results_df.to_csv(out_csv, index=False)
+    print(f"  Tabla guardada en: {out_csv}")
 
 
 if __name__ == "__main__":
