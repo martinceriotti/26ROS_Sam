@@ -46,8 +46,13 @@ secrets.*
 
 # Embeddings e imágenes generados — reproducibles con extract_embeddings.py
 data/embeddings_clip512.npz
+data/embeddings_clip512_multi.npz
 data/distress_scores.csv
 data/clip_scores.csv
+data/clip_scores_multi.csv
 
 # Logs de ejecución
 logs/
+
+# Outputs intermedios de modelos — reproducibles
+Salidas/

@@ -58,8 +58,10 @@ Subasta Vickrey: gana el mayor postor, paga el segundo precio
 
 - 1,000 simulaciones Monte Carlo por ronda de competencia
 - 4 rondas internas por simulación, capital $5M por ronda
-- **Ganador:** equipo con mayor win rate (% de simulaciones en primer lugar)
+- **Ganador:** equipo con mayor **Mean ROI promedio** (confirmado en dashboard_guide_es.md: "métrica principal de ranking")
+  - Win Rate (% de sims en primer lugar) es métrica secundaria — NO determina el ganador
 - **Métrica a optimizar:** ROI medio alto + std del ROI bajo (predicciones consistentes)
+- **Penalización por capital inactivo:** opportunity cost 4% anual sobre capital no invertido
 
 ## Convenciones de código
 
