@@ -231,6 +231,11 @@ META_LESSONS = [
      "en la misma corrida. Antes de decidir, se repitieron las comparaciones "
      "clave 2 o 3 veces para confirmar que la diferencia era real y no ruido "
      "del muestreo Monte Carlo."),
+    ("Comparar siempre contra el campeon vigente, no contra una version vieja",
+     "Kelly y Edge parecian ganar por mucho contra versiones sin escalar — pero "
+     "comparados de forma justa contra scale083 (el campeon real), quedaron "
+     "empatados o por debajo. Confirmar que un desafiante le gana al mejor "
+     "modelo actual, no a un rival mas facil, evita una falsa sensacion de mejora."),
 ]
 
 KELLY_RESULTS = [
@@ -242,11 +247,30 @@ KELLY_RESULTS = [
 KELLY_FLAT_ROI = 9.95      # Mean ROI local, escala plana 0.83 (misma base cruda)
 KELLY_SEGMENT_ROI = 10.15  # Mean ROI local, escala Kelly por segmento
 
+EDGE_RESULTS = [
+    # (bucket, Hit Rate %, EV por subasta como % del bid, escala sugerida)
+    ("SF-bajo", 78.6, 1.55, 0.806), ("SF-medio", 85.9, 1.88, 0.847), ("SF-alto", 89.9, 2.04, 0.867),
+    ("CONDO-bajo", 78.8, 1.50, 0.800), ("CONDO-medio", 86.0, 1.69, 0.823), ("CONDO-alto", 91.3, 1.86, 0.845),
+    ("REST-bajo", 74.2, 1.47, 0.796), ("REST-medio", 86.4, 1.69, 0.823), ("REST-alto", 93.0, 2.10, 0.876),
+]
+EDGE_FLAT_ROI = 9.95     # Mean ROI local, escala plana 0.83
+EDGE_BUCKET_ROI = 10.22  # Mean ROI local, escala por bucket fino (segmento x tercil de precio)
+
+# Validacion final en el dashboard real de Practice: Kelly y Edge comparados
+# contra el campeon vigente (scale083), no contra versiones sin escalar.
+PRACTICE_FINAL_VALIDATION = [
+    # (modelo, Mean ROI %, Sharpe, Hit Rate %, Props/sim)
+    ("round8_distress_fix_scale083 (campeon)", 32.72, 2.732, 81.0, 13.8),
+    ("kelly_segment", 32.57, 2.702, 82.1, 15.7),
+    ("edge_bucket", 31.01, 2.800, 85.4, 9.3),
+]
+
 FINAL_RECOMMENDATION = (
-    "Modelo elegido para la proxima ronda real: round8_distress_fix_scale083.csv\n\n"
+    "Modelo elegido para la presentacion final: round8_distress_fix_scale083.csv\n\n"
     "Es el modelo de Ronda 8 (tabular + imagenes CLIP + fix quirurgico de "
-    "propiedades distressed confirmadas) con todas las predicciones escaladas "
-    "x0.83. Es la combinacion que mejor Mean ROI mostro de forma consistente "
-    "en validaciones repetidas, tanto en simulacion local como en el dashboard "
-    "real de Practice."
+    "propiedades distressed) con todas las predicciones escaladas x0.83. Se "
+    "probaron dos refinamientos mas finos para tratar de superarlo (Kelly por "
+    "segmento y Edge por segmento x precio, secciones 6 y 7): ninguno le gano "
+    "de forma clara en el dashboard real de Practice. La escala 0.83 queda "
+    "confirmada como la mejor opcion disponible."
 )

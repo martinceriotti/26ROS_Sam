@@ -280,9 +280,10 @@ def main():
     add_title(s, "Cronologia: que probamos, que funciono y que no")
 
     rows_data = [(r['n'], r['name'], r['verdict']) for r in C.ROUNDS]
-    rows_data.append(("Extra", "Criterio de Kelly (escala por segmento)", "ok"))
+    rows_data.append(("Extra", "Criterio de Kelly (escala por segmento) — casi empata al campeon", "ok"))
+    rows_data.append(("Extra", "Edge por bucket (segmento x precio) — no supera al campeon", "mixed"))
     n_rows = len(rows_data) + 1
-    row_h = Emu(370000)
+    row_h = Emu(350000)
     table_shape = s.shapes.add_table(n_rows, 3, Emu(700000), Emu(1500000),
                                       Emu(10800000), row_h * n_rows)
     table = table_shape.table
@@ -368,8 +369,9 @@ def main():
             set_cell_text(t.cell(i, c), v, size=11.5, color=DARK, align=PP_ALIGN.CENTER, fill=fill)
 
     add_result_box(
-        s, f"Mean ROI local: 0.83 plano = {C.KELLY_FLAT_ROI:.2f}%  →  "
-           f"Kelly por segmento = {C.KELLY_SEGMENT_ROI:.2f}%  (mejora chica pero real)",
+        s, f"Local: 0.83 plano = {C.KELLY_FLAT_ROI:.2f}%  →  Kelly = {C.KELLY_SEGMENT_ROI:.2f}%  "
+           f"·  Practice real: Kelly {C.PRACTICE_FINAL_VALIDATION[1][1]:.2f}% vs "
+           f"campeon {C.PRACTICE_FINAL_VALIDATION[0][1]:.2f}% (empate practico)",
         TEAL, top=Emu(5000000),
     )
     add_paragraphs(s, [
@@ -377,18 +379,58 @@ def main():
         "que la escala plana ya estaba cerca del optimo — sin gran diferenciacion.",
     ], size=13, top=Emu(5750000), height=Emu(700000), color=GRAY)
 
+    # ── 7b. Edge (valor esperado) por bucket fino ───────────────────────────
+    s = base_slide(prs, TEAL, corner="tr")
+    add_kicker(s, "EXPERIMENTO NUEVO")
+    add_title(s, "Edge (valor esperado) por segmento x precio")
+    add_paragraphs(s, [
+        "EV = P(ganar) x (valor_real − costo pagado). Kelly ya midio esto por "
+        "segmento y no encontro diferencia. Cortando mas fino — segmento x tercil "
+        "de precio predicho — SI aparece un patron real y consistente.",
+    ], size=15, top=Emu(1550000), height=Emu(1000000))
+
+    headers2 = ["Bucket", "Hit Rate", "EV (% del bid)", "Escala"]
+    tshape2 = s.shapes.add_table(4, 4, Emu(1600000), Emu(2650000), Emu(9000000), Emu(1500000))
+    t2 = tshape2.table
+    for c, h in enumerate(headers2):
+        set_cell_text(t2.cell(0, c), h, size=12, bold=True, color=WHITE, align=PP_ALIGN.CENTER)
+        t2.cell(0, c).fill.solid(); t2.cell(0, c).fill.fore_color.rgb = NAVY
+    edge_summary = [
+        ("bajo (los 3 segmentos)", 77.2, 1.51, "~0.80"),
+        ("medio (los 3 segmentos)", 86.1, 1.75, "~0.83"),
+        ("alto (los 3 segmentos)", 91.4, 2.06, "~0.87"),
+    ]
+    for i, (b, hit, ev, scale) in enumerate(edge_summary, start=1):
+        fill = RGBColor(0xF7, 0xF8, 0xFC) if i % 2 == 0 else WHITE
+        vals = [b, f"{hit:.1f}%", f"{ev:.2f}%", scale]
+        for c, v in enumerate(vals):
+            set_cell_text(t2.cell(i, c), v, size=11, color=DARK, align=PP_ALIGN.CENTER, fill=fill)
+
+    m = C.PRACTICE_FINAL_VALIDATION
+    add_result_box(
+        s, f"Local: 0.83 plano = {C.EDGE_FLAT_ROI:.2f}%  →  Edge = {C.EDGE_BUCKET_ROI:.2f}%  "
+           f"·  Practice real: Edge {m[2][1]:.2f}% vs campeon {m[0][1]:.2f}% (queda por debajo)",
+        ORANGE, top=Emu(4550000),
+    )
+    add_paragraphs(s, [
+        "El tercil 'alto' de precio siempre tiene mas edge que el 'bajo', en los 3 "
+        "segmentos. Real, pero en Practice la mayor selectividad (menos volumen) "
+        "no alcanzo para superar al campeon.",
+    ], size=13, top=Emu(5300000), height=Emu(900000), color=GRAY)
+
     # ── 8. Recomendacion final ───────────────────────────────────────────────
     s = base_slide(prs, PINK, corner="tr")
     add_kicker(s, "RECOMENDACION FINAL")
-    add_title(s, "Modelo elegido para la proxima ronda")
+    add_title(s, "Modelo elegido para la presentacion final")
     add_result_box(s, C.FINAL_MODEL, NAVY, top=Emu(1650000))
     add_paragraphs(s, [C.FINAL_RECOMMENDATION.split("\n\n")[1]],
-                   top=Emu(2500000), size=16, height=Emu(1400000))
+                   top=Emu(2500000), size=15.5, height=Emu(1600000))
     add_bullets(s, [
         "Rondas 1 a 8: evolucion incremental, validada en Practice en cada paso.",
         "Ronda 9 (texto/LLM): pausada, no aporta con la cobertura/calidad actual.",
-        "Calibracion de escala: la mejora final, grande y reproducible.",
-    ], top=Emu(4200000), size=15, height=Emu(1800000))
+        "Kelly y Edge: probados a fondo, ninguno le gano al campeon — se cierra "
+        "la busqueda de mejoras con la escala 0.83 confirmada.",
+    ], top=Emu(4500000), size=14.5, height=Emu(1800000))
 
     # ── 9. Gracias ────────────────────────────────────────────────────────────
     s = prs.slides.add_slide(prs.slide_layouts[6])

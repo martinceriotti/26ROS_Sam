@@ -424,10 +424,67 @@ def kelly_page(pdf, page_num):
         f"escala Kelly por segmento = {C.KELLY_SEGMENT_ROI:.2f}%",
         color=C.TEAL,
     )
+    m = C.PRACTICE_FINAL_VALIDATION
     w.lesson_box(
-        "Kelly aca no descubre una mejora dramatica — confirma que nuestra escala "
-        "plana ya estaba cerca del optimo, con un margen chico para afinar por "
-        "segmento. Pendiente de validar en el dashboard real de Practice."
+        f"Validado en el dashboard real de Practice contra el campeon vigente "
+        f"(scale083): kelly_segment quedo practicamente empatado "
+        f"({m[1][1]:.2f}% vs {m[0][1]:.2f}% Mean ROI, -{m[0][1]-m[1][1]:.2f}pp). "
+        f"No lo supera, pero confirma que la escala 0.83 ya es una eleccion solida."
+    )
+    w.footer(page_num)
+    pdf.savefig(fig); plt.close(fig)
+
+
+def edge_page(pdf, page_num):
+    fig = plt.figure(figsize=(PAGE_W, PAGE_H))
+    ax = fig.add_axes([0, 0, 1, 1])
+    w = PageWriter(ax)
+    w.header_bar("SECCION 7 · EN DETALLE", "Edge (valor esperado) por segmento x precio")
+
+    w.write(
+        "Si pudieramos repetir la misma subasta muchas veces, cuanto ganariamos en "
+        "promedio? EV = P(ganar) x (valor_real − costo pagado) — el costo solo se "
+        "paga si ganamos. Kelly (Seccion 6) ya midio esto por segmento y encontro "
+        "poca diferencia. Aca se corta mas fino: segmento x tercil de precio "
+        "predicho dentro de ese segmento.",
+        fontsize=10, wrap=90, color=C.DARK, dy_after=0.026,
+    )
+    w.skip(0.006)
+
+    y0 = w.y
+    headers = ["Bucket", "Hit Rate", "EV (% del bid)", "Escala sugerida"]
+    col_x = [0.10, 0.34, 0.55, 0.78]
+    for cx, h in zip(col_x, headers):
+        w.ax.text(cx, y0, h, fontsize=9, fontweight='bold', color=C.NAVY, va='top')
+    y0 -= 0.024
+    for bucket, hit, ev, scale in C.EDGE_RESULTS:
+        vals = [bucket, f"{hit:.1f}%", f"{ev:.2f}%", f"{scale}"]
+        for cx, v in zip(col_x, vals):
+            w.ax.text(cx, y0, v, fontsize=8.8, va='top', family='monospace')
+        y0 -= 0.0225
+    w.y = y0 - 0.018
+
+    w.write("Resultado honesto", fontsize=12, bold=True, color=C.NAVY, dy_after=0.028)
+    w.write(
+        f"A diferencia del corte por segmento solo, aca SI hay un patron consistente: "
+        f"el tercil 'alto' (Hit Rate ~90-93%) supera siempre al tercil 'bajo' "
+        f"(Hit Rate ~74-79%) en los 3 segmentos. Escalar por este bucket mas fino "
+        f"mejoro el Mean ROI local de {C.EDGE_FLAT_ROI:.2f}% a {C.EDGE_BUCKET_ROI:.2f}%, "
+        f"mas que Kelly por segmento solo.",
+        fontsize=10, wrap=90, color=C.DARK, dy_after=0.026,
+    )
+    w.result_box(
+        f"Mean ROI local: escala plana 0.83 = {C.EDGE_FLAT_ROI:.2f}%  →  "
+        f"escala por bucket fino = {C.EDGE_BUCKET_ROI:.2f}%",
+        color=C.TEAL,
+    )
+    m = C.PRACTICE_FINAL_VALIDATION
+    w.lesson_box(
+        f"En el dashboard real, comparado contra el campeon vigente, edge_bucket "
+        f"quedo por debajo ({m[2][1]:.2f}% vs {m[0][1]:.2f}% Mean ROI, "
+        f"-{m[0][1]-m[2][1]:.2f}pp) pese al mejor Hit Rate (85.4%) y Sharpe (2.80) — "
+        f"su selectividad (9 props/sim vs 14) le costo volumen. La heterogeneidad "
+        f"que encontramos es real, pero no alcanza para superar la escala plana."
     )
     w.footer(page_num)
     pdf.savefig(fig); plt.close(fig)
@@ -436,7 +493,7 @@ def kelly_page(pdf, page_num):
 def lessons_and_final_page(pdf, page_num):
     fig, ax = new_page()
     w = PageWriter(ax)
-    w.header_bar("SECCION 7", "Aprendizajes clave y recomendacion final")
+    w.header_bar("SECCION 8", "Aprendizajes clave y recomendacion final")
 
     for i, (title, body) in enumerate(C.META_LESSONS, start=1):
         w.write(f"{i}. {title}", fontsize=10.8, bold=True, color=C.NAVY, dy_after=0.024)
@@ -447,7 +504,7 @@ def lessons_and_final_page(pdf, page_num):
     w.ax.add_patch(FancyBboxPatch((0.06, w.y - 0.19), 0.88, 0.19, boxstyle="round,pad=0.010",
                    transform=w.ax.transAxes, linewidth=1.4, edgecolor=C.ORANGE, facecolor="#FAFBFF"))
     y0 = w.y - 0.022
-    w.ax.text(0.09, y0, "MODELO ELEGIDO PARA LA PROXIMA RONDA", fontsize=9.5, color=C.GRAY,
+    w.ax.text(0.09, y0, "MODELO ELEGIDO PARA LA PRESENTACION FINAL", fontsize=9.5, color=C.GRAY,
              va='top', fontweight='bold', transform=w.ax.transAxes)
     y0 -= 0.032
     w.ax.text(0.09, y0, C.FINAL_MODEL, fontsize=14, color=C.NAVY, va='top',
@@ -485,6 +542,7 @@ def main():
         round9_detail_page(pdf, page); page += 1
         scale_sweep_page(pdf, page); page += 1
         kelly_page(pdf, page); page += 1
+        edge_page(pdf, page); page += 1
         lessons_and_final_page(pdf, page)
 
     print(f"PDF generado: {out_path}  ({page} paginas + portada = {page + 1} totales)")
