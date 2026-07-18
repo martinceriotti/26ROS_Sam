@@ -42,27 +42,27 @@ llm_features_df = pd.read_csv('data/llm_description_features.csv')
 train = train.merge(llm_features_df, on='zpid', how='left')
 test  = test.merge(llm_features_df,  on='zpid', how='left')
 
-# Rellenar NaN de features LLM en caso de zpid no encontrado
+# NaN real donde llm_ok=0 (extraccion fallida o zpid no encontrado), en vez de
+# rellenar con valores dummy: 0/1 fijos colisionaban con categorias validas
+# (ej. llm_condition=0 es tambien 'unknown' real), mezclando "sin dato" con
+# una respuesta real del LLM. LightGBM maneja NaN nativamente como missing.
 LLM_BINARY_COLS = [
     'llm_has_view', 'llm_has_ocean_view', 'llm_has_bay_view', 'llm_has_city_view',
     'llm_has_golf_view', 'llm_is_penthouse', 'llm_is_corner', 'llm_has_concierge',
     'llm_has_elevator', 'llm_has_boat_dock', 'llm_has_guest_house',
-    'llm_is_fixer', 'llm_amenities_count', 'llm_distress_count', 'llm_ok',
+    'llm_is_fixer', 'llm_amenities_count', 'llm_distress_count',
 ]
 LLM_ORDINAL_COLS = ['llm_condition', 'llm_tier']
 LLM_NUMERIC_COLS = ['llm_floor_level', 'llm_renovation_age']
+LLM_SUBSTANTIVE_COLS = LLM_BINARY_COLS + LLM_ORDINAL_COLS + LLM_NUMERIC_COLS
+LLM_FEATURE_COLS = LLM_SUBSTANTIVE_COLS + ['llm_ok']
 
-LLM_FEATURE_COLS = LLM_BINARY_COLS + LLM_ORDINAL_COLS + LLM_NUMERIC_COLS
-
-for col in LLM_BINARY_COLS:
-    if col in train.columns:
-        train[col] = train[col].fillna(0).astype(int)
-        test[col]  = test[col].fillna(0).astype(int)
-for col in LLM_ORDINAL_COLS:
-    if col in train.columns:
-        train[col] = train[col].fillna(0 if col == 'llm_condition' else 1).astype(int)
-        test[col]  = test[col].fillna(0 if col == 'llm_condition' else 1).astype(int)
-# llm_floor_level y llm_renovation_age se dejan como NaN (LightGBM los trata como missing)
+for df in (train, test):
+    df['llm_ok'] = df['llm_ok'].fillna(0).astype(int)
+    missing_mask = df['llm_ok'] == 0
+    for col in LLM_SUBSTANTIVE_COLS:
+        if col in df.columns:
+            df.loc[missing_mask, col] = np.nan
 
 TARGET      = 'log_price'
 SEGMENT_COL = 'segment'
@@ -237,7 +237,7 @@ ZIP_RELATIVE_FEATURES = [
 ]
 
 # ── Features list ─────────────────────────────────────────────────────────────
-LLM_MODEL_FEATURES = [c for c in LLM_FEATURE_COLS if c != 'llm_ok']
+LLM_MODEL_FEATURES = LLM_FEATURE_COLS
 
 FEATURES_BASE = [
     'bedrooms', 'bathrooms', 'livingArea', 'yearBuilt',
@@ -459,7 +459,7 @@ print(f'Fix auto OOF: {n_oof_fixed} propiedades distressed (ratio > 2.5x)')
 
 # ── Submissions ───────────────────────────────────────────────────────────────
 llm_coverage = int(train['llm_ok'].sum()) if 'llm_ok' in train.columns else 0
-suffix = f'_llm{llm_coverage}'
+suffix = f'_nanimpute_llm{llm_coverage}'
 
 submission = pd.DataFrame({
     'zpid':            test['zpid'],
