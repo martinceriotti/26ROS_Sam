@@ -38,8 +38,8 @@ import requests
 
 # ── Config ────────────────────────────────────────────────────────────────────
 OLLAMA_URL      = 'http://localhost:11434/api/generate'
-MODEL_NAME      = 'qwen2.5:1.5b'   # cambiar a 'qwen2.5:3b' para mejor calidad
-DEMO_SIZE       = 200              # None = procesar todo
+MODEL_NAME      = 'qwen2.5:1.5b'   # 0.5b descartado: alucinaciones inaceptables
+DEMO_SIZE       = None             # None = procesar todo
 MAX_DESC_CHARS  = 800              # descripcion mas corta = mas rapido
 CHECKPOINT_PATH = Path('data/llm_descriptions_checkpoint.json')
 OUTPUT_PATH     = Path('data/llm_description_features.csv')
@@ -143,16 +143,39 @@ def process_one(zpid: int, description: str) -> dict:
 
 
 # ── Aplanar JSON a features escalares ────────────────────────────────────────
-CONDITION_MAP = {'excellent': 4, 'good': 3, 'fair': 2, 'poor': 1, 'unknown': 0}
-TIER_MAP      = {'luxury': 2, 'standard': 1, 'budget': 0}
+CONDITION_MAP = {
+    'excellent': 4, 'good': 3, 'fair': 2, 'poor': 1, 'unknown': 0,
+    # Aliases que el modelo usa fuera del schema
+    'luxury': 4, 'pristine': 4, 'perfect': 4, 'updated': 3, 'renovated': 3,
+    'dated': 2, 'needs work': 2, 'as_is': 1, 'damaged': 1,
+}
+TIER_MAP = {
+    'luxury': 2, 'standard': 1, 'budget': 0,
+    'unknown': 1, 'premium': 2, 'high-end': 2, 'investor': 0, 'distressed': 0,
+}
 
 def _parse_floor(val) -> float:
     if not val:
         return np.nan
     if isinstance(val, (int, float)):
-        return float(val)
-    m = re.search(r'\d+', str(val))
-    return float(m.group()) if m else np.nan
+        f = float(val)
+        return f if 1 <= f <= 100 else np.nan
+    s = str(val).lower().strip()
+    # Rechazar valores que claramente no son pisos
+    bad_patterns = ['sqft', 'square', 'bed', 'bath', '/', 'br', 'ba']
+    if any(p in s for p in bad_patterns):
+        return np.nan
+    # Extraer numero de "21st floor", "floor 5", "second" etc.
+    floor_words = {'first':1,'second':2,'third':3,'fourth':4,'fifth':5,
+                   'sixth':6,'seventh':7,'eighth':8,'ninth':9,'tenth':10}
+    for word, num in floor_words.items():
+        if word in s:
+            return float(num)
+    m = re.search(r'\b(\d{1,3})\b', s)
+    if m:
+        f = float(m.group(1))
+        return f if 1 <= f <= 100 else np.nan
+    return np.nan
 
 def flatten(record: dict) -> dict:
     views     = record.get('views')     or []
