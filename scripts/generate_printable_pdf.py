@@ -306,6 +306,12 @@ def scale_sweep_page(pdf, page_num):
 
     w.y = 0.475
     w.write(
+        "Ojo: en este grafico local, la escala 0.85 muestra un pico un poco mas "
+        "alto que 0.83 — pero esta simulacion casera es aproximada, no la fuente "
+        "de verdad (ver por que mas abajo).",
+        fontsize=9.3, wrap=90, color=GRAY, italic=True, dy_after=0.024,
+    )
+    w.write(
         "Meseta optima entre escala 0.80 y 0.85: el Mean ROI local sube de 8.26% "
         "(sin escalar) a ~10.1-10.3% (+24% relativo). Validado en el dashboard real "
         "con 3 corridas independientes, cada una con un campo competitivo distinto:",

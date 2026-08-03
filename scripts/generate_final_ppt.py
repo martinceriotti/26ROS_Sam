@@ -204,10 +204,11 @@ def add_result_box(slide, text, color, top):
     return box
 
 
-def base_slide(prs, tri_color, corner="tr"):
+def base_slide(prs, tri_color, corner="tr", skip_logo=False):
     slide = prs.slides.add_slide(prs.slide_layouts[6])  # blank
     add_triangle(slide, tri_color, corner=corner)
-    add_logo(slide, corner="bl" if corner == "tr" else "br")
+    if not skip_logo:
+        add_logo(slide, corner="bl" if corner == "tr" else "br")
     return slide
 
 
@@ -335,15 +336,21 @@ def main():
     ], size=14, top=Emu(5900000), height=Emu(900000))
 
     # ── 6. La calibracion final ─────────────────────────────────────────────
-    s = base_slide(prs, TEAL, corner="tr")
+    # Sin logo: esta slide ya esta ajustada de espacio (grafico + 2 parrafos).
+    s = base_slide(prs, TEAL, corner="tr", skip_logo=True)
     add_kicker(s, "LA MEJORA FINAL")
     add_title(s, "Calibracion de escala sobre Ronda 8")
-    s.shapes.add_picture(str(ASSETS / "chart_scale_sweep.png"), Emu(1350000), Emu(1500000),
-                         width=Emu(9600000))
     add_paragraphs(s, [
-        "Validado con 3 corridas independientes en el dashboard real: escala 0.83 "
-        "le gano a Ronda 8 sin escalar por 2x a 4x en Mean ROI, sin excepciones.",
-    ], size=14, top=Emu(6000000), height=Emu(800000))
+        "Ojo: en el grafico, 0.85 parece ganarle a 0.83 — pero es una simulacion "
+        "casera aproximada, no la fuente de verdad (ver por que abajo).",
+    ], size=12, top=Emu(1150000), height=Emu(500000), color=GRAY)
+    s.shapes.add_picture(str(ASSETS / "chart_scale_sweep.png"), Emu(1700000), Emu(1650000),
+                         width=Emu(8800000))
+    add_paragraphs(s, [
+        "Validado de verdad con 3 corridas independientes en el dashboard real: "
+        "ahi escala 0.83 le gano a 0.85 y a Ronda 8 sin escalar, por 2x a 4x en "
+        "Mean ROI, sin excepciones.",
+    ], size=13, top=Emu(6150000), height=Emu(650000))
 
     # ── 7. Criterio de Kelly ─────────────────────────────────────────────────
     s = base_slide(prs, INDIGO, corner="bl")
