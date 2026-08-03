@@ -24,11 +24,16 @@ RED_BAD   = "#C0392B"
 
 MECHANICS = [
     "Cada propiedad tiene un precio de oferta (asking price) generado al azar "
-    "alrededor del valor real: asking = valor_real x (1 + Normal(-7%, 35%)).",
+    "con una distribucion normal (gaussiana), media -7% y desvio 35%: "
+    "asking = valor_real x (1 + Normal(-7%, 35%)). En criollo: el asking suele "
+    "salir un poco por debajo del valor real, pero con mucha variacion — a "
+    "veces sale muy bajo, a veces muy alto.",
     "Compramos solo si nuestra prediccion supera el asking price en un 8% "
     "(pred > asking x 1.08).",
-    "Si compramos, ofertamos pred x 0.85 en una subasta Vickrey: gana el mayor "
-    "postor pero paga el precio del segundo postor.",
+    "Si compramos, ofertamos pred x 0.85 en una subasta Vickrey (gana el mayor "
+    "postor pero paga el precio del segundo postor). Ese x0.85 es una regla "
+    "fija de la competencia, no algo que ajustamos nosotros — lo que si "
+    "calibramos es la prediccion que entra a esa formula (alpha, escala).",
     "Se corren 1,000 simulaciones Monte Carlo, 4 rondas por simulacion, "
     "capital de $5M por ronda.",
     "Gana el equipo con mayor Mean ROI promedio (metrica principal). "
@@ -45,12 +50,20 @@ ROUNDS = [
     ),
     dict(
         n="Ronda 2", date="2026-06-09", name="Segmentacion + Feature Engineering",
-        summary="Modelos separados por tipo de propiedad (SINGLE_FAMILY / CONDO / RESTO) "
-                "mas ratios financieros, scores compuestos (lujo, distress) e interacciones.",
+        summary="Dos tecnicas distintas, probadas juntas en la misma ronda.\n\n"
+                "(1) Segmentacion: en vez de un solo modelo, se entrenaron 3 modelos "
+                "separados, uno por tipo de propiedad (SINGLE_FAMILY / CONDO / RESTO) — "
+                "no es una columna nueva, es una decision de arquitectura.\n\n"
+                "(2) Feature engineering: columnas nuevas calculadas a partir de las "
+                "existentes — ratios financieros (ej. tax_per_sqft = impuesto / "
+                "superficie), scores compuestos (ej. luxury_score = suma de pileta + "
+                "vista al agua + garage + HOA alto) e interacciones (ej. school_x_area "
+                "= rating de escuela x superficie).",
         result="Practice: Mean ROI 20.63%, Sharpe 1.06 — PEOR que Ronda 1",
         verdict="bad",
         lesson="Mas feature engineering no garantiza mejor resultado. Hay que medir "
-               "cada cambio en Practice antes de asumir que mejora.",
+               "cada cambio en Practice antes de asumir que mejora. Como las dos "
+               "tecnicas se probaron juntas, no sabemos cual de las dos causo la caida.",
     ),
     dict(
         n="Ronda 3", date="2026-06-11", name="Deteccion de \"distressed sales ocultas\"",

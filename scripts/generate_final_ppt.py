@@ -350,10 +350,10 @@ def main():
     add_kicker(s, "EXPERIMENTO NUEVO")
     add_title(s, "Criterio de Kelly, adaptado a la subasta")
     add_paragraphs(s, [
-        "Kelly clasico asume perder = perder toda la apuesta. Acá no: si nos "
-        "ganan la subasta, no perdemos nada. Lo adaptamos a p = Hit Rate, "
-        "W = ganancia y L = perdida (como fraccion del costo), condicionado a "
-        "ganar la subasta:  f* = p/L − q/W",
+        "En criollo: pensa 3 mesas de casino, una por segmento. En cada una "
+        "sabemos que tan seguido ganamos (Hit Rate) y cuanto ganamos/perdemos "
+        "cuando pasa — Kelly usa esos datos para decidir donde apostar mas "
+        "fuerte y donde mas flojo (formula: f* = p/L − q/W).",
     ], size=15, top=Emu(1550000), height=Emu(1300000))
 
     headers = ["Segmento", "Hit Rate", "Kelly f*", "Escala sugerida"]
@@ -375,8 +375,8 @@ def main():
         TEAL, top=Emu(5000000),
     )
     add_paragraphs(s, [
-        "Los 3 segmentos tienen perfil de riesgo parecido, asi que Kelly confirma "
-        "que la escala plana ya estaba cerca del optimo — sin gran diferenciacion.",
+        "Las 3 mesas salieron casi iguales — Kelly confirma que la escala plana "
+        "ya estaba cerca del optimo, sin gran diferenciacion entre segmentos.",
     ], size=13, top=Emu(5750000), height=Emu(700000), color=GRAY)
 
     # ── 7b. Edge (valor esperado) por bucket fino ───────────────────────────
@@ -384,9 +384,9 @@ def main():
     add_kicker(s, "EXPERIMENTO NUEVO")
     add_title(s, "Edge (valor esperado) por segmento x precio")
     add_paragraphs(s, [
-        "EV = P(ganar) x (valor_real − costo pagado). Kelly ya midio esto por "
-        "segmento y no encontro diferencia. Cortando mas fino — segmento x tercil "
-        "de precio predicho — SI aparece un patron real y consistente.",
+        "En criollo: Kelly separo en 3 mesas por segmento y no vio diferencias. "
+        "Edge parte cada mesa en otras 3 segun que tan cara es la propiedad "
+        "DENTRO de su propio segmento (barata/media/cara) — 9 mesas en total.",
     ], size=15, top=Emu(1550000), height=Emu(1000000))
 
     headers2 = ["Bucket", "Hit Rate", "EV (% del bid)", "Escala"]
