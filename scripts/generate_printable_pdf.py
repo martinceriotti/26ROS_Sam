@@ -495,6 +495,56 @@ def lessons_and_final_page(pdf, page_num):
     pdf.savefig(fig); plt.close(fig)
 
 
+def qa_page(pdf, page_num, qa_subset, page_label, start_n):
+    fig, ax = new_page()
+    w = PW(ax)
+    w.header("ANEXO · GUIA DE ESTUDIO", page_label)
+    for i, (q, a) in enumerate(qa_subset, start=start_n):
+        w.write(f"{i}. {q}", fontsize=10.3, bold=True, wrap=98, dy_after=0.022)
+        w.write(a, fontsize=9.3, wrap=100, color=GRAY, dy_after=0.020)
+        w.ax.add_patch(plt.Rectangle((0.07, w.y + 0.006), 0.86, 0.0008,
+                       transform=w.ax.transAxes, facecolor="#cccccc"))
+        w.skip(0.020)
+    w.footer(page_num)
+    pdf.savefig(fig); plt.close(fig)
+
+
+def mc_page(pdf, page_num, mc_subset, page_label, start_n):
+    fig, ax = new_page()
+    w = PW(ax)
+    w.header("ANEXO · MULTIPLE CHOICE (autoevaluacion)", page_label)
+    letters = ["A", "B", "C", "D"]
+    for i, (q, options, _correct) in enumerate(mc_subset, start=start_n):
+        w.write(f"{i}. {q}", fontsize=10.3, bold=True, wrap=98, dy_after=0.020)
+        for letter, opt in zip(letters, options):
+            w.write(f"     {letter}) {opt}", fontsize=9.3, wrap=96, color=GRAY, dy_after=0.018)
+        w.skip(0.014)
+    w.footer(page_num)
+    pdf.savefig(fig); plt.close(fig)
+
+
+def mc_answer_key_page(pdf, page_num):
+    fig, ax = new_page()
+    w = PW(ax)
+    w.header("ANEXO · MULTIPLE CHOICE", "Respuestas correctas")
+    w.write(
+        "Tapa esta pagina mientras respondes las anteriores.", fontsize=9.5,
+        color=GRAY, italic=True, dy_after=0.036,
+    )
+    letters = ["A", "B", "C", "D"]
+    col_x = [0.10, 0.30, 0.50, 0.70]
+    row_h = 0.032
+    for i, (q, options, correct) in enumerate(C.STUDY_MC):
+        col = i % 4
+        row = i // 4
+        x = col_x[col]
+        y = w.y - row * row_h
+        w.ax.text(x, y, f"{i+1}. {letters[correct]}", fontsize=10.5, va='top',
+                 fontweight='bold', family='monospace', transform=w.ax.transAxes)
+    w.footer(page_num)
+    pdf.savefig(fig); plt.close(fig)
+
+
 def main():
     out_dir = Path(__file__).parent.parent / "reports"
     out_path = out_dir / "desarrollo_proyecto_SAM_imprimible.pdf"
@@ -520,7 +570,20 @@ def main():
         scale_sweep_page(pdf, page); page += 1
         kelly_page(pdf, page); page += 1
         edge_page(pdf, page); page += 1
-        lessons_and_final_page(pdf, page)
+        lessons_and_final_page(pdf, page); page += 1
+
+        # ── Anexo: guia de estudio para la defensa ──────────────────────────
+        qa_chunks = [C.STUDY_QA[i:i + 4] for i in range(0, len(C.STUDY_QA), 4)]
+        for i, chunk in enumerate(qa_chunks):
+            label = f"20 preguntas y respuestas ({i * 4 + 1}-{i * 4 + len(chunk)} de {len(C.STUDY_QA)})"
+            qa_page(pdf, page, chunk, label, i * 4 + 1); page += 1
+
+        mc_chunks = [C.STUDY_MC[i:i + 5] for i in range(0, len(C.STUDY_MC), 5)]
+        for i, chunk in enumerate(mc_chunks):
+            label = f"preguntas {i * 5 + 1}-{i * 5 + len(chunk)} de {len(C.STUDY_MC)}"
+            mc_page(pdf, page, chunk, label, i * 5 + 1); page += 1
+
+        mc_answer_key_page(pdf, page)
 
     print(f"PDF imprimible generado: {out_path}  ({page} paginas + portada = {page + 1} totales)")
 
