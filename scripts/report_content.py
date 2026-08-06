@@ -278,6 +278,172 @@ PRACTICE_FINAL_VALIDATION = [
     ("edge_bucket", 31.01, 2.800, 85.4, 9.3),
 ]
 
+STUDY_QA = [
+    ("Que mide el wMAPE y en que se diferencia del Mean ROI?",
+     "wMAPE mide el error de prediccion de precio (cuanto se equivoca el modelo, "
+     "en %, ponderado por precio real). Mean ROI mide la ganancia real de "
+     "invertir siguiendo esas predicciones en la simulacion de subasta. Son "
+     "independientes: un modelo puede tener buen wMAPE y mal ROI, o al reves "
+     "(paso en Ronda 3-4 y en Ronda 9)."),
+    ("Como se genera el asking price de cada propiedad en la simulacion?",
+     "asking = valor_real x (1 + shock), con shock de una distribucion normal, "
+     "media -7% y desvio 35%. En promedio el asking esta un poco por debajo del "
+     "valor real, pero con mucha variacion."),
+    ("Que es una subasta Vickrey y por que la usa la competencia?",
+     "Es una subasta de segundo precio: gana el que mas ofrece, pero paga lo "
+     "que ofrecio el segundo. Reduce el incentivo a subestimar cuanto vale algo "
+     "para uno."),
+    ("Cuantas propiedades tiene el train set y cuantas el test set?",
+     "Train: 11,840 propiedades con precio real conocido. Test: 5,038 sin "
+     "precio, sobre las que se generan las predicciones de la competencia real."),
+    ("Que metrica define al ganador: Mean ROI o Win Rate?",
+     "Mean ROI (promedio de ganancia en las 1,000 simulaciones). Win Rate es "
+     "secundario, no decide el ganador."),
+    ("Por que el 0.85 de la oferta no es algo que calibraron ustedes?",
+     "Es una regla fija de la mecanica de la competencia (oferta = prediccion "
+     "x 0.85), dada por el curso. Lo que si calibraron fue la prediccion que "
+     "entra a esa formula: el alpha de la regresion cuantil y la escala final "
+     "(0.83)."),
+    ("Que diferencia hay entre segmentacion y feature engineering en Ronda 2?",
+     "Segmentacion = entrenar 3 modelos separados por tipo de propiedad "
+     "(arquitectura, no una columna). Feature engineering = columnas nuevas "
+     "(ratios, scores compuestos, interacciones). Se probaron juntas en la "
+     "misma ronda, asi que no se puede aislar cual de las dos causo la caida."),
+    ("Que son los embeddings CLIP y para que sirvio el PCA?",
+     "CLIP es una red neuronal ya entrenada que convierte cada foto en 512 "
+     "numeros que resumen su contenido visual. PCA comprime esos 512 numeros "
+     "a 32, quedandose con lo mas relevante, antes de dárselo al modelo."),
+    ("Por que el fix de Ronda 8 corrige train y test de forma distinta?",
+     "En test solo se conocen los valores reales de 6 propiedades puntuales "
+     "(por resultados de subastas ya jugadas), asi que se corrigen a mano. En "
+     "train se conoce el valor real de las 11,840 propiedades, asi que se "
+     "arma una regla automatica (ratio prediccion/verdadero > 2.5x)."),
+    ("Diferencia entre las 6 de test y la deteccion automatica en train?",
+     "Las 6 de test se identificaron con certeza porque ya se jugo esa subasta "
+     "y se vio el resultado real. La regla de train es estadistica (umbral de "
+     "ratio), aplicada a gran escala sin mirar caso por caso."),
+    ("Por que el clip_distress_score mejoro el ROI sin bajar el MAPE?",
+     "El MAPE es un promedio sobre todas las propiedades; el score ayuda a "
+     "evitar comprar especificamente las peores (visualmente deterioradas), "
+     "pocas pero muy costosas si se compran mal. Cambia la decision de compra "
+     "mas de lo que cambia la prediccion promedio."),
+    ("Por que sobreestimar es mas costoso que subestimar?",
+     "Si se sobreestima, se puede ganar la subasta pagando de mas -> perdida "
+     "real de capital. Si se subestima, simplemente no se compra esa "
+     "propiedad -> se pierde la oportunidad, pero no plata. Por eso conviene "
+     "sesgar la prediccion hacia abajo (percentil 35)."),
+    ("En el grafico local 0.85 gana — por que igual eligieron 0.83?",
+     "Ese grafico es una simulacion aproximada casera (datos de una ronda "
+     "vieja de competidores). La decision real se tomo subiendo ambas escalas "
+     "al dashboard real de Practice: ahi 0.83 le gano a 0.85 en las 3 corridas "
+     "independientes que se hicieron."),
+    ("Que asume Kelly clasico que no se cumple en esta subasta?",
+     "Que perder = perder toda la apuesta. Aca, si se pierde la subasta, no se "
+     "pierde nada (el capital queda intacto) — solo se pierde si se gana la "
+     "subasta pagando de mas. Se adapto la formula a esa condicion."),
+    ("Por que los proxies para detectar distressed no funcionaron?",
+     "Se midio precision y recall de foreclosure, fotos, tags y texto contra "
+     "los casos reales — ninguno supero la tasa base (~1.66%, o sea, adivinar "
+     "al azar). Las perdidas catastroficas parecen ser idiosincraticas, no un "
+     "patron detectable en los datos disponibles."),
+    ("Por que comparar Kelly/Edge contra round8 sin escalar era enganoso?",
+     "Round8 sin escalar es la peor version conocida del modelo. Cualquier "
+     "variante nueva le gana facil a esa base debil. La comparacion justa es "
+     "contra el campeon real (scale083), y ahi la ventaja de Kelly y Edge se "
+     "achico o desaparecio."),
+    ("Por que Edge perdio en la prueba real si localmente mejoraba mas?",
+     "Edge se volvio mas selectivo (compraba menos propiedades, ~9 vs ~14-17 "
+     "del campeon) buscando mayor Hit Rate. Eso le dio mejor precision pero "
+     "menos volumen, y en el juego real el volumen importa tanto como acertar."),
+    ("ROI alto y variable vs ROI un poco mas bajo y estable — cual conviene?",
+     "Segun las reglas, gana el mayor Mean ROI promedio, asi que en el margen "
+     "el ROI mas alto gana aunque sea mas variable. Pero el curso tambien "
+     "valora el Std bajo como objetivo secundario — por eso Kelly (mejor "
+     "Sharpe) es un candidato razonable si se prioriza consistencia."),
+    ("Por que no alcanza con correr Practice una sola vez?",
+     "La simulacion varia segun cuantos modelos compiten a la vez y tiene "
+     "ruido de muestreo Monte Carlo. Se repitieron las comparaciones clave "
+     "2-3 veces con distintos campos competitivos antes de decidir."),
+    ("Que retomarian con un mes mas de trabajo?",
+     "Probablemente texto/LLM, pero cambiando el modelo de extraccion (uno "
+     "mas grande que qwen2.5:1.5b) y mejorando la cobertura (hoy 48%) antes "
+     "de reintentarlo — el problema no era el enfoque sino la calidad/"
+     "cobertura de los datos de entrada."),
+]
+
+STUDY_MC = [
+    ("Que significa wMAPE?",
+     ["Win/Mean Auction Profit Estimate",
+      "Una medida de riesgo del portafolio",
+      "Weighted Mean Absolute Percentage Error — error de prediccion de precio",
+      "El porcentaje de subastas ganadas"], 2),
+    ("Si compramos y pagamos de mas por una propiedad...",
+     ["No pasa nada, se ajusta automaticamente",
+      "Se cancela la compra",
+      "Ganamos el Win Rate igual",
+      "Perdemos capital real"], 3),
+    ("Cual es la metrica principal que define al ganador de la competencia?",
+     ["Mean ROI", "wMAPE", "Win Rate", "Sharpe"], 0),
+    ("El multiplicador de la oferta (prediccion x 0.85)...",
+     ["Lo calibramos nosotros en la Ronda 7",
+      "Es una regla fija de la competencia",
+      "Cambia segun el segmento",
+      "Se ajusto junto con la escala 0.83"], 1),
+    ("En la Ronda 2, segmentacion se refiere a...",
+     ["Una columna nueva que indica el tipo de propiedad",
+      "Dividir el dataset en train/test",
+      "Un score compuesto de lujo",
+      "Entrenar 3 modelos separados por tipo de propiedad"], 3),
+    ("Que hace PCA con los embeddings de CLIP?",
+     ["Los comprime de 512 a 32 numeros, conservando lo mas relevante",
+      "Los entrena desde cero para propiedades",
+      "Calcula el score de distress",
+      "Elimina las fotos de mala calidad"], 0),
+    ("Por que se uso el percentil 35 en vez de la media?",
+     ["Porque es mas facil de calcular",
+      "Porque el dataset tiene 35% de datos faltantes",
+      "Porque sobreestimar es mas costoso que subestimar en este juego",
+      "Porque asi lo pide la competencia"], 2),
+    ("Las 6 propiedades del fix quirurgico en test se identificaron...",
+     ["Con un modelo de deteccion automatica",
+      "Mirando resultados reales de subastas ya jugadas",
+      "Al azar",
+      "Usando el clip_distress_score"], 1),
+    ("Al probar proxies (fotos, tags, texto) para detectar distressed en test...",
+     ["Ninguno predijo mejor que el azar",
+      "Funcionaron mejor que el modelo principal",
+      "Solo el tag de foreclosure funciono bien",
+      "Funcionaron, pero solo en CONDO"], 0),
+    ("Kelly clasico asume que perder significa...",
+     ["Pagar de mas en la subasta",
+      "No participar en la subasta",
+      "Bajar el Hit Rate",
+      "Perder toda la apuesta"], 3),
+    ("En el barrido de escala, el grafico local mostraba que...",
+     ["0.83 era claramente el mejor punto",
+      "0.85 tenia un pico un poco mas alto que 0.83",
+      "1.00 (sin escalar) era el mejor",
+      "No habia diferencia entre escalas"], 1),
+    ("Por que se eligio 0.83 en vez de 0.85 pese al grafico local?",
+     ["Porque en 3 corridas reales del dashboard, 0.83 le gano a 0.85",
+      "Por practicidad, es un numero redondo",
+      "Porque 0.85 no se pudo probar",
+      "Porque el profesor lo indico"], 0),
+    ("Edge, comparado con Kelly, encontro diferencias reales al cortar por...",
+     ["Segmento solamente",
+      "Fecha de la venta",
+      "Segmento x tercil de precio dentro del segmento",
+      "Cantidad de fotos"], 2),
+    ("Por que Edge perdio en la prueba real pese a mejorar mas en la simulacion local?",
+     ["Por un error en el codigo",
+      "Porque no se probo nunca en Practice",
+      "Porque el Hit Rate bajo",
+      "Porque compro muchas menos propiedades (menos volumen)"], 3),
+    ("Cual fue el modelo final elegido para la presentacion?",
+     ["oof_round9_text_llm_llm5704", "round8_distress_fix_scale083",
+      "round8_kelly_segment", "round8_edge_bucket"], 1),
+]
+
 FINAL_RECOMMENDATION = (
     "Modelo elegido para la presentacion final: round8_distress_fix_scale083.csv\n\n"
     "Es el modelo de Ronda 8 (tabular + imagenes CLIP + fix quirurgico de "
