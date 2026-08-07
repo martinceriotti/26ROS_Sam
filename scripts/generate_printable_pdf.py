@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 sys.path.insert(0, str(Path(__file__).parent))
 import report_content as C
 
-PAGE_W, PAGE_H = 8.5, 11.0
+PAGE_W, PAGE_H = 8.27, 11.69  # A4 (antes Letter) — para que imprima sin recortes/escalado
 BLACK = "#000000"
 GRAY = "#555555"
 LIGHT_GRAY = "#888888"
@@ -222,20 +222,57 @@ def round_card(ax, top, height, r):
             y -= 0.0165
 
 
-def rounds_page(pdf, page_num, rounds_subset, page_label):
-    fig, ax = new_page()
-    w = PW(ax)
-    w.header("SECCION 3 · CRONOLOGIA", page_label)
-    n = len(rounds_subset)
-    gap = 0.022
-    top_area, bottom_area = CONTENT_START, 0.045
-    card_h = (top_area - bottom_area - gap * (n - 1)) / n
-    y = top_area
-    for r in rounds_subset:
-        round_card(ax, y, card_h, r)
-        y -= card_h + gap
-    w.footer(page_num)
-    pdf.savefig(fig); plt.close(fig)
+def _round_card_height(r):
+    """Replica exacta de los incrementos de round_card, para saber cuanto
+    espacio necesita CADA ronda antes de dibujarla — asi las cortas no dejan
+    de mas y las largas no se cortan, en vez de repartir la pagina pareja."""
+    paras = r['summary'].split("\n\n")
+    note = len(paras) > 3
+    if note:
+        paras = paras[:1]
+    h = 0.082
+    for para in paras:
+        h += len(textwrap.wrap(para, 112)) * 0.0185
+        h += 0.008
+    if note:
+        h += 0.022
+    h += 0.010 + 0.028
+    if r['lesson']:
+        h += len(textwrap.wrap("Leccion: " + r['lesson'], 118)) * 0.0165
+    return h + 0.016
+
+
+def rounds_flow(pdf, rounds, start_page, gap=0.022, bottom_limit=0.045):
+    """Acomoda las rondas de a tantas como entren por pagina (altura real de
+    cada una, no un reparto parejo), en vez de un numero fijo por pagina."""
+    page_num = start_page
+    idx = 0
+    while idx < len(rounds):
+        fig, ax = new_page()
+        w = PW(ax)
+        page_rounds = []
+        y = CONTENT_START
+        while idx < len(rounds):
+            h = _round_card_height(rounds[idx])
+            if page_rounds and y - h < bottom_limit:
+                break
+            page_rounds.append(rounds[idx])
+            y -= h + gap
+            idx += 1
+        if len(page_rounds) <= 3:
+            label = ", ".join(r['n'] for r in page_rounds)
+        else:
+            label = f"{page_rounds[0]['n']} a {page_rounds[-1]['n']}"
+        w.header("SECCION 3 · CRONOLOGIA", label)
+        y = CONTENT_START
+        for r in page_rounds:
+            h = _round_card_height(r)
+            round_card(ax, y, h, r)
+            y -= h + gap
+        w.footer(page_num)
+        pdf.savefig(fig); plt.close(fig)
+        page_num += 1
+    return page_num
 
 
 def round9_detail_page(pdf, page_num):
@@ -549,23 +586,14 @@ def main():
     out_dir = Path(__file__).parent.parent / "reports"
     out_path = out_dir / "desarrollo_proyecto_SAM_imprimible.pdf"
 
-    R = C.ROUNDS
-    groups = [
-        (R[0:2], "Rondas 1 y 2 — primeros pasos"),
-        (R[2:4], "Ronda 3 y 3-4 — distressed ocultas e imagenes"),
-        (R[4:6], "Ronda 4 y el simulador propio"),
-        (R[6:8], "Rondas 5 y 6 — calibrando la agresividad"),
-        (R[8:10], "Ronda 7 y Ronda 8 — el mejor modelo"),
-        (R[10:12], "Ronda 9 y la calibracion final"),
-    ]
-
     with PdfPages(out_path) as pdf:
         page = 1
         cover_page(pdf)
         mechanics_page(pdf, page); page += 1
         data_page(pdf, page); page += 1
-        for subset, label in groups:
-            rounds_page(pdf, page, subset, label); page += 1
+        # Cada ronda ocupa solo el alto que necesita (no un reparto parejo),
+        # asi Ronda 1 (corta) no deja tanto blanco y Ronda 2 (larga) no se corta.
+        page = rounds_flow(pdf, C.ROUNDS, page)
         round9_detail_page(pdf, page); page += 1
         scale_sweep_page(pdf, page); page += 1
         kelly_page(pdf, page); page += 1
@@ -573,15 +601,17 @@ def main():
         lessons_and_final_page(pdf, page); page += 1
 
         # ── Anexo: guia de estudio para la defensa ──────────────────────────
-        qa_chunks = [C.STUDY_QA[i:i + 4] for i in range(0, len(C.STUDY_QA), 4)]
+        QA_PER_PAGE = 9
+        qa_chunks = [C.STUDY_QA[i:i + QA_PER_PAGE] for i in range(0, len(C.STUDY_QA), QA_PER_PAGE)]
         for i, chunk in enumerate(qa_chunks):
-            label = f"20 preguntas y respuestas ({i * 4 + 1}-{i * 4 + len(chunk)} de {len(C.STUDY_QA)})"
-            qa_page(pdf, page, chunk, label, i * 4 + 1); page += 1
+            label = f"20 preguntas y respuestas ({i * QA_PER_PAGE + 1}-{i * QA_PER_PAGE + len(chunk)} de {len(C.STUDY_QA)})"
+            qa_page(pdf, page, chunk, label, i * QA_PER_PAGE + 1); page += 1
 
-        mc_chunks = [C.STUDY_MC[i:i + 5] for i in range(0, len(C.STUDY_MC), 5)]
+        MC_PER_PAGE = 8
+        mc_chunks = [C.STUDY_MC[i:i + MC_PER_PAGE] for i in range(0, len(C.STUDY_MC), MC_PER_PAGE)]
         for i, chunk in enumerate(mc_chunks):
-            label = f"preguntas {i * 5 + 1}-{i * 5 + len(chunk)} de {len(C.STUDY_MC)}"
-            mc_page(pdf, page, chunk, label, i * 5 + 1); page += 1
+            label = f"preguntas {i * MC_PER_PAGE + 1}-{i * MC_PER_PAGE + len(chunk)} de {len(C.STUDY_MC)}"
+            mc_page(pdf, page, chunk, label, i * MC_PER_PAGE + 1); page += 1
 
         mc_answer_key_page(pdf, page)
 
