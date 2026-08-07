@@ -270,7 +270,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
 <!-- S5: RONDA 2 — FEATURE ENGINEERING -->
 <div class="slide">
   <div class="eyebrow">Ronda 2</div>
-  <h2>Feature Engineering — <span class="accent">inventamos variables nuevas</span></h2>
+  <h2>Feature Engineering + Segmentación — <span class="accent">variables nuevas y 3 modelos</span></h2>
   <div class="g2">
     <div class="col">
       <div class="card">
@@ -286,11 +286,14 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
           <span class="chip teal">waterfront × lat</span>
           <span class="chip teal">listing_to_tax_ratio</span>
         </div>
+        <div style="margin-top:0.6rem;padding:0.5rem 0.7rem;background:var(--card2);border-radius:8px;font-size:0.9rem;color:var(--muted)">
+          + <strong style="color:var(--text)">3 modelos separados</strong> por tipo de propiedad: SINGLE_FAMILY · CONDO · REST
+        </div>
       </div>
       <div class="card coral">
         <div class="clabel">Resultado inesperado</div>
         <div class="ctitle">MAPE mejoró — ROI empeoró</div>
-        <div class="cval">El modelo se volvió más preciso en promedio, pero tomó peores decisiones de compra. Primera lección de la competencia.</div>
+        <div class="cval">El modelo mejoró el MAPE pero empeoró el ROI. No sabemos si fue el feature engineering, la segmentación, o los dos — los probamos juntos.</div>
       </div>
     </div>
     <div class="card" style="display:flex;flex-direction:column;justify-content:space-between">
@@ -406,20 +409,80 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
       <div class="ctitle">Predecimos conservador, no el promedio</div>
       <div class="cval" style="margin-bottom:0.8rem">En vez del precio esperado, predecimos el <strong style="color:var(--gold)">percentil 35</strong>. El modelo siempre estima un poco menos → ofertas más bajas → mayor ganancia cuando compramos.</div>
       <!-- Percentile visual -->
-      <div style="background:var(--card2);border-radius:10px;padding:0.8rem;display:flex;flex-direction:column;gap:0.3rem;font-size:0.87rem">
-        <div style="display:flex;align-items:center;gap:0.5rem">
-          <div style="width:12px;height:12px;border-radius:50%;background:var(--coral);flex-shrink:0"></div>
-          <span>p10 — precio muy bajo (10% de casas valen menos)</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:0.5rem">
-          <div style="width:12px;height:12px;border-radius:50%;background:var(--teal);flex-shrink:0;border:2px solid white"></div>
-          <span style="color:var(--teal);font-weight:700">p35 ← nosotros (conservador, aún rentable)</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:0.5rem">
-          <div style="width:12px;height:12px;border-radius:50%;background:var(--muted);flex-shrink:0"></div>
-          <span style="color:var(--muted)">p50 — precio promedio (la media)</span>
-        </div>
-      </div>
+      <canvas id="qcurve" width="400" height="170" style="width:100%;border-radius:10px;display:block;margin-top:0.5rem"></canvas>
+      <script>
+      (function(){
+        var c=document.getElementById('qcurve');if(!c)return;
+        var ctx=c.getContext('2d');
+        var W=c.width,H=c.height;
+        var pl=10,pr=10,pt=16,pb=16;
+        function norm(x){return Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI);}
+        var zMin=-3.8,zMax=2.6;
+        function zX(z){return pl+(z-zMin)/(zMax-zMin)*(W-pl-pr);}
+        var peak=norm(0);
+        var chartH=H-pt-pb;
+        function nY(y){return H-pb-y*chartH/peak;}
+        var z10=-1.28,z35=-0.385,z50=0;
+        var x10=zX(z10),x35=zX(z35),x50=zX(z50);
+        var baseline=nY(0);
+
+        // shaded area left of p35
+        ctx.beginPath();
+        ctx.moveTo(zX(zMin),baseline);
+        for(var z=zMin;z<=z35;z+=0.04)ctx.lineTo(zX(z),nY(norm(z)));
+        ctx.lineTo(x35,baseline);ctx.closePath();
+        ctx.fillStyle='rgba(0,201,167,0.2)';ctx.fill();
+
+        // bell curve
+        ctx.beginPath();
+        for(var z=zMin;z<=zMax;z+=0.04){
+          var x=zX(z),y=nY(norm(z));
+          z===zMin?ctx.moveTo(x,y):ctx.lineTo(x,y);
+        }
+        ctx.strokeStyle='rgba(200,210,240,0.5)';ctx.lineWidth=2.5;ctx.stroke();
+
+        // vertical lines
+        function vline(x,yTop,col,dash){
+          ctx.beginPath();ctx.setLineDash(dash||[]);
+          ctx.strokeStyle=col;ctx.lineWidth=1.8;
+          ctx.moveTo(x,yTop);ctx.lineTo(x,baseline);ctx.stroke();
+          ctx.setLineDash([]);
+        }
+        vline(x10,nY(norm(z10)),'rgba(255,95,109,0.6)',[5,3]);
+        vline(x35,nY(norm(z35)),'#00c9a7');
+        vline(x50,nY(norm(z50)),'rgba(180,190,220,0.35)',[5,3]);
+
+        // ---- LABELS: each in its own zone, no overlap ----
+
+        // p10 — bottom left, small
+        ctx.font='10px sans-serif';ctx.fillStyle='rgba(255,95,109,0.75)';
+        ctx.textAlign='center';
+        ctx.fillText('p10',x10,baseline+12);
+
+        // p35 — label LEFT of its line, at mid-height
+        var y35=nY(norm(z35));
+        ctx.font='bold 13px sans-serif';ctx.fillStyle='#00c9a7';
+        ctx.textAlign='right';
+        ctx.fillText('p35 ← nosotros',x35-6,y35+18);
+        // price tag above line
+        ctx.font='bold 12px sans-serif';ctx.textAlign='center';
+        ctx.fillText('$430K',x35,y35-8);
+
+        // p50 — label RIGHT of its line
+        var y50=nY(norm(z50));
+        ctx.font='bold 12px sans-serif';ctx.fillStyle='rgba(160,170,200,0.85)';
+        ctx.textAlign='left';
+        ctx.fillText('$500K',x50+6,y50+4);
+        ctx.font='10px sans-serif';ctx.fillStyle='rgba(140,150,180,0.7)';
+        ctx.fillText('p50 promedio',x50+6,y50+16);
+
+        // axis label bottom center
+        ctx.font='10px sans-serif';ctx.fillStyle='rgba(120,130,160,0.55)';
+        ctx.textAlign='center';
+        ctx.fillText('Precio de una casa →',W/2,H-1);
+      })();
+      </script>
+        
     </div>
     <div class="card">
       <div style="font-size:2.3rem;margin-bottom:0.3rem">📸</div>
@@ -456,7 +519,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
         <strong style="color:var(--text)">clip_distress_score</strong> — ¿la foto parece propiedad deteriorada? Score 0–1 por cada casa.
       </div>
       <div style="padding:0.55rem 0.7rem;background:rgba(255,95,109,0.07);border:1px solid rgba(255,95,109,0.2);border-radius:8px;font-size:0.96rem">
-        ⚠️ Las imágenes mejoraron el MAPE (22%) pero <strong style="color:var(--coral)">bajaron el ROI a 29%</strong>. Más precisión ≠ más plata.
+        ✅ CLIP fue la mayor mejora del proyecto: <strong style="color:var(--teal)">ROI subió a 49.7% (+92%)</strong>. El clip_distress_score mejoró la decisión de compra aunque no bajó el MAPE.
       </div>
     </div>
   </div>
@@ -493,16 +556,16 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
     <div class="card teal" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1.2rem">
       <div class="clabel">Resultado en Practice (OOF)</div>
       <div>
-        <div class="bignum gold" style="font-size:4.5rem">85%</div>
-        <div style="font-size:1.2rem;color:var(--muted);margin-top:0.2rem">Mean ROI</div>
+        <div class="bignum gold" style="font-size:4.5rem">~32%</div>
+        <div style="font-size:1.2rem;color:var(--muted);margin-top:0.2rem">Mean ROI <span style="font-size:0.85rem">(rango 27-36%)</span></div>
       </div>
       <div style="display:flex;gap:2rem">
         <div style="text-align:center">
-          <div style="font-size:2.3rem;font-weight:800;color:var(--teal)">93.8%</div>
+          <div style="font-size:2.3rem;font-weight:800;color:var(--teal)">~81%</div>
           <div style="font-size:0.87rem;color:var(--muted)">Hit Rate</div>
         </div>
         <div style="text-align:center">
-          <div style="font-size:2.3rem;font-weight:800">3.94</div>
+          <div style="font-size:2.3rem;font-weight:800">~2.7</div>
           <div style="font-size:0.87rem;color:var(--muted)">Sharpe Ratio</div>
         </div>
       </div>
@@ -650,16 +713,16 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   <div style="text-align:center">
     <div class="eyebrow" style="margin-bottom:1.5rem">La lección más importante</div>
     <div style="font-size:clamp(3rem,8vw,6.5rem);font-weight:900;letter-spacing:-0.05em;line-height:1.05">
-      MAPE bajo<br>
+      Error bajo<br>
       <span style="color:var(--coral)">≠</span><br>
-      <span style="color:var(--teal)">ROI alto</span>
+      <span style="color:var(--teal)">mejor decisión</span>
     </div>
     <div style="display:flex;gap:1.2rem;justify-content:center;margin-top:1.8rem;flex-wrap:wrap">
       <div style="padding:1rem 1.4rem;background:var(--card);border:1px solid var(--border);border-radius:14px;text-align:left">
-        <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.5rem">CLIP Embeddings (Ronda 4)</div>
+        <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.5rem">clip_distress_score (Ronda 4)</div>
         <div style="display:flex;gap:2rem">
-          <div><div style="font-size:1.4rem;font-weight:800;color:var(--teal)">22% MAPE</div><div style="font-size:0.85rem;color:var(--muted)">más preciso</div></div>
-          <div><div style="font-size:1.4rem;font-weight:800;color:var(--coral)">29% ROI</div><div style="font-size:0.85rem;color:var(--muted)">menos plata</div></div>
+          <div><div style="font-size:1.4rem;font-weight:800;color:var(--muted)">MAPE =</div><div style="font-size:0.85rem;color:var(--muted)">sin cambio</div></div>
+          <div><div style="font-size:1.4rem;font-weight:800;color:var(--teal)">ROI ↑</div><div style="font-size:0.85rem;color:var(--muted)">mejor decisión</div></div>
         </div>
       </div>
       <div style="padding:1rem 1.4rem;background:rgba(245,200,66,0.05);border:1px solid rgba(245,200,66,0.3);border-radius:14px;text-align:left">
