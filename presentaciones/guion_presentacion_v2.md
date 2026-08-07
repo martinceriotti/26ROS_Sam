@@ -34,11 +34,9 @@
 
 **Ancla visual:** Logo SAM + Maiameee!
 
-> "Buenas tardes. Somos el equipo SAM — Martin Ceriotti y Juan Ignacio Cacchione.
-> Durante este cuatrimestre participamos en una competencia de inversión inmobiliaria simulada en Miami.
-> El objetivo era predecir el precio de venta de propiedades residenciales mejor que los equipos competidores.
-> En la práctica, pasamos por 9 rondas de modelos, cometimos errores que nos costaron plata virtual, y aprendimos algo que no esperábamos aprender.
-> Les vamos a contar el recorrido."
+> "Somos el equipo SAM — Martin Ceriotti y Juan Ignacio Cacchione.
+> Participamos en una competencia donde teníamos que predecir precios de casas en Miami mejor que los demás equipos.
+> Les vamos a contar qué funcionó, qué no funcionó, y qué aprendimos."
 
 ---
 
