@@ -1,37 +1,43 @@
 # Guión Presentación — Equipo SAM
-## 15 minutos · ~140 palabras/minuto · Martin y Juan mitad cada uno
+## 15 minutos · ~140 palabras/minuto · 14 slides · Martin y Juan mitad cada uno
 
 ---
 
-## SLIDE 1 — Título · JUAN · 45s (~100 palabras)
+## SLIDE 1 — Título · JUAN · 45s (~105 palabras)
+
+**En slide:** Logo SAM, título, subtítulo.
 
 > "Buenas tardes. Somos el equipo SAM — Martin Ceriotti y Juan Ignacio Cacchione.
 > Durante este cuatrimestre participamos en una competencia de inversión inmobiliaria simulada en Miami.
-> El objetivo era simple en teoría: predecir el precio de venta de propiedades residenciales mejor que los equipos competidores.
+> El objetivo era predecir el precio de venta de propiedades residenciales mejor que los equipos competidores.
 > En la práctica, pasamos por 9 rondas de modelos, cometimos errores que nos costaron plata virtual, y aprendimos algo que no esperábamos aprender.
 > Les vamos a contar el recorrido."
 
 ---
 
-## SLIDE 2 — El Juego · MARTIN · 1:30 (~200 palabras)
+## SLIDE 2 — El Juego / Mecánica · MARTIN · 1:30 (~200 palabras)
 
-> "Antes de arrancar con los modelos, vale la pena entender bien cómo funciona la competencia, porque cambia completamente cómo hay que pensar el problema.
+**En slide:** Diagrama de la simulación, 11,840 train / 5,038 test, Vickrey, ROI.
+
+> "Antes de arrancar con los modelos, vale entender cómo funciona la competencia, porque cambia completamente cómo hay que pensar el problema.
 >
 > El organizador tiene una base de datos de miles de ventas reales de propiedades en Miami. Nos da dos partes: el train set con 11,840 casas donde conocemos el precio real, y el test set con 5,038 casas donde el precio está oculto. Eso es lo que predecimos.
 >
 > Una vez que subimos nuestras predicciones, el sistema corre 1,000 simulaciones de mercado. En cada simulación, aparece una propiedad con un precio de venta aleatorio basado en el valor real. Nosotros compramos si nuestra predicción supera ese precio en un margen mínimo del 8%.
 >
-> Si compramos, entramos a una subasta. La subasta es del tipo Vickrey: gana el equipo que más ofertó, pero paga lo que ofertó el segundo. Nuestra oferta siempre es nuestra predicción multiplicada por 0.85.
+> Si compramos, entramos a una subasta Vickrey: gana el equipo que más ofertó, pero paga lo que ofertó el segundo. Nuestra oferta siempre es nuestra predicción multiplicada por 0.85.
 >
 > Al final de las 1,000 simulaciones se mide el ROI promedio. Eso determina el ranking."
 
 ---
 
-## SLIDE 3 — Métricas · MARTIN · 45s (~100 palabras)
+## SLIDE 3 — Métricas · MARTIN · 45s (~105 palabras)
 
-> "La competencia tiene dos métricas principales que vale entender bien porque no siempre van de la mano.
+**En slide:** MAPE vs ROI — la tensión central.
+
+> "La competencia tiene dos métricas que vale entender porque no siempre van de la mano.
 >
-> El MAPE es el error promedio de nuestras predicciones — cuánto nos equivocamos en porcentaje. Un MAPE de 26% significa que erramos en promedio $26 por cada $100 de precio real.
+> El MAPE es el error promedio de predicción: un 26% significa que erramos $26 por cada $100 de precio real.
 >
 > El ROI es cuánta ganancia generamos en la simulación. Es la métrica que determina el ganador.
 >
@@ -39,119 +45,153 @@
 
 ---
 
-## SLIDE 4 — Ronda 1 LightGBM · MARTIN · 2:00 (~267 palabras)
+## SLIDE 4 — Ronda 1: LightGBM · MARTIN · 1:45 (~245 palabras)
 
-> "Nuestra primera ronda fue establecer un baseline sólido usando LightGBM.
+**En slide:** 📚 train/test, 🌳×100, CV 5-fold visual con EXAMEN rotando, 26.5% MAPE.
+
+> "Nuestra primera ronda fue un baseline sólido con LightGBM.
 >
-> LightGBM es un modelo de boosting por gradiente. La idea es simple: entrenamos 100 árboles de decisión en secuencia, donde cada árbol aprende de los errores del anterior. El árbol 1 hace una predicción, comete errores. El árbol 2 se enfoca exactamente en corregir esos errores. Y así sucesivamente. La predicción final es la suma de los 100 árboles.
+> LightGBM es un modelo de boosting por gradiente. La idea: entrenamos 100 árboles de decisión en secuencia, donde cada árbol aprende de los errores del anterior. El árbol 1 hace una predicción, se equivoca. El árbol 2 corrige esos errores. Y así 100 veces. La predicción final es la suma.
 >
-> Para evaluar el modelo usamos CV 5-Fold, que es básicamente un sistema de exámenes repetidos. Tomamos las 11,840 casas del train set y las dividimos en 5 grupos. En la primera vuelta, LightGBM entrena con 4 grupos y lo examinamos con el quinto. En la segunda vuelta, entrenamos con otros 4 y examinamos con otro grupo distinto. Repetimos 5 veces rotando el grupo de examen.
+> Para evaluar usamos CV 5-Fold. Tomamos las 11,840 casas y las dividimos en 5 grupos. En cada vuelta, entrenamos con 4 grupos y examinamos con el quinto. Rotamos el grupo de examen 5 veces.
 >
-> ¿Por qué hacemos esto? Porque si evaluáramos el modelo con las mismas casas con las que entrenó, el resultado sería demasiado optimista — el modelo simplemente memorizó. El CV 5-Fold nos da una medida honesta del error real.
+> ¿Por qué? Si evaluáramos con las mismas casas con las que entrenamos, el resultado sería optimista — el modelo memorizó. El CV 5-Fold nos da una medida honesta del error real.
 >
-> El promedio de los 5 errores nos dio un MAPE de 26.5%. Por cada $100 de precio real, nos equivocamos en promedio $26. Es nuestro punto de partida."
+> Promedio de los 5 errores: MAPE de 26.5%. Por cada $100 de precio real, nos equivocamos en promedio $26. Es nuestro punto de partida."
 
 ---
 
-## SLIDE 5 — Ronda 2 Feature Engineering · JUAN · 1:30 (~200 palabras)
+## SLIDE 5 — Ronda 2a: Ratios Financieros · JUAN · 1:00 (~140 palabras)
+
+**En slide:** 4 cards con fórmula y pregunta que responde cada ratio.
 
 > "En la Ronda 2 decidimos darle más información al modelo creando variables nuevas a partir de los datos que ya teníamos.
 >
-> Algunas son ratios financieros: el impuesto por metro cuadrado, la relación entre el precio de lista y la valuación municipal. Otras son scores compuestos: un score de lujo que suma si la casa tiene pileta, frente al mar y garage; un score de venta forzada que suma señales de apuro del vendedor.
+> Las primeras son ratios financieros. El impuesto por metro cuadrado: si una casa paga mucho de impuesto relativo a su tamaño, es cara de mantener. La relación entre precio de lista y valuación municipal: si el vendedor pide mucho menos de lo que el municipio dice que vale, puede ser señal de apuro.
 >
-> También creamos interacciones entre variables: la combinación de calidad de escuela del barrio con el área de la propiedad, por ejemplo.
+> El precio mediano del barrio, que calculamos dentro de cada fold para no contaminar el modelo. Y el HOA por metro cuadrado, que indica si las expensas son proporcionales al tamaño.
 >
-> Además de las variables nuevas, probamos segmentar el problema: en vez de un solo modelo para todas las casas, entrenamos tres modelos separados según el tipo de propiedad — casas individuales, condominios y el resto.
->
-> El MAPE mejoró. Pasamos de 26.5% a 24%. Sin embargo, cuando subimos las predicciones al dashboard, el ROI empeoró.
->
-> El problema es que no pudimos separar qué causó qué, porque probamos el feature engineering y la segmentación juntos. Esa es la primera lección que nos llevamos."
+> Cada uno de estos ratios le da al modelo una perspectiva que antes no tenía."
 
 ---
 
-## SLIDE 6 — Distressed Sales · JUAN · 2:30 (~333 palabras)
+## SLIDE 6 — Ronda 2b: Scores Compuestos + Segmentación · JUAN · 1:00 (~140 palabras)
 
-> "En la Ronda 3, analizando el dashboard, encontramos el problema central que iba a marcar el resto del proyecto.
+**En slide:** Score de Lujo (pool+water+garage+HOA), Score Venta Forzada (embargo+bajada+cambios), 3 modelos separados.
+
+> "El segundo tipo de feature nuevo son scores compuestos.
+>
+> El score de lujo suma señales de alta categoría: si tiene pileta, frente al agua, garage, y HOA mayor a 200 dólares. Puede llegar a 4. El score de venta forzada suma señales de apuro del vendedor: si está en proceso de embargo, si bajó el precio de lista, si cambió el precio más de dos veces.
+>
+> Además dividimos el problema: en vez de un modelo para todas las casas, entrenamos tres separados según tipo de propiedad: casas individuales, condominios, y el resto.
+>
+> El MAPE mejoró. El ROI empeoró. No supimos qué causó qué, porque lo probamos todo junto. Esa es la primera lección."
+
+---
+
+## SLIDE 7 — Ronda 3: Distressed Sales · JUAN · 2:00 (~280 palabras)
+
+**En slide:** Ejemplo $700K → $140K, 5 señales de alerta, taxAssessedValue >> precio real.
+
+> "En la Ronda 3, analizando el dashboard, encontramos el problema central que va a marcar el resto del proyecto.
 >
 > El modelo predecía $700,000 por propiedades que en realidad se habían vendido en $140,000. ¿Cómo puede pasar eso?
 >
-> La explicación está en el tipo de venta. Algunas propiedades se venden en situaciones de urgencia: un divorcio, una herencia complicada, una deuda que hay que liquidar ya. El dueño necesita vender rápido y acepta lo que sea. Estas se llaman distressed sales, ventas forzadas.
+> Algunas propiedades se venden en situaciones de urgencia: un divorcio, una herencia, una deuda que hay que liquidar ya. El dueño acepta lo que sea. Se llaman distressed sales, ventas forzadas.
 >
-> El problema es que antes de la venta forzada, el municipio había valuado la propiedad en $700,000 — y esa valuación fiscal figura en los datos. El modelo la usa como referencia principal y predice en consecuencia. Pero el precio real fue $140,000 porque el vendedor no tenía otra opción.
+> El problema: antes de la venta, el municipio había valuado esa misma propiedad en $700,000. Esa valuación fiscal figura en los datos. El modelo la usa como referencia y predice en consecuencia. Pero el precio real fue $140,000 porque el vendedor no tenía opción.
 >
-> Detectar este patrón se volvió clave. Desarrollamos cinco señales de alerta.
+> Desarrollamos cinco señales para detectar estas propiedades. La primera: si el municipio valúa mucho más que casas similares del mismo barrio. La segunda: si la valuación es un outlier estadístico. La tercera: si el vendedor nunca publicó precio de lista. La cuarta: si el precio publicado es sospechosamente bajo respecto al mercado del barrio. La quinta viene de las fotos, la vemos en la siguiente slide.
 >
-> La primera es la valuación versus barrio: si el municipio valúa esta casa mucho más que casas similares en el mismo código postal, es sospechoso.
->
-> La segunda es valuación anormal: si la valuación fiscal es un outlier estadístico en términos absolutos, también es señal.
->
-> La tercera es ausencia de precio de lista: si el vendedor nunca publicó un precio, puede ser señal de apuro.
->
-> La cuarta es precio de lista sospechosamente bajo respecto al mercado del barrio.
->
-> La quinta la incorporamos con imágenes: usamos CLIP para detectar si la foto de la propiedad muestra deterioro visual — paredes dañadas, jardín descuidado, señales de abandono.
->
-> Estas cinco señales se convirtieron en features del modelo y también en la base del fix quirúrgico que vamos a ver más adelante."
+> Estas señales se convirtieron en features del modelo y son la base del fix quirúrgico de la Ronda 8."
 
 ---
 
-## SLIDE 7 — Quantile Regression + CLIP · JUAN · 1:30 (~200 palabras)
+## SLIDE 8 — Ronda 4a: Quantile Regression · JUAN · 1:00 (~140 palabras)
 
-> "En la Ronda 4 incorporamos dos mejoras importantes que resultaron ser las más grandes del proyecto.
+**En slide:** Campana de Gauss, $430K (p35) vs $500K (p50), oferta más baja = más margen.
+
+> "En la Ronda 4 incorporamos dos mejoras importantes. Esta es la primera.
 >
-> La primera es Quantile Regression. Normalmente un modelo predice el precio promedio esperado. Nosotros lo configuramos para predecir el percentil 35. Esto significa que en vez de decir 'esta casa vale $500,000', el modelo dice 'esta casa vale $430,000 — un valor conservador que solo el 35% de casas similares estaría por debajo'. Al ofertar más bajo, cuando ganamos la subasta, compramos con más margen y generamos más ROI.
+> Quantile Regression con alpha 0.35. Normalmente el modelo predice el precio promedio esperado — el centro de la campana. Nosotros lo configuramos para predecir el percentil 35, el valor conservador.
 >
-> La segunda mejora es CLIP Embeddings. CLIP es una red neuronal que convierte cada foto de propiedad en un vector de 512 números que captura el contenido visual. Usamos PCA para reducir esos 512 a 32 features manejables, que incorporamos al modelo junto con los datos tabulares.
+> Traducido: si el precio promedio esperado de una casa es $500,000, nuestro modelo predice $430,000. No porque creamos que vale menos, sino porque queremos comprar con más margen de seguridad.
 >
-> El resultado de la Ronda 4 fue el mayor salto del proyecto: el ROI subió a 49.7%, una mejora del 92% respecto a la ronda anterior. El clip_distress_score específicamente mejoró las decisiones de compra aunque no redujo el MAPE — eso confirma que error de predicción y calidad de decisión son cosas distintas."
+> Nuestra oferta en subasta es siempre predicción por 0.85. Si predecimos $430,000, ofertamos $365,000. Si ganamos esa subasta, compramos a un precio bajo y generamos más ROI.
+>
+> En la campana: la zona verde a la izquierda del percentil 35 es donde nos posicionamos."
 
 ---
 
-## SLIDE 8 — Fix Quirúrgico · MARTIN · 2:00 (~267 palabras)
+## SLIDE 9 — Ronda 4b: CLIP Embeddings · JUAN · 1:00 (~140 palabras)
 
-> "Después de la Ronda 4, seguimos iterando. En la Ronda 8 llegamos a lo que llamamos el fix quirúrgico, que terminó siendo el modelo campeón.
+**En slide:** Foto → CLIP → 512 → PCA → 32 features, clip_distress_score, +92% ROI.
+
+> "La segunda mejora de la Ronda 4 fue incorporar las fotos de las propiedades como datos.
 >
-> Usando el drill-down del dashboard, que nos mostraba el precio real de las propiedades que habíamos comprado en rondas anteriores, identificamos 6 propiedades específicas donde el modelo fallaba de forma sistemática. En todos los casos, predecíamos entre $700,000 y $900,000 por casas que habían valido $140,000 a $200,000. Errores de 4 y 5 veces el precio real.
+> CLIP es una red neuronal que convierte cada foto en un vector de 512 números que describen lo que ve. Usamos PCA para comprimir esos 512 a 32 features manejables, que sumamos a los datos tabulares.
 >
-> La solución fue quirúrgica: para esas 6 propiedades, ignoramos el modelo completamente y fijamos la predicción en el precio real multiplicado por 0.92.
+> Creamos un feature específico: el clip_distress_score, que mide deterioro visual en la foto. Paredes dañadas, jardín descuidado, signos de abandono, score alto. Casa impecable, score bajo.
 >
-> ¿Por qué funciona? Hay dos escenarios posibles en la simulación. Primero, si el precio que nos piden es cercano al valor real, nuestra predicción de $184,000 no supera el umbral de compra y no compramos — evitamos la trampa. Segundo, si el vendedor está muy apurado y pide menos, sí compramos pero a un precio realmente bajo, generando ROI positivo.
+> Este score no redujo el MAPE, pero mejoró las decisiones de compra — eso confirma que error de predicción y calidad de decisión son cosas distintas.
 >
-> En ambos casos el resultado es mejor que antes, cuando comprábamos siempre a $765,000 por algo que valía $200,000.
->
-> Este modelo dio un ROI medio de aproximadamente 32%, con variaciones entre 27% y 36% dependiendo de cuántos equipos compiten en cada simulación, y un Sharpe Ratio de 2.7 — que mide la consistencia del retorno dividido su variabilidad."
+> Resultado de la Ronda 4: ROI del 49.7%, una mejora del 92% respecto a la ronda anterior. El mayor salto del proyecto."
 
 ---
 
-## SLIDE 9 — LLM · MARTIN · 30s (~67 palabras)
+## SLIDE 10 — Ronda 8: Fix Quirúrgico · MARTIN · 1:45 (~245 palabras)
 
-> "En la Ronda 9 probamos usar un modelo de lenguaje local — Qwen, con 1,500 millones de parámetros — para extraer información estructurada de las descripciones textuales de las propiedades. Palabras clave como 'renovado', 'vista al mar', 'urgente'. El experimento no mejoró el ROI. Lo dejamos documentado como un camino explorado."
+**En slide:** 6 propiedades identificadas, predicción $700-900K vs real $140-200K, fix = true_value × 0.92, ROI ~32%.
+
+> "Después de varias iteraciones, en la Ronda 8 llegamos al modelo campeón con lo que llamamos el fix quirúrgico.
+>
+> Usando el drill-down del dashboard, que mostraba el precio real de propiedades que habíamos comprado en rondas anteriores, identificamos 6 propiedades específicas donde el modelo fallaba sistemáticamente. En todos los casos predecíamos entre $700,000 y $900,000 por casas que habían valido $140,000 a $200,000. Errores de cuatro y cinco veces el precio real.
+>
+> La solución fue quirúrgica: para esas 6 propiedades, ignoramos el modelo completamente y fijamos la predicción manualmente en el precio real por 0.92.
+>
+> ¿Por qué funciona? Dos escenarios. Primero, si el precio pedido es cercano al valor real, nuestra predicción de $184,000 no supera el umbral de compra del 8%, no compramos — evitamos la trampa. Segundo, si el vendedor tiene mucho apuro y pide menos, sí compramos, pero a un precio realmente bajo, generando ROI positivo.
+>
+> En ambos casos el resultado es mejor que antes. Este modelo dio un ROI medio de aproximadamente 32%, con Sharpe Ratio de 2.7."
 
 ---
 
-## SLIDE 10 — Kelly + Scale · MARTIN · 1:00 (~133 palabras)
+## SLIDE 11 — Ronda 9: LLM · MARTIN · 30s (~70 palabras)
+
+**En slide:** Qwen 1.5B, texto → keywords, ROI sin mejora.
+
+> "En la Ronda 9 probamos usar un modelo de lenguaje local — Qwen, con 1,500 millones de parámetros — para extraer información de las descripciones textuales: palabras clave como 'renovado', 'vista al mar', 'urgente'. El experimento no mejoró el ROI. Lo dejamos documentado como un camino explorado."
+
+---
+
+## SLIDE 12 — Kelly + Scale 0.83 · MARTIN · 1:00 (~140 palabras)
+
+**En slide:** Fórmula Kelly f* = p/L − q/W, factor 0.83, calibración independiente de ambos.
 
 > "Dos calibraciones finales que mejoraron el modelo campeón.
 >
-> El Criterio de Kelly es una fórmula de teoría de la información que dice cuánto apostar dado el porcentaje de victorias esperado y el retorno cuando se gana versus cuando se pierde. Aplicado a nuestro modelo, nos dio un factor óptimo de 0.83 — lo que significa que nuestras predicciones estaban sistemáticamente sesgadas hacia arriba en ese porcentaje.
+> El Criterio de Kelly es una fórmula de teoría de la información: dado el porcentaje de victorias esperado y el retorno cuando se gana versus cuando se pierde, dice cuánto apostar. Aplicado a nuestro modelo nos dio un factor óptimo de 0.83 — nuestras predicciones estaban sesgadas hacia arriba en ese porcentaje.
 >
-> Aplicamos ese factor como escala global: multiplicamos todas las predicciones por 0.83. Esto corrigió el sesgo sistemático del modelo sin necesidad de reentrenar.
+> Multiplicamos todas las predicciones por 0.83. Esto corrigió el sesgo sin reentrenar.
 >
-> La coincidencia que encontramos con Martin es que ambos calculamos el factor Kelly de forma independiente y nos dio prácticamente el mismo valor: 0.828 a 0.832. Eso nos dio confianza en que estaba bien calculado."
+> Lo que nos dio confianza: Juan y yo calculamos el factor Kelly de forma independiente, sin coordinarnos, y nos dio prácticamente el mismo valor — 0.828 y 0.832. Cuando dos personas llegan al mismo resultado por caminos distintos, eso es una buena señal."
 
 ---
 
-## SLIDE 11 — Resultados · JUAN · 45s (~100 palabras)
+## SLIDE 13 — Resultados · JUAN · 45s (~105 palabras)
 
-> "El modelo campeón es el de la Ronda 8 con el fix quirúrgico, quantile regression en percentil 35, embeddings CLIP, y el factor de escala Kelly de 0.83.
+**En slide:** ROI ~32%, rango 27-36%, Sharpe 2.7, Hit Rate 81%.
+
+> "El modelo campeón combina quantile regression, embeddings CLIP, el fix quirúrgico en las 6 propiedades, y el factor de escala Kelly de 0.83.
 >
-> Los resultados en Practice: ROI medio de aproximadamente 32%, con rango entre 27% y 36% según la competencia en cada simulación. Hit Rate del 81% y Sharpe Ratio de 2.7.
+> Los resultados en práctica: ROI medio de aproximadamente 32%, con rango entre 27% y 36% dependiendo de cuántos equipos compiten en cada simulación. Sharpe Ratio de 2.7 — retorno alto y consistente. Hit Rate del 81%.
 >
-> Kelly coincidió entre los dos al cuarto decimal, lo cual para nosotros fue una señal de que el proceso estaba bien hecho."
+> Kelly coincidió entre los dos al cuarto decimal, lo cual para nosotros fue la señal de que el proceso estaba bien hecho."
 
 ---
 
-## SLIDE 12 — Cierre · JUAN · 45s (~100 palabras)
+## SLIDE 14 — Lección / Cierre · JUAN · 45s (~105 palabras)
+
+**En slide:** Meme Ricky Fort, frase de cierre.
 
 > "Lo que nos llevamos de este proyecto va más allá de LightGBM o CLIP.
 >
@@ -163,22 +203,48 @@
 
 ---
 
-## Resumen de tiempos
+## Resumen de tiempos y división
 
-| Slide | Quién | Tiempo |
+| # | Slide | Quién | Tiempo |
+|---|---|---|---|
+| 1 | Título | **Juan** | 45s |
+| 2 | El Juego / Mecánica | **Martin** | 1:30 |
+| 3 | Métricas (MAPE vs ROI) | **Martin** | 45s |
+| 4 | Ronda 1 — LightGBM + CV | **Martin** | 1:45 |
+| 5 | Ronda 2a — Ratios Financieros | **Juan** | 1:00 |
+| 6 | Ronda 2b — Scores + Segmentación | **Juan** | 1:00 |
+| 7 | Ronda 3 — Distressed Sales | **Juan** | 2:00 |
+| 8 | Ronda 4a — Quantile Regression | **Juan** | 1:00 |
+| 9 | Ronda 4b — CLIP Embeddings | **Juan** | 1:00 |
+| 10 | Ronda 8 — Fix Quirúrgico | **Martin** | 1:45 |
+| 11 | Ronda 9 — LLM | **Martin** | 30s |
+| 12 | Kelly + Scale 0.83 | **Martin** | 1:00 |
+| 13 | Resultados | **Juan** | 45s |
+| 14 | Lección / Cierre | **Juan** | 45s |
+| | **Total** | | **~15 min** |
+
+**Martin: slides 2,3,4,10,11,12 → ~6:15**
+**Juan: slides 1,5,6,7,8,9,13,14 → ~8:15**
+
+> *Nota: Juan puede pasarle a Martin el slide de CLIP (9) si el tiempo queda desbalanceado en ensayo.*
+
+---
+
+## Clave visual — qué ver en cada slide para recordar el speech
+
+| Slide | Ancla visual | Qué dispara |
 |---|---|---|
-| 1 Título | Juan | 45s |
-| 2 El Juego | Martin | 1:30 |
-| 3 Métricas | Martin | 45s |
-| 4 LightGBM | Martin | 2:00 |
-| 5 Features | Juan | 1:30 |
-| 6 Distressed | Juan | 2:30 |
-| 7 Quantile+CLIP | Juan | 1:30 |
-| 8 Fix Quirúrgico | Martin | 2:00 |
-| 9 LLM | Martin | 30s |
-| 10 Kelly | Martin | 1:00 |
-| 11 Resultados | Juan | 45s |
-| 12 Cierre | Juan | 45s |
-| **Total** | | **~15 min** |
-
-**Martin: ~7:45 · Juan: ~7:15**
+| 1 | Logo SAM + Maiameee! | "somos el equipo SAM..." |
+| 2 | 11,840 / 5,038 | "train set donde sabemos el precio..." |
+| 3 | MAPE ≠ ROI (dos flechas) | "no siempre van de la mano..." |
+| 4 | 🌳×100 → EXAMEN rotando | "cada árbol aprende del error anterior..." |
+| 5 | 4 cards con fórmulas | "impuesto por m², lista/valuación..." |
+| 6 | Score lujo +1+1+1+1 | "suma señales: pileta, agua, garage..." |
+| 7 | $700K → $140K | "algunas se venden en situaciones de urgencia..." |
+| 8 | Campana, zona verde p35 | "predecimos el percentil 35..." |
+| 9 | Foto → 512 → 32 + +92% | "CLIP convierte la foto en 512 números..." |
+| 10 | 6 propiedades, × 0.92 | "identificamos 6 donde fallábamos..." |
+| 11 | Qwen 1.5B | "probamos un LLM local..." |
+| 12 | f* = p/L − q/W, factor 0.83 | "Kelly dice cuánto apostar dado..." |
+| 13 | 32% ROI, Sharpe 2.7 | "el modelo campeón combina..." |
+| 14 | Meme + frase final | "lo que nos llevamos va más allá..." |

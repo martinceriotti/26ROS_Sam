@@ -206,119 +206,200 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
 <div class="slide">
   <div class="eyebrow">Ronda 1</div>
   <h2>Baseline — <span class="accent">LightGBM</span></h2>
-
-  <!-- Tree chain -->
-  <div class="card wide" style="margin-bottom:0.85rem;padding:0.9rem 1.2rem">
-    <div class="clabel" style="margin-bottom:0.5rem">🌳 LightGBM — 100 árboles de decisión encadenados</div>
-    <div class="tree-chain">
-      <div class="tnode"><span class="ticon">🌳</span><div class="tnum">Árbol 1</div><div class="terr">→ error</div></div>
-      <div class="carr">→</div>
-      <div class="tnode"><span class="ticon">🌳</span><div class="tnum">Árbol 2</div><div class="terr">→ error</div></div>
-      <div class="carr">→</div>
-      <div class="tnode"><span class="ticon">🌳</span><div class="tnum">Árbol 3</div><div class="terr">→ error</div></div>
-      <div class="cdots">···</div>
-      <div class="tnode hi"><span class="ticon">🌳</span><div class="tnum">Árbol 100</div><div class="tok">pred final</div></div>
-      <div class="carr">→</div>
-      <div class="tnode res"><span class="ticon">💰</span><div class="tnum" style="color:var(--teal);font-weight:700">Precio</div></div>
-    </div>
-    <div style="font-size:0.87rem;color:var(--muted);margin-top:0.4rem">Cada árbol aprende del error del anterior — solo juntos dan el resultado final.</div>
-  </div>
-
-  <!-- Bottom: CV + LightGBM pipeline -->
-  <div class="card wide" style="padding:1rem 1.3rem">
-    <div class="clabel" style="margin-bottom:0.6rem">Cómo se usan juntos — CV 5-Fold es el método de examen del LightGBM</div>
-    <div style="display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap">
-      <!-- CV folds -->
-      <div style="flex:1;min-width:180px">
-        <div style="font-size:0.96rem;color:var(--muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.1em">Paso 1 — Dividir</div>
-        <div class="cv-folds">
-          <div class="cv-fold train">Entrena<br>1</div>
-          <div class="cv-fold train">Entrena<br>2</div>
-          <div class="cv-fold exam">✓ EXAM<br>3</div>
-          <div class="cv-fold train">Entrena<br>4</div>
-          <div class="cv-fold train">Entrena<br>5</div>
+  <div style="display:flex;gap:0.9rem;height:calc(100% - 5rem)">
+    <!-- LEFT -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:0.8rem">
+      <div class="card" style="padding:0.9rem 1.1rem">
+        <div class="clabel" style="margin-bottom:0.6rem">Los datos</div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem">
+          <div style="display:flex;align-items:center;gap:0.7rem;padding:0.5rem 0.8rem;background:rgba(0,201,167,0.07);border-radius:8px;font-size:0.98rem">
+            <span>📚</span><div><strong>11,840 casas</strong> con precio real <span style="color:var(--teal);font-weight:700">→ entrenamos</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.7rem;padding:0.5rem 0.8rem;background:rgba(245,200,66,0.07);border-radius:8px;font-size:0.98rem">
+            <span>🎯</span><div><strong>5,038 casas</strong> sin precio <span style="color:var(--gold);font-weight:700">→ predecimos</span></div>
+          </div>
         </div>
       </div>
-      <div style="color:var(--muted);font-size:1.4rem;flex-shrink:0">→</div>
-      <!-- LightGBM box -->
-      <div style="background:rgba(245,200,66,0.07);border:1px solid rgba(245,200,66,0.3);border-radius:10px;padding:0.6rem 1rem;flex-shrink:0;text-align:center">
-        <div style="font-size:0.96rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem">Paso 2 — LightGBM</div>
-        <div style="font-size:1.2rem">🌳×100</div>
-        <div style="font-size:0.96rem;color:var(--gold);margin-top:0.2rem;font-weight:600">entrena con 4 grupos<br>predice el 5to</div>
-      </div>
-      <div style="color:var(--muted);font-size:1.4rem;flex-shrink:0">→</div>
-      <!-- Error per fold -->
-      <div style="background:var(--card2);border-radius:10px;padding:0.6rem 0.9rem;flex-shrink:0;text-align:center">
-        <div style="font-size:0.96rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem">Paso 3 — Error del fold</div>
-        <div style="font-size:1.2rem;color:var(--coral);font-weight:700">MAPE₃ = ?</div>
-        <div style="font-size:0.96rem;color:var(--muted);margin-top:0.2rem">se repite 5 veces<br>rotando el examen</div>
-      </div>
-      <div style="color:var(--muted);font-size:1.4rem;flex-shrink:0">→</div>
-      <!-- Final MAPE -->
-      <div style="background:rgba(0,201,167,0.07);border:1px solid rgba(0,201,167,0.3);border-radius:10px;padding:0.6rem 1rem;flex-shrink:0;text-align:center">
-        <div style="font-size:0.96rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem">Paso 4 — Promedio</div>
-        <div style="font-size:1.7rem;font-weight:900;color:var(--gold);line-height:1">26.5%</div>
-        <div style="font-size:0.96rem;color:var(--teal);margin-top:0.2rem;font-weight:600">MAPE final</div>
+      <div class="card" style="padding:0.9rem 1.1rem;flex:1;display:flex;flex-direction:column;justify-content:space-between">
+        <div class="clabel" style="margin-bottom:0.6rem">🌳 LightGBM — cómo predice</div>
+        <div style="display:flex;flex-direction:column;gap:0.7rem;flex:1;justify-content:center">
+          <div style="display:flex;align-items:center;justify-content:center;gap:0.6rem">
+            <div style="padding:0.7rem 1rem;background:var(--card2);border-radius:8px;text-align:center;font-size:0.9rem;color:var(--muted)">
+              📋<br><span style="font-size:0.82rem">datos<br>de la casa</span>
+            </div>
+            <div style="color:var(--muted);font-size:1.5rem">→</div>
+            <div style="padding:0.7rem 1.2rem;background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.3);border-radius:8px;text-align:center">
+              <div style="font-size:2rem">🌳🌳🌳</div>
+              <div style="font-size:0.95rem;color:var(--gold);font-weight:700">× 100 árboles</div>
+            </div>
+            <div style="color:var(--muted);font-size:1.5rem">→</div>
+            <div style="padding:0.7rem 1rem;background:rgba(0,201,167,0.08);border:1px solid rgba(0,201,167,0.3);border-radius:8px;text-align:center;font-size:0.9rem;color:var(--teal);font-weight:700">
+              💰<br><span style="font-size:0.82rem">precio<br>estimado</span>
+            </div>
+          </div>
+          <div style="padding:0.5rem 0.8rem;background:var(--card2);border-radius:8px;font-size:0.9rem;color:var(--muted);text-align:center">
+            💡 El árbol 1 se equivoca → el árbol 2 aprende de ese error → y así 100 veces
+          </div>
+        </div>
       </div>
     </div>
-    <div style="margin-top:0.5rem;font-size:0.85rem;color:var(--muted)">
-      💡 LightGBM = el modelo que predice. CV 5-Fold = la forma de evaluarlo honestamente 5 veces. El MAPE 26.5% es el promedio de las 5 evaluaciones.
+    <!-- RIGHT: CV 5-fold -->
+    <div class="card" style="flex:1;padding:0.9rem 1.1rem;display:flex;flex-direction:column">
+      <div class="clabel" style="margin-bottom:0.5rem">📋 CV 5-Fold — el examen del modelo</div>
+      <div style="font-size:0.9rem;color:var(--muted);margin-bottom:0.6rem">11,840 casas en 5 grupos. Cada vuelta, uno es el examen:</div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;flex:1;justify-content:center">
+        <div style="display:flex;align-items:center;gap:0.3rem">
+          <div style="width:3rem;font-size:0.82rem;color:var(--muted)">vuelta 1</div>
+          <div style="flex:1;height:2rem;background:rgba(255,95,109,0.25);border:1.5px solid rgba(255,95,109,0.6);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--coral)">EXAMEN</div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="width:3rem;font-size:0.82rem;color:var(--muted);text-align:right">27%</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.3rem">
+          <div style="width:3rem;font-size:0.82rem;color:var(--muted)">vuelta 2</div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(255,95,109,0.25);border:1.5px solid rgba(255,95,109,0.6);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--coral)">EXAMEN</div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="width:3rem;font-size:0.82rem;color:var(--muted);text-align:right">26%</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.3rem">
+          <div style="width:3rem;font-size:0.82rem;color:var(--muted)">vuelta 3</div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(255,95,109,0.25);border:1.5px solid rgba(255,95,109,0.6);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--coral)">EXAMEN</div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="width:3rem;font-size:0.82rem;color:var(--muted);text-align:right">27%</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.3rem">
+          <div style="width:3rem;font-size:0.82rem;color:var(--muted)">vuelta 4</div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(255,95,109,0.25);border:1.5px solid rgba(255,95,109,0.6);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--coral)">EXAMEN</div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="width:3rem;font-size:0.82rem;color:var(--muted);text-align:right">26%</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.3rem">
+          <div style="width:3rem;font-size:0.82rem;color:var(--muted)">vuelta 5</div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(0,201,167,0.1);border-radius:5px"></div>
+          <div style="flex:1;height:2rem;background:rgba(255,95,109,0.25);border:1.5px solid rgba(255,95,109,0.6);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--coral)">EXAMEN</div>
+          <div style="width:3rem;font-size:0.82rem;color:var(--muted);text-align:right">26%</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.8rem;padding:0.7rem 1rem;background:rgba(245,200,66,0.07);border:1px solid rgba(245,200,66,0.2);border-radius:8px;margin-top:0.8rem">
+        <div style="font-size:0.9rem;color:var(--muted)">Promedio →</div>
+        <div style="font-size:2rem;font-weight:900;color:var(--gold)">26.5% MAPE</div>
+        <div style="font-size:0.85rem;color:var(--muted)">= $26 de error<br>cada $100</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- S5: RONDA 2 — FEATURE ENGINEERING -->
+<!-- S5a: RONDA 2A — RATIOS FINANCIEROS -->
 <div class="slide">
-  <div class="eyebrow">Ronda 2</div>
-  <h2>Feature Engineering + Segmentación — <span class="accent">variables nuevas y 3 modelos</span></h2>
-  <div class="g2">
-    <div class="col">
-      <div class="card">
-        <div class="clabel">Variables que creamos a partir de los datos</div>
-        <div style="margin-bottom:0.5rem;font-size:1.2rem;margin-top:0.2rem">A partir de lo que ya teníamos, construimos señales nuevas:</div>
-        <div class="chips">
-          <span class="chip teal">luxury_score</span>
-          <span class="chip teal">distress_score</span>
-          <span class="chip teal">tax_per_sqft</span>
-          <span class="chip teal">zip_median_price</span>
-          <span class="chip teal">school × area</span>
-          <span class="chip teal">age × school</span>
-          <span class="chip teal">waterfront × lat</span>
-          <span class="chip teal">listing_to_tax_ratio</span>
+  <div class="eyebrow">Ronda 2 — Feature Engineering · Parte 1</div>
+  <h2>Ratios Financieros — <span class="accent">combinamos lo que ya teníamos</span></h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;margin-top:0.3rem">
+
+    <div class="card" style="padding:1rem 1.2rem">
+      <div style="font-size:1.8rem;margin-bottom:0.5rem">💰</div>
+      <div class="ctitle">Impuesto por m²</div>
+      <div style="font-family:monospace;font-size:0.92rem;color:var(--gold);margin:0.4rem 0">taxAssessedValue ÷ área</div>
+      <div class="cval">¿Es cara de mantener para su tamaño?</div>
+    </div>
+
+    <div class="card" style="padding:1rem 1.2rem">
+      <div style="font-size:1.8rem;margin-bottom:0.5rem">📊</div>
+      <div class="ctitle">Lista / Valuación</div>
+      <div style="font-family:monospace;font-size:0.92rem;color:var(--gold);margin:0.4rem 0">precio_lista ÷ taxAssessedValue</div>
+      <div class="cval">¿El vendedor pide mucho menos de lo que vale según el municipio? Señal de apuro.</div>
+    </div>
+
+    <div class="card" style="padding:1rem 1.2rem">
+      <div style="font-size:1.8rem;margin-bottom:0.5rem">🏠</div>
+      <div class="ctitle">Precio mediano del ZIP</div>
+      <div style="font-family:monospace;font-size:0.92rem;color:var(--gold);margin:0.4rem 0">mediana del barrio (calculada en cada fold)</div>
+      <div class="cval">¿Cuánto valen las casas similares en la misma zona? Base de comparación local.</div>
+    </div>
+
+    <div class="card" style="padding:1rem 1.2rem">
+      <div style="font-size:1.8rem;margin-bottom:0.5rem">🏢</div>
+      <div class="ctitle">HOA por m²</div>
+      <div style="font-family:monospace;font-size:0.92rem;color:var(--gold);margin:0.4rem 0">hoa_fee_monthly ÷ área</div>
+      <div class="cval">¿Las expensas son proporcionales al tamaño? HOA alto relativo al área puede indicar lujo o problema.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- S5b: RONDA 2B — SCORES COMPUESTOS -->
+<div class="slide">
+  <div class="eyebrow">Ronda 2 — Feature Engineering · Parte 2</div>
+  <h2>Scores Compuestos + <span class="accent">3 Modelos Separados</span></h2>
+  <div style="display:flex;gap:0.9rem;height:calc(100% - 5rem)">
+
+    <!-- LEFT: scores -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:0.8rem">
+      <div class="card" style="padding:1rem 1.2rem;flex:1">
+        <div style="font-size:1.5rem;margin-bottom:0.4rem">🏊</div>
+        <div class="ctitle" style="color:var(--gold)">Score de Lujo</div>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;margin-top:0.5rem">
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.95rem"><span style="color:var(--teal);font-weight:700">+1</span> Tiene pileta</div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.95rem"><span style="color:var(--teal);font-weight:700">+1</span> Frente al agua</div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.95rem"><span style="color:var(--teal);font-weight:700">+1</span> Tiene garage</div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.95rem"><span style="color:var(--teal);font-weight:700">+1</span> HOA > $200/mes</div>
         </div>
-        <div style="margin-top:0.6rem;padding:0.5rem 0.7rem;background:var(--card2);border-radius:8px;font-size:0.9rem;color:var(--muted)">
-          + <strong style="color:var(--text)">3 modelos separados</strong> por tipo de propiedad: SINGLE_FAMILY · CONDO · REST
-        </div>
+        <div style="margin-top:0.6rem;padding:0.4rem 0.6rem;background:var(--card2);border-radius:6px;font-size:0.88rem;color:var(--muted)">Suma de 0 a 4 → el modelo usa como número</div>
       </div>
-      <div class="card coral">
-        <div class="clabel">Resultado inesperado</div>
-        <div class="ctitle">MAPE mejoró — ROI empeoró</div>
-        <div class="cval">El modelo mejoró el MAPE pero empeoró el ROI. No sabemos si fue el feature engineering, la segmentación, o los dos — los probamos juntos.</div>
+
+      <div class="card coral" style="padding:1rem 1.2rem;flex:1">
+        <div style="font-size:1.5rem;margin-bottom:0.4rem">⚠️</div>
+        <div class="ctitle" style="color:var(--coral)">Score de Venta Forzada</div>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;margin-top:0.5rem">
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.95rem"><span style="color:var(--coral);font-weight:700">+1</span> En proceso de embargo</div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.95rem"><span style="color:var(--coral);font-weight:700">+1</span> Bajó el precio de lista</div>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.95rem"><span style="color:var(--coral);font-weight:700">+1</span> Más de 2 cambios de precio</div>
+        </div>
+        <div style="margin-top:0.6rem;padding:0.4rem 0.6rem;background:rgba(255,95,109,0.1);border-radius:6px;font-size:0.88rem;color:var(--muted)">Señales de que el vendedor tiene apuro</div>
       </div>
     </div>
-    <div class="card" style="display:flex;flex-direction:column;justify-content:space-between">
-      <div>
-        <div class="clabel">¿Qué pasó con los números?</div>
-        <div style="margin-top:0.8rem;display:flex;flex-direction:column;gap:0.8rem">
-          <div style="padding:0.7rem 0.9rem;background:var(--card2);border-radius:10px">
-            <div style="font-size:0.96rem;color:var(--muted);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.1em">Ronda 1 — Baseline</div>
-            <div style="display:flex;gap:1.5rem">
-              <div><div style="font-size:1.6rem;font-weight:800">26.5%</div><div style="font-size:0.68rem;color:var(--muted)">MAPE</div></div>
-            </div>
+
+    <!-- RIGHT: segmentación + resultado -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:0.8rem">
+      <div class="card" style="padding:1rem 1.2rem;flex:1">
+        <div class="clabel" style="margin-bottom:0.6rem">Segmentación — 3 modelos separados</div>
+        <div style="font-size:0.95rem;color:var(--muted);margin-bottom:0.8rem">En vez de un modelo para todo, entrenamos uno por tipo de propiedad:</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem">
+          <div style="display:flex;align-items:center;gap:0.7rem;padding:0.5rem 0.8rem;background:var(--card2);border-radius:8px">
+            <span style="font-size:1.3rem">🏡</span>
+            <div><strong>SINGLE_FAMILY</strong> <span style="color:var(--muted);font-size:0.88rem">— 41% del dataset</span></div>
           </div>
-          <div style="padding:0.7rem 0.9rem;background:var(--card2);border-radius:10px;border:1px solid var(--border)">
-            <div style="font-size:0.96rem;color:var(--muted);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.1em">Ronda 2 — Feature Engineering</div>
-            <div style="display:flex;gap:1.5rem">
-              <div><div style="font-size:1.6rem;font-weight:800;color:var(--teal)">24% ↓</div><div style="font-size:0.68rem;color:var(--muted)">MAPE mejor</div></div>
-              <div><div style="font-size:1.6rem;font-weight:800;color:var(--coral)">ROI ↑</div><div style="font-size:0.68rem;color:var(--muted)">empeoró</div></div>
-            </div>
+          <div style="display:flex;align-items:center;gap:0.7rem;padding:0.5rem 0.8rem;background:var(--card2);border-radius:8px">
+            <span style="font-size:1.3rem">🏢</span>
+            <div><strong>CONDO</strong> <span style="color:var(--muted);font-size:0.88rem">— 40% del dataset</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.7rem;padding:0.5rem 0.8rem;background:var(--card2);border-radius:8px">
+            <span style="font-size:1.3rem">🏘️</span>
+            <div><strong>REST</strong> <span style="color:var(--muted);font-size:0.88rem">— townhouses, multifamily, etc.</span></div>
           </div>
         </div>
       </div>
-      <div style="padding:0.7rem 0.9rem;background:var(--card2);border-radius:10px;font-size:0.98rem;margin-top:0.8rem;border-left:3px solid var(--gold)">
-        💡 Saber que "las casas con pileta valen más" no ayuda si el mercado ya lo descuentó en el asking price.
+
+      <div class="card coral" style="padding:1rem 1.2rem">
+        <div class="clabel" style="margin-bottom:0.4rem">Resultado inesperado</div>
+        <div class="ctitle">MAPE mejoró → ROI empeoró</div>
+        <div class="cval" style="margin-top:0.3rem">No sabemos si fue los ratios, los scores, o la segmentación — los probamos juntos.</div>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -398,130 +479,130 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   </div>
 </div>
 
-<!-- S7: RONDA 4 — QUANTILE + CLIP -->
+<!-- S7a: QUANTILE REGRESSION -->
 <div class="slide">
-  <div class="eyebrow">Ronda 4</div>
-  <h2>Quantile Regression + <span class="accent">Imágenes CLIP</span></h2>
-  <div class="g2">
-    <div class="card gold">
-      <div style="font-size:2.3rem;margin-bottom:0.3rem">📉</div>
-      <div class="clabel">Quantile Regression α = 0.35</div>
-      <div class="ctitle">Predecimos conservador, no el promedio</div>
-      <div class="cval" style="margin-bottom:0.8rem">En vez del precio esperado, predecimos el <strong style="color:var(--gold)">percentil 35</strong>. El modelo siempre estima un poco menos → ofertas más bajas → mayor ganancia cuando compramos.</div>
-      <!-- Percentile visual -->
-      <canvas id="qcurve" width="400" height="170" style="width:100%;border-radius:10px;display:block;margin-top:0.5rem"></canvas>
-      <script>
-      (function(){
-        var c=document.getElementById('qcurve');if(!c)return;
-        var ctx=c.getContext('2d');
-        var W=c.width,H=c.height;
-        var pl=10,pr=10,pt=16,pb=16;
-        function norm(x){return Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI);}
-        var zMin=-3.8,zMax=2.6;
-        function zX(z){return pl+(z-zMin)/(zMax-zMin)*(W-pl-pr);}
-        var peak=norm(0);
-        var chartH=H-pt-pb;
-        function nY(y){return H-pb-y*chartH/peak;}
-        var z10=-1.28,z35=-0.385,z50=0;
-        var x10=zX(z10),x35=zX(z35),x50=zX(z50);
-        var baseline=nY(0);
+  <div class="eyebrow">Ronda 4 · Parte 1</div>
+  <h2>Quantile Regression — <span class="accent">predecimos conservador</span></h2>
+  <div style="display:flex;gap:0.9rem;height:calc(100% - 5rem)">
 
-        // shaded area left of p35
-        ctx.beginPath();
-        ctx.moveTo(zX(zMin),baseline);
-        for(var z=zMin;z<=z35;z+=0.04)ctx.lineTo(zX(z),nY(norm(z)));
-        ctx.lineTo(x35,baseline);ctx.closePath();
-        ctx.fillStyle='rgba(0,201,167,0.2)';ctx.fill();
-
-        // bell curve
-        ctx.beginPath();
-        for(var z=zMin;z<=zMax;z+=0.04){
-          var x=zX(z),y=nY(norm(z));
-          z===zMin?ctx.moveTo(x,y):ctx.lineTo(x,y);
-        }
-        ctx.strokeStyle='rgba(200,210,240,0.5)';ctx.lineWidth=2.5;ctx.stroke();
-
-        // vertical lines
-        function vline(x,yTop,col,dash){
-          ctx.beginPath();ctx.setLineDash(dash||[]);
-          ctx.strokeStyle=col;ctx.lineWidth=1.8;
-          ctx.moveTo(x,yTop);ctx.lineTo(x,baseline);ctx.stroke();
-          ctx.setLineDash([]);
-        }
-        vline(x10,nY(norm(z10)),'rgba(255,95,109,0.6)',[5,3]);
-        vline(x35,nY(norm(z35)),'#00c9a7');
-        vline(x50,nY(norm(z50)),'rgba(180,190,220,0.35)',[5,3]);
-
-        // ---- LABELS: each in its own zone, no overlap ----
-
-        // p10 — bottom left, small
-        ctx.font='10px sans-serif';ctx.fillStyle='rgba(255,95,109,0.75)';
-        ctx.textAlign='center';
-        ctx.fillText('p10',x10,baseline+12);
-
-        // p35 — label LEFT of its line, at mid-height
-        var y35=nY(norm(z35));
-        ctx.font='bold 13px sans-serif';ctx.fillStyle='#00c9a7';
-        ctx.textAlign='right';
-        ctx.fillText('p35 ← nosotros',x35-6,y35+18);
-        // price tag above line
-        ctx.font='bold 12px sans-serif';ctx.textAlign='center';
-        ctx.fillText('$430K',x35,y35-8);
-
-        // p50 — label RIGHT of its line
-        var y50=nY(norm(z50));
-        ctx.font='bold 12px sans-serif';ctx.fillStyle='rgba(160,170,200,0.85)';
-        ctx.textAlign='left';
-        ctx.fillText('$500K',x50+6,y50+4);
-        ctx.font='10px sans-serif';ctx.fillStyle='rgba(140,150,180,0.7)';
-        ctx.fillText('p50 promedio',x50+6,y50+16);
-
-        // axis label bottom center
-        ctx.font='10px sans-serif';ctx.fillStyle='rgba(120,130,160,0.55)';
-        ctx.textAlign='center';
-        ctx.fillText('Precio de una casa →',W/2,H-1);
-      })();
-      </script>
-        
-    </div>
-    <div class="card">
-      <div style="font-size:2.3rem;margin-bottom:0.3rem">📸</div>
-      <div class="clabel">CLIP Embeddings — fotos de propiedades</div>
-      <div class="ctitle">Foto → 512 números → 32 con PCA</div>
-      <!-- Pipeline visual -->
-      <div style="display:flex;align-items:center;gap:0.4rem;margin:0.8rem 0;font-size:0.85rem;flex-wrap:wrap">
-        <div style="padding:0.4rem 0.7rem;background:var(--card2);border-radius:7px;text-align:center">
-          <div style="font-size:1.32rem">📸</div>
-          <div style="color:var(--muted)">Foto</div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:0.8rem">
+      <div class="card" style="padding:1rem 1.2rem">
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:0.5rem">Quantile Regression α = 0.35</div>
+        <div class="ctitle" style="font-size:1.3rem;margin-bottom:0.6rem">Predecimos el percentil 35, no el promedio</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.98rem">
+          <div style="padding:0.5rem 0.8rem;background:var(--card2);border-radius:8px">
+            🎯 Modelo normal → predice <strong>$500K</strong> (precio promedio esperado)
+          </div>
+          <div style="padding:0.5rem 0.8rem;background:rgba(0,201,167,0.08);border:1px solid rgba(0,201,167,0.2);border-radius:8px">
+            ✅ Nuestro modelo → predice <strong style="color:var(--teal)">$430K</strong> (valor conservador, percentil 35)
+          </div>
+          <div style="padding:0.5rem 0.8rem;background:var(--card2);border-radius:8px">
+            💰 Nuestra oferta → <strong>$430K × 0.85 = $365K</strong> (vs $425K del modelo normal)
+          </div>
         </div>
-        <div style="color:var(--muted)">→</div>
-        <div style="padding:0.4rem 0.7rem;background:var(--card2);border-radius:7px;text-align:center">
-          <div style="font-size:1.32rem">🧠</div>
-          <div style="color:var(--muted)">CLIP</div>
-        </div>
-        <div style="color:var(--muted)">→</div>
-        <div style="padding:0.4rem 0.7rem;background:var(--card2);border-radius:7px;text-align:center">
-          <div style="font-weight:700;color:var(--coral)">×512</div>
-          <div style="color:var(--muted)">vectores</div>
-        </div>
-        <div style="color:var(--muted)">→</div>
-        <div style="padding:0.4rem 0.7rem;background:var(--card2);border-radius:7px;text-align:center">
-          <div style="font-size:1.32rem">📐</div>
-          <div style="color:var(--muted)">PCA</div>
-        </div>
-        <div style="color:var(--muted)">→</div>
-        <div style="padding:0.4rem 0.7rem;background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.25);border-radius:7px;text-align:center">
-          <div style="font-weight:700;color:var(--gold)">×32</div>
-          <div style="color:var(--muted)">features</div>
-        </div>
-      </div>
-      <div style="padding:0.55rem 0.7rem;background:var(--card2);border-radius:8px;font-size:0.96rem;margin-bottom:0.6rem">
-        <strong style="color:var(--text)">clip_distress_score</strong> — ¿la foto parece propiedad deteriorada? Score 0–1 por cada casa.
-      </div>
-      <div style="padding:0.55rem 0.7rem;background:rgba(255,95,109,0.07);border:1px solid rgba(255,95,109,0.2);border-radius:8px;font-size:0.96rem">
-        ✅ CLIP fue la mayor mejora del proyecto: <strong style="color:var(--teal)">ROI subió a 49.7% (+92%)</strong>. El clip_distress_score mejoró la decisión de compra aunque no bajó el MAPE.
+        <div style="margin-top:0.7rem;font-size:0.9rem;color:var(--muted)">Si ganamos la subasta, compramos con más margen → más ROI.</div>
       </div>
     </div>
+
+    <div style="flex:1">
+      <div class="card" style="padding:1rem 1.2rem;height:100%;box-sizing:border-box">
+        <div class="clabel" style="margin-bottom:0.5rem">La campana de Gauss — precios posibles de una casa</div>
+        <canvas id="qcurve" width="360" height="200" style="width:100%;border-radius:8px;display:block"></canvas>
+        <script>
+        (function(){
+          var c=document.getElementById('qcurve');if(!c)return;
+          var ctx=c.getContext('2d');var W=c.width,H=c.height;
+          var pl=10,pr=10,pt=30,pb=50;
+          function norm(x){return Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI);}
+          var zMin=-3.8,zMax=2.6;
+          function zX(z){return pl+(z-zMin)/(zMax-zMin)*(W-pl-pr);}
+          var peak=norm(0);var chartH=H-pt-pb;
+          function nY(y){return H-pb-y*chartH/peak;}
+          var z10=-1.28,z35=-0.385,z50=0;
+          var x10=zX(z10),x35=zX(z35),x50=zX(z50);
+          var baseline=nY(0);
+          ctx.beginPath();ctx.moveTo(zX(zMin),baseline);
+          for(var z=zMin;z<=z35;z+=0.04)ctx.lineTo(zX(z),nY(norm(z)));
+          ctx.lineTo(x35,baseline);ctx.closePath();
+          ctx.fillStyle='rgba(0,201,167,0.2)';ctx.fill();
+          ctx.beginPath();
+          for(var z=zMin;z<=zMax;z+=0.04){var x=zX(z),y=nY(norm(z));z===zMin?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+          ctx.strokeStyle='rgba(200,210,240,0.5)';ctx.lineWidth=2.5;ctx.stroke();
+          function vline(x,yTop,col,dash){ctx.beginPath();ctx.setLineDash(dash||[]);ctx.strokeStyle=col;ctx.lineWidth=2;ctx.moveTo(x,yTop);ctx.lineTo(x,baseline);ctx.stroke();ctx.setLineDash([]);}
+          vline(x10,nY(norm(z10)),'rgba(255,95,109,0.6)',[5,3]);
+          vline(x35,nY(norm(z35)),'#00c9a7');
+          vline(x50,nY(norm(z50)),'rgba(180,190,220,0.35)',[5,3]);
+          ctx.font='bold 13px sans-serif';ctx.textAlign='center';
+          ctx.fillStyle='#00c9a7';ctx.fillText('$430K',x35,nY(norm(z35))-8);
+          ctx.fillStyle='rgba(160,170,200,0.8)';ctx.fillText('$500K',x50,nY(norm(z50))-8);
+          ctx.font='bold 12px sans-serif';
+          ctx.fillStyle='rgba(255,95,109,0.8)';ctx.fillText('p10',x10,baseline+16);
+          ctx.fillStyle='#00c9a7';ctx.fillText('p35',x35,baseline+16);ctx.font='10px sans-serif';ctx.fillText('← nosotros',x35,baseline+28);
+          ctx.font='bold 12px sans-serif';ctx.fillStyle='rgba(160,170,200,0.8)';
+          ctx.textAlign='left';ctx.fillText('p50 promedio',x50+6,baseline+16);
+          ctx.font='10px sans-serif';ctx.fillStyle='rgba(120,130,160,0.55)';ctx.textAlign='center';ctx.fillText('Precio de una casa →',W/2,H-2);
+        })();
+        </script>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- S7b: CLIP EMBEDDINGS -->
+<div class="slide">
+  <div class="eyebrow">Ronda 4 · Parte 2</div>
+  <h2>CLIP Embeddings — <span class="accent">las fotos como datos</span></h2>
+  <div style="display:flex;gap:0.9rem;height:calc(100% - 5rem)">
+
+    <!-- LEFT: pipeline -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:0.8rem">
+      <div class="card" style="padding:1rem 1.2rem">
+        <div class="clabel" style="margin-bottom:0.7rem">📸 CLIP Embeddings — Fotos de Propiedades</div>
+        <div class="ctitle" style="margin-bottom:0.8rem">Foto → 512 números → 32 con PCA</div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:0.8rem">
+          <div style="text-align:center;padding:0.5rem 0.7rem;background:var(--card2);border-radius:8px;font-size:0.88rem">📷<br>Foto</div>
+          <div style="color:var(--muted)">→</div>
+          <div style="text-align:center;padding:0.5rem 0.7rem;background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:8px;font-size:0.88rem">🧠<br>CLIP</div>
+          <div style="color:var(--muted)">→</div>
+          <div style="text-align:center;padding:0.5rem 0.7rem;background:var(--card2);border-radius:8px;font-size:0.88rem">×512<br>vectores</div>
+          <div style="color:var(--muted)">→</div>
+          <div style="text-align:center;padding:0.5rem 0.7rem;background:var(--card2);border-radius:8px;font-size:0.88rem">📐<br>PCA</div>
+          <div style="color:var(--muted)">→</div>
+          <div style="text-align:center;padding:0.6rem 0.9rem;background:rgba(0,201,167,0.1);border:1px solid rgba(0,201,167,0.3);border-radius:8px;font-size:0.88rem;color:var(--teal);font-weight:700">×32<br>features</div>
+        </div>
+        <div style="padding:0.5rem 0.8rem;background:var(--card2);border-radius:8px;font-size:0.9rem;color:var(--muted)">
+          CLIP convierte cada foto en 512 números que describen lo que ve. PCA los comprime a 32 para que el modelo los pueda usar eficientemente.
+        </div>
+      </div>
+
+      <div class="card" style="padding:1rem 1.2rem">
+        <div class="clabel" style="margin-bottom:0.4rem">clip_distress_score</div>
+        <div class="ctitle" style="margin-bottom:0.4rem">¿La foto muestra deterioro visual?</div>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;font-size:0.92rem">
+          <div style="color:var(--muted)">🔴 Paredes dañadas, jardín descuidado, signos de abandono → score alto</div>
+          <div style="color:var(--muted)">🟢 Casa impecable, bien mantenida → score bajo</div>
+        </div>
+        <div style="margin-top:0.5rem;font-size:0.88rem;color:var(--muted);padding:0.4rem 0.6rem;background:var(--card2);border-radius:6px">
+          No bajó el MAPE, pero mejoró las decisiones de compra.
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: result -->
+    <div class="card teal" style="flex:0.6;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1rem;padding:1.2rem">
+      <div class="clabel">Resultado — Ronda 4</div>
+      <div>
+        <div class="bignum gold" style="font-size:3.5rem">49.7%</div>
+        <div style="font-size:1.1rem;color:var(--muted);margin-top:0.2rem">Mean ROI</div>
+      </div>
+      <div style="padding:0.6rem 1rem;background:rgba(0,201,167,0.12);border:1px solid rgba(0,201,167,0.3);border-radius:10px">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--teal)">+92%</div>
+        <div style="font-size:0.88rem;color:var(--muted)">vs ronda anterior</div>
+      </div>
+      <div style="font-size:0.88rem;color:var(--muted);font-style:italic">Mayor mejora del proyecto</div>
+    </div>
+
   </div>
 </div>
 
@@ -567,6 +648,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
         <div style="text-align:center">
           <div style="font-size:2.3rem;font-weight:800">~2.7</div>
           <div style="font-size:0.87rem;color:var(--muted)">Sharpe Ratio</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.3rem;font-family:monospace">ROI medio / σ(ROI)</div>
         </div>
       </div>
       <span class="pill best">⭐ Modelo campeón</span>
