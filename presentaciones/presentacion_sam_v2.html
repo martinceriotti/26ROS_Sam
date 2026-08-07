@@ -786,25 +786,26 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   
   <div class="eyebrow">Resultados finales</div>
   <h2>Mejor modelo — <span class="accent">Round 8 Fix Quirúrgico</span></h2>
-  <div class="g4 hfill-sm" style="margin-bottom:0.9rem">
-    <div class="card" style="text-align:center;padding:0.9rem">
-      <div class="bignum gold" style="font-size:3.4rem">85%</div>
-      <div style="font-size:0.87rem;color:var(--muted);margin-top:0.3rem">Mean ROI<br>en Practice</div>
+  <div style="width:100%;max-width:940px;display:flex;flex-direction:column;gap:0.8rem;flex:1">
+    <div class="g4" style="flex-shrink:0">
+      <div class="card" style="text-align:center;padding:1rem">
+        <div class="bignum gold" style="font-size:3.2rem">85%</div>
+        <div style="font-size:1rem;color:var(--muted);margin-top:0.3rem">Mean ROI<br>en Practice</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1rem">
+        <div class="bignum teal" style="font-size:3.2rem">93.8%</div>
+        <div style="font-size:1rem;color:var(--muted);margin-top:0.3rem">Hit Rate<br>ganamos cuando compramos</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1rem">
+        <div class="bignum" style="font-size:3.2rem">3.94</div>
+        <div style="font-size:1rem;color:var(--muted);margin-top:0.3rem">Sharpe Ratio<br>retorno / riesgo</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1rem">
+        <div class="bignum" style="font-size:3.2rem">22</div>
+        <div style="font-size:1rem;color:var(--muted);margin-top:0.3rem">Propiedades<br>compradas por ronda</div>
+      </div>
     </div>
-    <div class="card" style="text-align:center;padding:0.9rem">
-      <div class="bignum teal" style="font-size:3.4rem">93.8%</div>
-      <div style="font-size:0.87rem;color:var(--muted);margin-top:0.3rem">Hit Rate<br>cuando compramos, ganamos</div>
-    </div>
-    <div class="card" style="text-align:center;padding:0.9rem">
-      <div class="bignum" style="font-size:3.4rem">3.94</div>
-      <div style="font-size:0.87rem;color:var(--muted);margin-top:0.3rem">Sharpe Ratio<br>riesgo/retorno</div>
-    </div>
-    <div class="card" style="text-align:center;padding:0.9rem">
-      <div class="bignum" style="font-size:3.4rem">22</div>
-      <div style="font-size:0.87rem;color:var(--muted);margin-top:0.3rem">Propiedades<br>compradas por ronda</div>
-    </div>
-  </div>
-  <div class="card wide">
+    <div class="card wide" style="flex:1;overflow:auto">
     <div class="clabel" style="margin-bottom:0.5rem">Evolución de ROI por ronda</div>
     <table class="dtable">
       <thead><tr><th>Ronda</th><th>Modelo</th><th>Novedad</th><th>ROI práctica</th><th>Resultado</th></tr></thead>
@@ -816,6 +817,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
         <tr><td>9</td><td>LLM local</td><td>texto de propiedades (falló)</td><td style="color:var(--coral)">↓ descartado</td><td><span class="pill fail">↘ Descartado</span></td></tr>
       </tbody>
     </table>
+  </div>
   </div>
 </div>
 
