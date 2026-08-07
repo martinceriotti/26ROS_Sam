@@ -32,6 +32,10 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:0.9rem;width:100%;max-width:940px;}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:0.9rem;width:100%;max-width:940px;}
 .col{display:flex;flex-direction:column;gap:0.9rem;}
+/* FILL HEIGHT */
+.hfill{height:calc(100vh - 11.5rem);align-items:stretch;}
+.hfill-sm{height:calc(100vh - 14rem);align-items:stretch;}
+
 
 /* CARDS */
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.3rem;}
@@ -171,7 +175,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   
   <div class="eyebrow">Las métricas</div>
   <h2>MAPE, ROI y <span class="accent">Win Rate</span></h2>
-  <div class="g3">
+  <div class="g3 hfill">
     <div class="card">
       <div style="font-size:2.2rem;margin-bottom:0.4rem">🎯</div>
       <div class="clabel">Error del modelo</div>
@@ -316,7 +320,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   
   <div class="eyebrow">Ronda 2 — Feature Engineering · Parte 1</div>
   <h2>Ratios Financieros — <span class="accent">combinamos lo que ya teníamos</span></h2>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;margin-top:0.3rem">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;margin-top:0.3rem;height:calc(100vh - 11.5rem);align-items:stretch">
 
     <div class="card" style="padding:1rem 1.2rem">
       <div style="font-size:1.8rem;margin-bottom:0.5rem">💰</div>
@@ -420,7 +424,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   
   <div class="eyebrow">Ronda 3 · <em>distressed sales</em> = ventas forzadas</div>
   <h2>Ventas Forzadas — <span class="accent">el problema central</span></h2>
-  <div class="g2">
+  <div class="g2 hfill">
     <div class="col">
       <div class="card coral">
         <div class="clabel">El problema que encontramos</div>
@@ -454,7 +458,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
       <div class="card teal">
         <div class="clabel">Cómo las detectamos</div>
         <div class="ctitle">taxAssessedValue >> precio de venta</div>
-        <div class="cval" style="margin-bottom:0.7rem">Si la valuación fiscal es más de 2.5× el precio del barrio → señal de venta forzada. Creamos 5 alertas:</div>
+        <div class="cval" style="margin-bottom:0.7rem">Desarrollamos 5 señales de alerta para detectarlas:</div>
         <div style="display:flex;flex-direction:column;gap:0.3rem">
           <div style="display:flex;align-items:center;gap:0.6rem;padding:0.35rem 0.7rem;background:var(--card2);border-radius:7px;font-size:1.08rem">
             <span style="font-size:1.2rem">🏛️</span>
@@ -629,7 +633,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   
   <div class="eyebrow">Ronda 8 — Mejor modelo ⭐</div>
   <h2>Fix Quirúrgico — <span class="accent">6 propiedades, 52% de las pérdidas</span></h2>
-  <div class="g2">
+  <div class="g2 hfill">
     <div class="col">
       <div class="card">
         <div class="clabel">Cómo las encontramos — drill-down en el dashboard</div>
@@ -681,7 +685,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   
   <div class="eyebrow">Ronda 9 — Experimento fallido</div>
   <h2>LLM Local — <span class="accent">texto de propiedades</span></h2>
-  <div class="g2">
+  <div class="g2 hfill">
     <div class="card">
       <div style="font-size:2.3rem;margin-bottom:0.4rem">🤖</div>
       <div class="clabel">La idea</div>
@@ -727,7 +731,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   
   <div class="eyebrow">Calibración Final</div>
   <h2>Kelly Criterion + <span class="accent">Scale Factor 0.83</span></h2>
-  <div class="g2">
+  <div class="g2 hfill">
     <div class="card gold">
       <div style="font-size:2.3rem;margin-bottom:0.35rem">🎚️</div>
       <div class="clabel">Scale Factor — barrido de escala</div>
@@ -782,7 +786,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   
   <div class="eyebrow">Resultados finales</div>
   <h2>Mejor modelo — <span class="accent">Round 8 Fix Quirúrgico</span></h2>
-  <div class="g4" style="margin-bottom:0.9rem">
+  <div class="g4 hfill-sm" style="margin-bottom:0.9rem">
     <div class="card" style="text-align:center;padding:0.9rem">
       <div class="bignum gold" style="font-size:3.4rem">85%</div>
       <div style="font-size:0.87rem;color:var(--muted);margin-top:0.3rem">Mean ROI<br>en Practice</div>
