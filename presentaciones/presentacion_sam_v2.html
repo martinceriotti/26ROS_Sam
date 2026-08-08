@@ -163,7 +163,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
     <div class="flow-step" style="border-color:rgba(245,200,66,0.35);background:rgba(245,200,66,0.04)"><span class="ficon">💰</span><div class="ftitle" style="color:var(--gold)">ROI</div><div class="fdetail">Ganancia sobre capital — la métrica que gana</div></div>
   </div>
   <div class="drow">
-    <div class="drake no"><div class="dface">😑</div><div class="dtxt"><span class="badge no">❌ Error</span><br>Bajar el MAPE al máximo y asumir que eso gana</div></div>
+    <div class="drake no"><div class="dface">😑</div><div class="dtxt"><span class="badge no">❌ Error</span><br>Bajar el wMAPE al máximo y asumir que eso gana</div></div>
     <div class="drake yes"><div class="dface">😏</div><div class="dtxt"><span class="badge yes">✅ Clave</span><br>Maximizar ROI — predecir bien <em>donde nos jugamos la plata</em></div></div>
   </div>
 </div>
@@ -174,12 +174,12 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
   <div style="position:absolute;top:1rem;right:1.2rem;width:2rem;height:2rem;border-radius:50%;background:#f5c842;color:#0b0f1a;font-weight:900;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:10;opacity:0.85">M</div>
   
   <div class="eyebrow">Las métricas</div>
-  <h2>MAPE, ROI y <span class="accent">Win Rate</span></h2>
+  <h2>wMAPE, ROI y <span class="accent">Win Rate</span></h2>
   <div class="g3">
     <div class="card">
       <div style="font-size:2.2rem;margin-bottom:0.4rem">🎯</div>
       <div class="clabel">Error del modelo</div>
-      <div class="ctitle">MAPE</div>
+      <div class="ctitle">wMAPE</div>
       <div class="cval">Error promedio en %. <strong style="color:var(--text)">Más bajo = más preciso.</strong></div>
       <div style="margin-top:0.7rem;padding:0.6rem 0.8rem;background:var(--card2);border-radius:8px;font-size:0.96rem;line-height:1.6">
         Casa vale <strong style="color:var(--text)">$500K</strong>,<br>
@@ -307,7 +307,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
       </div>
       <div style="display:flex;align-items:center;gap:0.8rem;padding:0.7rem 1rem;background:rgba(245,200,66,0.07);border:1px solid rgba(245,200,66,0.2);border-radius:8px;margin-top:0.8rem">
         <div style="font-size:0.9rem;color:var(--muted)">Promedio →</div>
-        <div style="font-size:2rem;font-weight:900;color:var(--gold)">26.5% MAPE</div>
+        <div style="font-size:2rem;font-weight:900;color:var(--gold)">26.5% wMAPE</div>
         <div style="font-size:0.85rem;color:var(--muted)">= $26 de error<br>cada $100</div>
       </div>
     </div>
@@ -410,7 +410,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
 
       <div class="card coral" style="padding:1rem 1.2rem">
         <div class="clabel" style="margin-bottom:0.4rem">Resultado inesperado</div>
-        <div class="ctitle">MAPE mejoró → ROI empeoró</div>
+        <div class="ctitle">wMAPE mejoró → ROI empeoró</div>
         <div class="cval" style="margin-top:0.3rem">No sabemos si fue los ratios, los scores, o la segmentación — los probamos juntos.</div>
       </div>
     </div>
@@ -605,7 +605,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
           <div style="color:var(--muted)">🟢 Casa impecable, bien mantenida → score bajo</div>
         </div>
         <div style="margin-top:0.5rem;font-size:0.88rem;color:var(--muted);padding:0.4rem 0.6rem;background:var(--card2);border-radius:6px">
-          No bajó el MAPE, pero mejoró las decisiones de compra.
+          No bajó el wMAPE, pero mejoró las decisiones de compra.
         </div>
       </div>
     </div>
@@ -812,7 +812,7 @@ h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.025em;
       <tbody>
         <tr><td>1</td><td>LightGBM baseline</td><td>35 variables tabulares</td><td style="color:var(--muted)">—</td><td><span class="pill pending">Base</span></td></tr>
         <tr><td>2</td><td>Feature Engineering</td><td>luxury_score, distress_score</td><td style="color:var(--coral)">↓ peor</td><td><span class="pill fail">↘ Peor ROI</span></td></tr>
-        <tr><td>3–7</td><td>Distressed + Quantile + CLIP</td><td>ventas forzadas, p35, fotos</td><td>~29%</td><td><span class="pill ok">Mejor MAPE</span></td></tr>
+        <tr><td>3–7</td><td>Distressed + Quantile + CLIP</td><td>ventas forzadas, p35, fotos</td><td>~29%</td><td><span class="pill ok">Mejor wMAPE</span></td></tr>
         <tr class="champ"><td>8</td><td><strong>Fix Quirúrgico</strong></td><td>6 zpids hardcoded</td><td><strong style="color:var(--gold)">85%</strong></td><td><span class="pill best">⭐ Campeón</span></td></tr>
         <tr><td>9</td><td>LLM local</td><td>texto de propiedades (falló)</td><td style="color:var(--coral)">↓ descartado</td><td><span class="pill fail">↘ Descartado</span></td></tr>
       </tbody>

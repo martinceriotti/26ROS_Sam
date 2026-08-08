@@ -12,7 +12,7 @@
 |---|---|---|---|
 | 1 | Título | **Juan** | 45s |
 | 2 | El Juego / Mecánica | **Martin** | 1:15 |
-| 3 | Métricas (MAPE vs ROI) | **Martin** | 45s |
+| 3 | Métricas (wMAPE vs ROI) | **Martin** | 45s |
 | 4 | Ronda 1 — LightGBM + CV | **Martin** | 1:15 |
 | 5 | Ronda 2a — Ratios Financieros | **Juan** | 1:00 |
 | 6 | Ronda 2b — Scores + Segmentación | **Juan** | 1:00 |
@@ -58,27 +58,27 @@
 
 ## SLIDE 3 — Métricas · MARTIN · 45s
 
-**Ancla visual:** MAPE ↓ ≠ ROI ↑
+**Ancla visual:** wMAPE ↓ ≠ ROI ↑
 
 > "La competencia tiene dos métricas que no siempre van de la mano.
 >
-> El MAPE es el error promedio de predicción: un 26% significa que erramos $26 por cada $100 de precio real.
+> El wMAPE es el error promedio de predicción: un 26% significa que erramos $26 por cada $100 de precio real.
 >
 > El ROI es cuánta ganancia generamos en la simulación. Es la métrica que determina el ganador.
 >
-> El aprendizaje central: bajar el MAPE no garantiza subir el ROI. Lo vamos a ver repetido en varias rondas."
+> El aprendizaje central: bajar el wMAPE no garantiza subir el ROI. Lo vamos a ver repetido en varias rondas."
 
 ---
 
 ## SLIDE 4 — Ronda 1: LightGBM · MARTIN · 1:15
 
-**Ancla visual:** 🌳×100 → CV 5-fold visual → 26.5% MAPE
+**Ancla visual:** 🌳×100 → CV 5-fold visual → 26.5% wMAPE
 
 > "Nuestra primera ronda fue un baseline con LightGBM. La idea: 100 árboles de decisión en secuencia, donde cada árbol aprende de los errores del anterior. La predicción final es la suma de los 100.
 >
 > Para evaluarlo usamos CV 5-Fold. Tomamos las 11,840 casas y las dividimos en 5 grupos. En cada vuelta entrenamos con 4 grupos y examinamos con el quinto, rotando. Así obtenemos una medida honesta del error real — si evaluáramos con las mismas casas con las que entrenamos, el resultado sería demasiado optimista.
 >
-> Resultado: MAPE de 26.5%. $26 de error por cada $100. Es nuestro punto de partida."
+> Resultado: wMAPE de 26.5%. $26 de error por cada $100. Es nuestro punto de partida."
 
 ---
 
@@ -108,7 +108,7 @@
 >
 > Además dividimos el problema: en vez de un modelo para todas las casas, entrenamos tres separados por tipo — casas individuales, condominios, y el resto.
 >
-> El MAPE mejoró. El ROI empeoró. No supimos qué causó qué, porque lo probamos todo junto. Primera lección."
+> El wMAPE mejoró. El ROI empeoró. No supimos qué causó qué, porque lo probamos todo junto. Primera lección."
 
 ---
 
@@ -156,7 +156,7 @@
 >
 > Creamos el clip_distress_score: mide deterioro visual en la foto. Casa deteriorada, score alto. Casa impecable, score bajo.
 >
-> Este score no redujo el MAPE, pero mejoró las decisiones de compra. Eso confirma que error de predicción y calidad de decisión son cosas distintas.
+> Este score no redujo el wMAPE, pero mejoró las decisiones de compra. Eso confirma que error de predicción y calidad de decisión son cosas distintas.
 >
 > Resultado de la Ronda 4: ROI de 49.7%, mejora del 92%. El mayor salto del proyecto."
 
@@ -218,7 +218,7 @@
 
 > "Lo que nos llevamos: el error de predicción no es lo mismo que tomar una buena decisión.
 >
-> Tuvimos rondas donde el MAPE mejoró y el ROI empeoró, y rondas donde una señal no redujo el error pero cambió completamente la calidad de las compras.
+> Tuvimos rondas donde el wMAPE mejoró y el ROI empeoró, y rondas donde una señal no redujo el error pero cambió completamente la calidad de las compras.
 >
 > El algoritmo era la parte fácil. Lo difícil fue entender el juego.
 >
@@ -232,7 +232,7 @@
 |---|---|---|
 | 1 | Logo SAM + Maiameee! | "Somos el equipo SAM..." |
 | 2 | 11,840 / 5,038 + subasta | "El organizador nos da dos partes..." |
-| 3 | MAPE ≠ ROI | "No siempre van de la mano..." |
+| 3 | wMAPE ≠ ROI | "No siempre van de la mano..." |
 | 4 | 🌳×100 + EXAMEN rotando | "100 árboles en secuencia..." |
 | 5 | 4 fórmulas con pregunta | "El impuesto por metro cuadrado..." |
 | 6 | +1+1+1+1 / +1+1+1 | "El score de lujo suma..." |
